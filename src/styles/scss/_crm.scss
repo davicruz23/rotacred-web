@@ -1,0 +1,594 @@
+.home-crm {
+  background-color: #E2E8FA !important;
+
+  .card-three #world-map-markers {
+    height: 340px;
+    margin-top: -40px;
+
+    figure {
+      height: 340px;
+      overflow: hidden;
+
+      @include lg {
+        text-align: center;
+      }
+
+      svg {
+        scale: 0.7;
+        margin-top: -50px;
+        margin-left: -70px;
+
+        @include xl {
+          margin-left: -100px;
+        }
+
+        @include lg {
+          scale: 0.8;
+          margin-top: -30px;
+          margin-left: unset;
+        }
+
+        @include sm {
+          margin-left: -60px;
+        }
+
+        @include xs {
+          margin-left: -90px;
+          scale: 0.6;
+        }
+
+        @include xxs {
+          margin-left: -130px;
+          margin-top: -40px;
+        }
+      }
+    }
+  }
+
+  .logistics-tab .nav-item .nav-link {
+    @include xxs {
+      font-size: 10px;
+    }
+  }
+
+  .check-card-area {
+    @include lg {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 {
+      @include lg {
+        margin-top: 0;
+      }
+
+      @include md {
+        font-size: 16px;
+      }
+    }
+
+    svg {
+      @include xs {
+        width: 26px;
+      }
+    }
+  }
+
+  .card-2,
+  .compare-card-title {
+    @include lg {
+      padding: 20px;
+    }
+
+    @include md {
+      padding: 15px;
+    }
+  }
+
+  div#announcementBody {
+    @include lg {
+      max-height: 200px;
+      padding-bottom: 15px;
+    }
+  }
+
+  .location-hire-card #world-map-markers {
+    margin-top: 0px;
+    height: 300px;
+
+    figure {
+      height: 300px;
+      overflow: hidden;
+      width: 100%;
+
+      @include md {
+        text-align: center;
+      }
+
+      svg {
+        scale: 1;
+        margin-left: 20px;
+        margin-top: -10px;
+
+        @include xxl {
+          scale: 0.8;
+          margin-left: -30px;
+        }
+
+        @include xl {
+          scale: 1;
+          margin-left: 20px;
+        }
+
+        @include lg {
+          scale: 0.9;
+          margin-left: -10px;
+        }
+
+        @include md {
+          scale: 1;
+          margin-left: auto;
+        }
+
+        @include sm {
+          scale: 1;
+        }
+
+        @include xs {
+          scale: 0.9;
+        }
+
+        @include xxs {
+          scale: 0.7;
+          margin-left: -50px;
+        }
+      }
+    }
+  }
+
+  .top-header-area {
+    width: 100%;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background-color: #E2E8FA;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    z-index: 999;
+
+    @media #{$breakpoint-md} {
+      width: calc(100% - 90px);
+      height: 120px;
+    }
+
+    @media #{$breakpoint-xl} {
+      height: 160px;
+    }
+
+    @media #{$breakpoint-xxl} {
+      width: calc(100% - 140px);
+    }
+
+    &.header-sticky {
+      height: 70px;
+
+      @media #{$breakpoint-md} {
+        height: 80px;
+      }
+
+      @media #{$breakpoint-xl} {
+        height: 90px;
+      }
+    }
+  }
+
+  &.bg-detected {
+    .top-header-area {
+      background-color: transparent;
+
+      &.header-sticky {
+        background-color: rgba(226, 232, 250, 0.75);
+      }
+    }
+  }
+
+  .main-content-wrap {
+    padding-top: 70px;
+
+    @media #{$breakpoint-md} {
+      padding-top: 120px;
+    }
+
+    @media #{$breakpoint-xl} {
+      padding-top: 160px;
+    }
+  }
+
+  .main-content-wrap .main-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .card-three {
+    @include xxs {
+      padding: 20px 15px;
+    }
+  }
+
+  .single-card-three-content h3 {
+    @include xxs {
+      font-size: 26px;
+    }
+  }
+
+  .vector-map-area #world-map-sales-markers {
+    height: 250px;
+
+    figure {
+      height: 250px;
+      overflow: hidden;
+      text-align: center;
+
+      svg {
+        scale: 0.7;
+        margin-top: -40px;
+        margin-left: -20px;
+
+        @include xxl {
+          margin-left: -30px;
+        }
+
+        @include sm {
+          margin-left: -20px;
+        }
+
+        @include xs {
+          margin-left: -60px;
+        }
+
+        @include xxs {
+          margin-left: -120px;
+          scale: 0.6;
+        }
+      }
+    }
+  }
+
+  .react-calendar .react-calendar__viewContainer button.react-calendar__tile.react-calendar__month-view__days__day {
+    @include xxs {
+      height: 42px;
+    }
+  }
+
+  .card-five {
+    @include md {
+      padding: 15px;
+    }
+
+    @include sm {
+      padding: 24px;
+    }
+
+    .card-icon-5 {
+      @include md {
+        margin-right: 10px !important;
+      }
+
+      @include sm {
+        margin-right: 15px !important;
+      }
+
+      svg {
+        @include md {
+          width: 40px;
+          height: 40px;
+        }
+
+        @include sm {
+          width: 50px;
+          height: 50px;
+        }
+      }
+    }
+  }
+
+  .react-calendar {
+    padding-bottom: 24px;
+
+    @include md {
+      padding-bottom: 15px;
+    }
+
+    @include sm {
+      padding-bottom: 24px;
+    }
+  }
+
+  .card-progress-five p {
+    @include md {
+      font-size: 12px;
+    }
+
+    @include sm {
+      font-size: 14px;
+    }
+  }
+
+  .react-calendar .react-calendar__viewContainer button::after {
+    @include md {
+      width: 42px;
+      height: 42px;
+    }
+
+    @include xxs {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  .card-info-five {
+    h3 {
+      @include md {
+        font-size: 22px;
+      }
+
+      @include sm {
+        font-size: 26px;
+      }
+    }
+  }
+
+  .webdesh-page-content {
+    margin-left: 0;
+    margin-right: 0;
+
+    @media #{$breakpoint-md} {
+      margin-right: 90px;
+    }
+
+    @media #{$breakpoint-xxl} {
+      margin-right: 140px;
+    }
+  }
+
+  .webdesh-sidemenu-area {
+    background-color: #27292F;
+    width: 90px;
+    left: auto;
+    right: -200px;
+    height: calc(100% - 90px);
+    top: 45px;
+    bottom: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 30px 0 0 30px;
+
+    @media #{$breakpoint-md} {
+      right: 0;
+    }
+
+    @media #{$breakpoint-xxl} {
+      width: 140px;
+    }
+
+    &.sidebar-bg-detected {
+      background-color: #27292F;
+
+      &::after {
+        background-color: rgba(14, 9, 52, 0.9);
+        border-radius: 28px 0 0 28px;
+      }
+    }
+  }
+
+  .crm-logo {
+    @media #{$breakpoint-xl} {
+      margin-right: 110px !important;
+    }
+  }
+
+  .side-menu-area {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .webdesh-sidemenu-area .slimScrollDiv {
+    top: 0;
+    background-color: #27292F;
+    padding-bottom: 0 !important;
+  }
+
+  .webdesh-sidenav {
+    margin-bottom: 1rem;
+  }
+
+  .right-side-navbar .nav-item.dropdown .btn {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+
+    img {
+      max-height: 20px;
+    }
+
+    @include md {
+      width: 45px;
+      height: 45px;
+    }
+
+    @include sm {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .top-header-area .dropdown-menu {
+    border-radius: 8px;
+  }
+
+  .mobile-menu-icon {
+    flex: 0 0 2rem;
+    max-width: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background-color: $white;
+    line-height: 2rem;
+    border-radius: 8px;
+    color: $heading;
+
+    @media #{$breakpoint-md} {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+    }
+  }
+
+  .footer-area {
+    width: 100%;
+    margin-left: 0;
+    border-radius: 8px;
+  }
+
+  .footer-area .copywrite-text p a {
+    color: $bg-blue-two;
+  }
+
+  .user-profile-area .dropdown-item i {
+    color: $bg-blue-two;
+  }
+
+  .top-header-area .nav-item.dropdown .dropdown-menu .dropdown-item:hover,
+  .top-header-area .nav-item.dropdown .dropdown-menu .dropdown-item:focus {
+    color: $bg-blue-two;
+  }
+
+  .crm-search-bar {
+    margin-top: 50px;
+
+    .dropdown-toggle {
+      width: 44px;
+      height: 44px;
+      background-color: $bg-blue-two;
+      border-radius: 50%;
+      color: $white;
+      font-size: 20px;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .dropdown-menu {
+      box-shadow: none;
+      width: 15rem;
+      top: 30px;
+      right: 10px;
+    }
+
+    .top-search-bar form input {
+      width: 8rem;
+      box-shadow: none;
+    }
+  }
+
+  .crm-settings-btn>a {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #363941;
+    color: $white;
+  }
+
+  .crm-nav {
+    .nav-item {
+      >a {
+        margin: 0.5rem 0;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: transparent;
+        display: block;
+        text-align: center;
+        line-height: 50px;
+        font-size: 26px;
+        color: $white;
+
+        &:hover,
+        &:focus {
+          background-color: $heading;
+        }
+      }
+
+      &.active {
+        a {
+          background-color: $heading;
+        }
+      }
+    }
+  }
+
+  .classy-navbar-toggler {
+    text-align: center;
+    background-color: #ffffff;
+    margin-left: 8px;
+    color: #737B8B;
+    border: none;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px 0px rgba(27, 42, 82, 0.14);
+
+    @media #{$breakpoint-md} {
+      width: 50px;
+      height: 50px;
+      font-size: 2rem;
+      line-height: 50px;
+    }
+  }
+
+  .breakpoint-off {
+    .classynav {
+      ul {
+        li {
+
+          .dropdown,
+          .megamenu {
+            border-radius: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .breakpoint-on .classy-navbar .classy-menu {
+    left: -340px;
+    right: auto;
+
+    &.menu-on {
+      left: 0;
+    }
+  }
+
+  .close-sidemenu {
+    right: auto;
+    left: -1rem;
+  }
+
+  &.mobile-menu-open {
+    .webdesh-sidemenu-area {
+      right: 0;
+    }
+  }
+}

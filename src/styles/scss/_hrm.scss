@@ -1,0 +1,470 @@
+.home-hrm {
+    .top-header-area {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.065);
+    }
+
+    .sidebar-menu li.treeview.menu-open a {
+        color: #16113A !important;
+    }
+
+    .sidebar-menu ul.treeview-menu.menu-open a {
+        color: #ABABAB !important;
+    }
+
+    .sidebar-menu ul.treeview-menu.menu-open li.active a {
+        color: #FFF !important;
+    }
+
+    .webdesh-logo {
+        height: 105px;
+    }
+
+    .top-header-area .nav-item.dropdown .dropdown-menu.dropdown-menu-end {
+        right: 0 !important;
+        left: unset !important;
+        top: 0;
+    }
+
+    .card-three #world-map-markers {
+        height: 340px;
+        margin-top: -40px;
+
+        figure {
+            height: 340px;
+            overflow: hidden;
+
+            @include lg {
+                text-align: center;
+            }
+
+            svg {
+                scale: 0.65;
+                margin-top: -40px;
+
+                @include xxl {
+                    margin-left: -100px;
+
+                }
+
+                @include xl {
+                    scale: 0.6;
+                    margin-left: -150px;
+
+                }
+
+                @include lg {
+                    scale: 0.8;
+                    margin-top: -30px;
+                    margin-left: unset;
+                }
+
+                @include md {
+                    scale: 0.7;
+                    margin-top: -40px;
+                    margin-left: -80px;
+                }
+
+                @include sm {
+                    margin-left: -55px;
+                }
+
+                @include xs {
+                    margin-left: -90px;
+                }
+
+                @include xxs {
+                    margin-left: -160px;
+                    scale: 0.6;
+                }
+            }
+        }
+    }
+
+    .card-three {
+        @include md {
+            padding: 20px 15px;
+        }
+    }
+
+    .card-title {
+        @include xxs {
+            font-size: 16px;
+        }
+    }
+
+    .single-card-three-content h3 {
+        @include md {
+            font-size: 24px;
+        }
+    }
+
+    .card-header-three-title h3 {
+        @include xxs {
+            font-size: 16px;
+            max-width: 90%;
+        }
+    }
+
+    .single-card-three p {
+        @include md {
+            font-size: 12px;
+        }
+    }
+
+    .card-2,
+    .compare-card-title,
+    .announcement-card {
+        @include xl {
+            padding: 15px;
+        }
+
+        @include lg {
+            padding: 20px;
+        }
+
+        @include md {
+            padding: 15px;
+        }
+
+    }
+
+    div#announcementBody {
+        @include lg {
+            max-height: 200px;
+            padding-bottom: 15px;
+        }
+    }
+
+    .single-announcement h6 {
+        @include xl {
+            font-size: 15px;
+        }
+    }
+
+    .check-card-area {
+        @include lg {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 {
+            @include lg {
+                margin-top: 0;
+            }
+
+            @include md {
+                font-size: 16px;
+            }
+        }
+
+        svg {
+            @include xs {
+                width: 26px;
+            }
+        }
+    }
+
+    .compare-card-title h3,
+    .card-header-three-title h3,
+    .announcement-card .card-title h3 {
+        @include xl {
+            font-size: 16px;
+        }
+
+        @include lg {
+            font-size: 20px;
+        }
+
+        @include xs {
+            font-size: 18px;
+        }
+    }
+
+    .location-hire-card #world-map-markers {
+        margin-top: 0px;
+        height: 300px;
+
+        figure {
+            height: 300px;
+            overflow: hidden;
+            width: 100%;
+
+            @include md {
+                text-align: center;
+            }
+
+            svg {
+                scale: 1;
+                margin-left: 20px;
+                margin-top: -10px;
+
+                @include xxl {
+                    scale: 0.8;
+                    margin-left: -30px;
+                }
+
+                @include xl {
+                    scale: 1;
+                    margin-left: 20px;
+                }
+
+                @include lg {
+                    scale: 0.9;
+                    margin-left: -10px;
+                }
+
+                @include lg {
+                    margin-left: auto;
+                }
+
+                @include sm {
+                    scale: 1;
+                }
+
+                @include xs {
+                    scale: 0.9;
+                    margin-left: -20px;
+                }
+
+                @include xxs {
+                    scale: 0.7;
+                    margin-left: -60px;
+                }
+            }
+        }
+    }
+
+    .user-profile-area .dropdown-item i {
+        background: transparent;
+    }
+
+    div#webdeshSideNav {
+        padding-top: 105px;
+    }
+
+    .side-menu-area {
+        margin-bottom: 0;
+    }
+
+    .os-scrollbar-handle {
+        height: 2px !important;
+        background: #0fd3547a !important;
+    }
+
+    &.bg-detected {
+        .top-header-area {
+            background-color: transparent;
+
+            &.header-sticky {
+                background-color: rgba(226, 244, 232, 0.9);
+            }
+        }
+    }
+
+    .main-content-wrap {
+        padding-top: 108px;
+
+        @media #{$breakpoint-md} {
+            padding-top: 128px;
+        }
+    }
+
+    .webdesh-sidemenu-area {
+        &.sidebar-bg-detected {
+            background-color: #0E0934;
+
+            &::after {
+                background-color: rgba(14, 9, 52, 0.9);
+            }
+        }
+
+        .os-scrollbar-handle {
+            height: 225px !important;
+            width: 40% !important;
+        }
+    }
+
+    &.mobile-menu-open {
+        .webdesh-sidemenu-area {
+            left: 0;
+        }
+
+        .webdesh-logo {
+            left: 0;
+        }
+    }
+
+    .mobile-menu-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 0;
+        line-height: 36px;
+    }
+
+    .sidebar-menu .treeview.active {
+        li.active {
+            a {
+                color: $white;
+
+                &::after {
+                    background-color: $white;
+                }
+            }
+        }
+    }
+
+    .vector-map-area #world-map-sales-markers {
+        height: 250px;
+
+        figure {
+            height: 250px;
+            overflow: hidden;
+            text-align: center;
+
+            svg {
+                scale: 0.7;
+                margin-top: -40px;
+                margin-left: -20px;
+
+                @include xxl {
+                    margin-left: -50px;
+                }
+
+                @include sm {
+                    margin-left: -20px;
+                }
+
+                @include xs {
+                    margin-left: -60px;
+                }
+
+                @include xxs {
+                    margin-left: -120px;
+                    scale: 0.6;
+                }
+            }
+        }
+    }
+
+    .react-calendar .react-calendar__viewContainer button.react-calendar__tile.react-calendar__month-view__days__day {
+        @include xxs {
+            height: 42px;
+        }
+    }
+
+    .card-five {
+        @include xxl {
+            padding: 20px;
+        }
+
+        @include md {
+            padding: 15px;
+        }
+
+        @include sm {
+            padding: 24px;
+        }
+
+        .card-icon-5 {
+            @include md {
+                margin-right: 10px !important;
+            }
+
+            @include sm {
+                margin-right: 15px !important;
+            }
+
+            svg {
+                @include md {
+                    width: 40px;
+                    height: 40px;
+                }
+
+                @include sm {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+        }
+    }
+
+    .react-calendar {
+        padding-bottom: 24px;
+
+        @include md {
+            padding-bottom: 15px;
+        }
+
+        @include sm {
+            padding-bottom: 24px;
+        }
+    }
+
+    .card-progress-five p {
+        @include md {
+            font-size: 12px;
+        }
+
+        @include sm {
+            font-size: 14px;
+        }
+    }
+
+    .react-calendar .react-calendar__viewContainer button::after {
+        @include md {
+            width: 42px;
+            height: 42px;
+        }
+
+        @include xxs {
+            width: 35px;
+            height: 35px;
+        }
+    }
+
+    .card-info-five {
+        h3 {
+            @include md {
+                font-size: 22px;
+            }
+
+            @include sm {
+                font-size: 26px;
+            }
+        }
+    }
+
+    .logistics-tab .card {
+        p {
+            @include md {
+                font-size: 13px;
+            }
+        }
+    }
+
+    .pos-cta-card {
+        h4 {
+            font-size: 22px;
+        }
+
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .pos-system-cta-card .cta-heading-wrap {
+        h6 {
+            color: rgba(37, 47, 74, 0.7);
+            font-size: 12px;
+            font-weight: 500;
+            max-width: 120px;
+        }
+
+        h3 {
+            @include xxl {
+                font-size: 26px;
+            }
+        }
+    }
+}

@@ -1,0 +1,811 @@
+.home-ota {
+  background-color: #D3DBE7 !important;
+
+  .single-card-three-content h3 {
+    @include xs {
+      font-size: 28px;
+    }
+
+    @include xxs {
+      font-size: 25px;
+    }
+  }
+
+  .card-three {
+    @include xs {
+      padding: 20px 15px;
+    }
+  }
+
+  .card-three #world-map-markers {
+    height: 300px;
+    text-align: center;
+
+    figure {
+      height: 300px;
+      overflow: hidden;
+
+      @include lg {
+        text-align: center;
+      }
+
+      svg {
+        margin-top: -80px;
+        scale: 0.7;
+        margin-left: -70px;
+
+        @include xl {
+          scale: 0.65;
+          margin-left: -90px;
+        }
+
+        @include lg {
+          scale: 0.75;
+          margin-left: unset;
+        }
+
+        @include sm {
+          margin-left: -55px;
+        }
+
+        @include xs {
+          scale: 0.7;
+          margin-left: -90px;
+        }
+
+        @include xxs {
+          scale: 0.6;
+          margin-left: -140px;
+        }
+      }
+    }
+  }
+
+  .check-card-area h2 {
+    @include xl {
+      font-size: 18px;
+    }
+  }
+
+  .location-hire-card #world-map-markers {
+    margin-top: 0px;
+    height: 300px;
+
+    figure {
+      height: 300px;
+      overflow: hidden;
+      width: 100%;
+
+      @include md {
+        text-align: center;
+      }
+
+      svg {
+        scale: 1;
+        margin-left: 20px;
+        margin-top: -10px;
+
+        @include xxl {
+          scale: 0.8;
+          margin-left: -30px;
+        }
+
+        @include xl {
+          scale: 1;
+          margin-left: 20px;
+        }
+
+        @include lg {
+          scale: 0.9;
+          margin-left: -10px;
+        }
+
+        @include lg {
+          margin-left: auto;
+        }
+
+        @include sm {
+          scale: 1;
+        }
+
+        @include xs {
+          scale: 0.9;
+          margin-left: -20px;
+        }
+
+        @include xxs {
+          scale: 0.7;
+          margin-left: -60px;
+        }
+      }
+    }
+  }
+
+  .check-card-area {
+    @include lg {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 {
+      @include lg {
+        margin-top: 0;
+      }
+
+      @include md {
+        font-size: 16px;
+      }
+    }
+
+    svg {
+      @include xs {
+        width: 26px;
+      }
+    }
+  }
+
+  div#announcementBody {
+    @include lg {
+      max-height: 200px;
+      padding-bottom: 15px;
+    }
+  }
+
+  .card-2,
+  .compare-card-title,
+  .announcement-card {
+    @include lg {
+      padding: 20px;
+    }
+
+    @include md {
+      padding: 15px;
+    }
+  }
+
+  .os-scrollbar-handle {
+    background: #828282 !important;
+    width: 3px !important;
+    height: 40% !important;
+  }
+
+  .ota-tooltip-container {
+    background: #000;
+    color: #fff;
+  }
+
+  .webdesh-logo {
+    height: 80px;
+  }
+
+  .webdesh-logo a {
+    height: 80px;
+    padding-top: 0;
+  }
+
+  div#webdeshSideNav {
+    padding-top: 80px;
+  }
+
+  .top-header-area {
+    width: 100%;
+    left: 0;
+    height: 80px;
+    background-color: $white;
+    box-shadow: 0px 1px 2px 0px rgba(27, 42, 82, 0.14);
+    padding: 0;
+
+    .nav-item.dropdown .dropdown-menu.dropdown-menu-end {
+      right: 0 !important;
+      left: unset !important;
+      top: 0;
+    }
+
+    @media #{$breakpoint-md} {
+      width: calc(100% - 140px);
+      left: 140px;
+    }
+  }
+
+  &.bg-detected {
+    .top-header-area {
+      background-color: rgba(255, 255, 255, 0.8);
+
+      &.header-sticky {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  .webdesh-logo {
+    width: 140px;
+  }
+
+  .webdesh-page-content {
+    margin-left: 0;
+
+    @media #{$breakpoint-md} {
+      margin-left: 140px;
+    }
+  }
+
+  .webdesh-sidemenu-area {
+    width: 140px;
+
+    &.sidebar-bg-detected {
+      background-color: #0E0934;
+
+      &::after {
+        background-color: rgba(14, 9, 52, 0.9);
+      }
+    }
+  }
+
+  .webdesh-logo {
+    a {
+      padding-left: 0;
+      width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .side-menu-area {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    padding-bottom: 0;
+    height: calc(100% - 8rem);
+  }
+
+  .side-menu-scroll {
+    height: 100%;
+  }
+
+  .sidebar-menu {
+    li {
+      a {
+        width: 56px;
+        padding: 0;
+        font-size: 24px;
+        font-weight: 500;
+        color: $white;
+        height: 56px;
+        border-radius: 10px;
+        justify-content: center;
+        margin: .25rem auto;
+
+        &::before {
+          display: none;
+        }
+
+        i {
+          flex: 0 0 auto;
+          max-width: auto;
+          width: auto;
+          font-size: 24px;
+        }
+      }
+    }
+  }
+
+  .sidebar-menu .treeview.active>a,
+  .sidebar-menu>li>a:hover,
+  .sidebar-menu>li.menu-open>a {
+    color: $white;
+    background-color: $bg-blue;
+
+    i {
+      color: $white;
+    }
+  }
+
+  .sidebar-menu li .treeview-menu {
+    margin: 10px;
+
+    li {
+      margin-bottom: 4px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      a {
+        color: $white;
+        height: 30px;
+        font-size: 12px;
+        font-weight: 400;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.06);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        line-height: 30px;
+        padding: 0 0.625rem;
+        border-radius: 0;
+
+        &:last-child {
+          margin-bottom: 0 !important;
+        }
+
+        &::after {
+          display: none;
+        }
+
+      }
+
+      &.active {
+        a {
+          color: #007bff;
+        }
+      }
+    }
+  }
+
+
+  .sidebar-menu li .treeview-menu {
+    margin: 0;
+    position: fixed;
+    left: 140px;
+    z-index: 1050;
+    top: -100%;
+    bottom: 0;
+    background-color: #000;
+    padding: 0 !important;
+    width: 140px;
+    height: 0;
+    transition: 0.5s ease-in-out;
+
+    &.menu-open {
+      padding: 10px !important;
+      height: 100%;
+      top: 0;
+      padding-top: 120px !important;
+    }
+  }
+
+  .sidenav-logout {
+    font-size: 14px;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    background-color: #0E0934;
+    height: 5rem;
+    z-index: 100;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    transition-duration: 400ms;
+
+
+    @include sm {
+      left: -340px;
+    }
+
+    i {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+
+    &:hover,
+    &:focus {
+      color: $bg-blue;
+    }
+  }
+
+  &.mobile-menu-open .sidenav-logout {
+    @include sm {
+      left: 0;
+    }
+  }
+
+  .mobile-menu-icon {
+    width: 36px;
+    height: 36px;
+    background-color: $white;
+    border-radius: 0;
+    color: $heading;
+    border: 1px solid $border;
+  }
+
+
+  .classy-menu {
+    @include lg {
+      left: auto;
+      right: -340px;
+      z-index: 99999;
+      width: 260px;
+      background-color: #fff;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      transition-duration: .5s;
+      padding: 0;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+      display: block;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    &.menu-on {
+      left: auto;
+      right: 0;
+      background-color: #E2E8FA;
+      z-index: 999;
+      width: 260px;
+    }
+
+    .classycloseIcon {
+      top: 20px;
+      right: 20px;
+      z-index: 12;
+      position: absolute;
+
+      .cross-wrap {
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        position: relative;
+
+        span {
+          position: absolute;
+          display: block;
+          width: 100%;
+          height: 2px;
+          border-radius: 6px;
+          background: #232323;
+        }
+
+        span.top {
+          top: 12px;
+          left: 0;
+          -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+
+        span.bottom {
+          bottom: 12px;
+          left: 0;
+          -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+        }
+
+      }
+    }
+
+    .classynav.top-navbar {
+      padding: 80px 0;
+    }
+
+    ul#corenav {
+      @include lg {
+        flex-direction: column;
+      }
+
+      li {
+        width: 100%;
+
+        a {
+          text-wrap: nowrap;
+
+          @include lg {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            width: 100%;
+          }
+        }
+
+
+        &.active {
+          button.mobile-dropdown-btn {
+            background-color: #27ae60;
+          }
+        }
+      }
+
+      li.cn-dropdown-item:hover ul.dropdown,
+      li.megamenu-item:hover .megamenu {
+        @include lg {
+          opacity: 0;
+          visibility: hidden;
+          height: 0;
+        }
+      }
+
+      li.cn-dropdown-item.active ul.dropdown {
+        @include lg {
+          opacity: 1;
+          visibility: visible;
+          height: auto;
+          position: relative;
+          background-color: transparent;
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+
+      li.megamenu-item.active .megamenu {
+        @include lg {
+          opacity: 1;
+          visibility: visible;
+          height: auto;
+          position: relative;
+          background-color: transparent;
+          border-radius: 0;
+          box-shadow: none;
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+    }
+
+    button.mobile-dropdown-btn {
+      background-color: #007bff;
+      border: 0;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      margin-right: 15px;
+      color: #fff;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      display: none;
+
+      @include md {
+        display: block;
+      }
+    }
+  }
+
+
+  .classy-navbar-toggler {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    font-size: 20px;
+    border: 1px solid $border;
+    display: none;
+
+    @include lg {
+      display: block;
+    }
+
+    @media #{$breakpoint-md} {
+      width: 46px;
+      height: 46px;
+      line-height: 46px;
+      font-size: 1.75rem;
+    }
+  }
+
+  .top-search-bar form input,
+  .right-side-navbar .nav-item.dropdown .btn {
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    box-shadow: none;
+  }
+
+  .top-search-bar form input {
+    min-width: 80px;
+    width: 80px;
+
+    @media #{$breakpoint-xs-landscape} {
+      width: 150px;
+    }
+
+    @media #{$breakpoint-sm} {
+      width: 150px;
+    }
+
+    @media #{$breakpoint-md} {
+      width: 180px;
+    }
+
+    @media #{$breakpoint-lg} {
+      width: 240px;
+    }
+
+    @media #{$breakpoint-xl} {
+      width: 220px;
+    }
+
+    @media #{$breakpoint-xxl} {
+      width: 280px;
+    }
+
+    @include xxs {
+      min-width: 100px;
+      width: 100px;
+    }
+  }
+
+  .main-content-wrap {
+    padding-top: 80px;
+  }
+
+  .main-content-wrap .main-container {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 1.5rem;
+  }
+
+  .footer-area .copywrite-text p a {
+    color: $bg-blue;
+  }
+
+  .user-profile-area .dropdown-item i {
+    color: $bg-blue;
+  }
+
+  .top-header-area .nav-item.dropdown .dropdown-menu .dropdown-item:hover,
+  .top-header-area .nav-item.dropdown .dropdown-menu .dropdown-item:focus {
+    color: $bg-blue;
+  }
+
+  .webdesh-sidemenu-area .slimScrollDiv {
+    top: 100px;
+    padding-bottom: 100px !important;
+  }
+
+  &.mobile-menu-open {
+    .webdesh-sidemenu-area {
+      left: 0;
+    }
+
+    .webdesh-logo {
+      left: 0;
+      height: 100px;
+    }
+  }
+
+  .sidebar-menu a .ti-chevron-right {
+    font-size: 16px !important;
+    right: 10px;
+    top: 8px;
+  }
+
+  .vector-map-area #world-map-sales-markers {
+    height: 250px;
+
+    figure {
+      height: 250px;
+      overflow: hidden;
+      text-align: center;
+
+      svg {
+        scale: 0.7;
+        margin-top: -40px;
+        margin-left: -20px;
+
+        @include xxl {
+          margin-left: -50px;
+        }
+
+        @include sm {
+          margin-left: -20px;
+        }
+
+        @include xs {
+          margin-left: -50px;
+        }
+
+        @include xxs {
+          margin-left: -100px;
+          scale: 0.6;
+        }
+      }
+    }
+  }
+
+  .react-calendar .react-calendar__viewContainer button.react-calendar__tile.react-calendar__month-view__days__day {
+    @include xxs {
+      height: 42px;
+    }
+  }
+
+  .card-five {
+    @include xxl {
+      padding: 20px;
+    }
+
+    @include xl {
+      padding: 16px;
+    }
+
+    @include md {
+      padding: 15px;
+    }
+
+    @include sm {
+      padding: 24px;
+    }
+
+    .card-title {
+      @include xxs {
+        font-size: 16px;
+      }
+    }
+
+    .card-icon-5 {
+      @include md {
+        margin-right: 10px !important;
+      }
+
+      @include sm {
+        margin-right: 15px !important;
+      }
+
+      svg {
+        @include md {
+          width: 40px;
+          height: 40px;
+        }
+
+        @include sm {
+          width: 50px;
+          height: 50px;
+        }
+      }
+    }
+  }
+
+  .react-calendar {
+    padding-bottom: 24px;
+
+    @include md {
+      padding-bottom: 15px;
+    }
+
+    @include sm {
+      padding-bottom: 24px;
+    }
+  }
+
+  .card-progress-five p {
+    @include md {
+      font-size: 12px;
+    }
+
+    @include sm {
+      font-size: 14px;
+    }
+  }
+
+  .react-calendar .react-calendar__viewContainer button::after {
+    @include md {
+      width: 42px;
+      height: 42px;
+    }
+
+    @include xxs {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  .card-info-five {
+
+    h3 {
+      @include md {
+        font-size: 22px;
+      }
+
+      @include sm {
+        font-size: 26px;
+      }
+    }
+  }
+
+  .logistics-tab .card {
+    p {
+      @include xl {
+        font-size: 12px;
+      }
+    }
+  }
+}
