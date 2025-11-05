@@ -122,7 +122,7 @@ function App() {
             <Route path="/logistics" element={<LogisticsPage />} />
             <Route path="/restaurant" element={<RestaurantPage />} />
             <Route path="/pos" element={<PosPage />} /> */}
-            <Route path="/saas" element={<SaasPage />} />
+            <Route path="/inicio" element={<SaasPage />} />
 
             <Route path="/audience" element={<AudiencePage />} />
             <Route path="/company" element={<CompanyPage />} />

@@ -135,7 +135,7 @@ const CustomerChart = () => {
     const chart = new ApexCharts(chartRef.current, chartOptions);
 
     const initChart = () => {
-      chart.render(); // Attempt to render with default options
+      chart.render();
     };
 
     initChart();

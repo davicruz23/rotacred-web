@@ -8,6 +8,7 @@ import SessionsByDeviceCard from "../cards/SessionsByDeviceCard";
 import SessionsCard from "../cards/SessionsCard";
 import TotalOrderCard4 from "../cards/TotalOrderCard4";
 import TotalSaleCard2 from "../cards/TotalSaleCard2";
+import SalesByProductCard from "../cards/TotalVendasPorProduto";
 import TrafficCard from "../cards/TrafficCard";
 import UsersCard from "../cards/UsersCard";
 import UsersCard2 from "../cards/UsersCard2";
@@ -19,35 +20,32 @@ const SaasMain = () => {
       <div className="col-12">
         <div className="row g-4">
           <div
-            className={`col-12 col-sm-6 col-lg-4 ${
-              activeLayout === "style-1" ||
-              activeLayout === "style-3" ||
-              activeLayout === "style-4"
+            className={`col-12 col-sm-6 col-lg-4 ${activeLayout === "style-1" ||
+                activeLayout === "style-3" ||
+                activeLayout === "style-4"
                 ? "col-xxl col-xl-4"
                 : "col-xl"
-            }`}
+              }`}
           >
             <TotalSaleCard2 />
           </div>
           <div
-            className={`col-12 col-sm-6 col-lg-4 ${
-              activeLayout === "style-1" ||
-              activeLayout === "style-3" ||
-              activeLayout === "style-4"
+            className={`col-12 col-sm-6 col-lg-4 ${activeLayout === "style-1" ||
+                activeLayout === "style-3" ||
+                activeLayout === "style-4"
                 ? "col-xxl col-xl-4"
                 : "col-xl"
-            }`}
+              }`}
           >
             <TotalOrderCard4 />
           </div>
           <div
-            className={`col-12 col-sm-6 col-lg-4 ${
-              activeLayout === "style-1" ||
-              activeLayout === "style-3" ||
-              activeLayout === "style-4"
+            className={`col-12 col-sm-6 col-lg-4 ${activeLayout === "style-1" ||
+                activeLayout === "style-3" ||
+                activeLayout === "style-4"
                 ? "col-xxl col-xl-4"
                 : "col-xl"
-            }`}
+              }`}
           >
             <VisitorCard />
           </div>
@@ -70,14 +68,17 @@ const SaasMain = () => {
         <SessionsByDeviceCard />
       </div>
 
+      <div className="col-12 col-lg-6 col-xl-5">
+        <SalesByProductCard />
+      </div>
+
       <div
-        className={`col-12 col-lg-6 ${
-          activeLayout === "style-1" ||
-          activeLayout === "style-3" ||
-          activeLayout === "style-4"
+        className={`col-12 col-lg-6 ${activeLayout === "style-1" ||
+            activeLayout === "style-3" ||
+            activeLayout === "style-4"
             ? "col-xxl-3 col-xl-6"
             : "col-xl-3"
-        }`}
+          }`}
       >
         <div className="row g-4">
           <div className="col-12">
@@ -95,28 +96,26 @@ const SaasMain = () => {
       </div>
 
       <div
-        className={`col-12 ${
-          activeLayout === "style-1" ||
-          activeLayout === "style-3" ||
-          activeLayout === "style-4"
+        className={`col-12 ${activeLayout === "style-1" ||
+            activeLayout === "style-3" ||
+            activeLayout === "style-4"
             ? "col-lg-12 col-xxl-4 col-xl-6"
             : "col-lg-6 col-xl-4"
-        }`}
+          }`}
       >
         <CampaignCard />
       </div>
 
-      <div
-        className={`col-12 ${
-          activeLayout === "style-1" ||
-          activeLayout === "style-3" ||
-          activeLayout === "style-4"
+      {/* <div
+        className={`col-12 ${activeLayout === "style-1" ||
+            activeLayout === "style-3" ||
+            activeLayout === "style-4"
             ? "col-lg-12 col-xxl-5 col-xl-12"
             : "col-lg-6 col-xl-5"
-        }`}
+          }`}
       >
         <MapLocationCard2 />
-      </div>
+      </div> */}
 
       <div className="col-12">
         <RecentCustomerCard />

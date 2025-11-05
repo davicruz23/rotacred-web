@@ -52,82 +52,82 @@ const homepageList = [
   },
 ];
 const homepageList2 = [
-  {
-    id: 1,
-    name: "Call Center",
-    url: "/call-center",
-    img: "/img/util/home-1.png",
-  },
-  {
-    id: 2,
-    name: "CRM",
-    url: "/crm",
-    img: "/img/util/home-2.png",
-  },
-  {
-    id: 3,
-    name: "HR Management",
-    url: "/hr-management",
-    img: "/img/util/home-3.png",
-  },
-  {
-    id: 4,
-    name: "HRM",
-    url: "/hrm",
-    img: "/img/util/home-4.png",
-  },
-  {
-    id: 5,
-    name: "OTA",
-    url: "/ota",
-    img: "/img/util/home-5.png",
-  },
-  {
-    id: 6,
-    name: "Courier System",
-    url: "/courier",
-    img: "/img/util/home-6.png",
-  },
-  {
-    id: 7,
-    name: "Delivery",
-    url: "/delivery",
-    img: "/img/util/home-7.png",
-  },
-  {
-    id: 8,
-    name: "Logistics",
-    url: "/logistics",
-    img: "/img/util/home-8.png",
-  },
-  {
-    id: 9,
-    name: "Podcast",
-    url: "/podcast",
-    img: "/img/util/home-9.png",
-  },
-  {
-    id: 10,
-    name: "Music",
-    url: "/music",
-    img: "/img/util/home-10.png",
-  },
-  {
-    id: 11,
-    name: "Restaurant POS",
-    url: "/restaurant",
-    img: "/img/util/home-11.png",
-  },
-  {
-    id: 12,
-    name: "POS System",
-    url: "/pos",
-    img: "/img/util/home-12.png",
-  },
+  // {
+  //   id: 1,
+  //   name: "Call Center",
+  //   url: "/call-center",
+  //   img: "/img/util/home-1.png",
+  // },
+  // {
+  //   id: 2,
+  //   name: "CRM",
+  //   url: "/crm",
+  //   img: "/img/util/home-2.png",
+  // },
+  // {
+  //   id: 3,
+  //   name: "HR Management",
+  //   url: "/hr-management",
+  //   img: "/img/util/home-3.png",
+  // },
+  // {
+  //   id: 4,
+  //   name: "HRM",
+  //   url: "/hrm",
+  //   img: "/img/util/home-4.png",
+  // },
+  // {
+  //   id: 5,
+  //   name: "OTA",
+  //   url: "/ota",
+  //   img: "/img/util/home-5.png",
+  // },
+  // {
+  //   id: 6,
+  //   name: "Courier System",
+  //   url: "/courier",
+  //   img: "/img/util/home-6.png",
+  // },
+  // {
+  //   id: 7,
+  //   name: "Delivery",
+  //   url: "/delivery",
+  //   img: "/img/util/home-7.png",
+  // },
+  // {
+  //   id: 8,
+  //   name: "Logistics",
+  //   url: "/logistics",
+  //   img: "/img/util/home-8.png",
+  // },
+  // {
+  //   id: 9,
+  //   name: "Podcast",
+  //   url: "/podcast",
+  //   img: "/img/util/home-9.png",
+  // },
+  // {
+  //   id: 10,
+  //   name: "Music",
+  //   url: "/music",
+  //   img: "/img/util/home-10.png",
+  // },
+  // {
+  //   id: 11,
+  //   name: "Restaurant POS",
+  //   url: "/restaurant",
+  //   img: "/img/util/home-11.png",
+  // },
+  // {
+  //   id: 12,
+  //   name: "POS System",
+  //   url: "/pos",
+  //   img: "/img/util/home-12.png",
+  // },
   {
     id: 13,
-    name: "SaaS",
-    url: "/saas",
+    name: "Inicio",
+    url: "/inicio",
     img: "/img/util/home-13.png",
   },
 ];
@@ -321,57 +321,57 @@ const navData = [
         icon: "ti ti-layout-dashboard",
         url: "#",
         subLinks: [
+          // {
+          //   subTitle: "Call Center",
+          //   subUrl: "/call-center",
+          // },
+          // {
+          //   subTitle: "CRM",
+          //   subUrl: "/crm",
+          // },
+          // {
+          //   subTitle: "HR Management",
+          //   subUrl: "/hr-management",
+          // },
+          // {
+          //   subTitle: "HRM",
+          //   subUrl: "/hrm",
+          // },
+          // {
+          //   subTitle: "OTA",
+          //   subUrl: "/ota",
+          // },
+          // {
+          //   subTitle: "Courier System",
+          //   subUrl: "/courier",
+          // },
+          // {
+          //   subTitle: "Delivery",
+          //   subUrl: "/delivery",
+          // },
+          // {
+          //   subTitle: "Logistics",
+          //   subUrl: "/logistics",
+          // },
+          // {
+          //   subTitle: "Podcast",
+          //   subUrl: "/podcast",
+          // },
+          // {
+          //   subTitle: "Music",
+          //   subUrl: "/music",
+          // },
+          // {
+          //   subTitle: "Restaurant POS",
+          //   subUrl: "/restaurant",
+          // },
+          // {
+          //   subTitle: "POS System",
+          //   subUrl: "/pos",
+          // },
           {
-            subTitle: "Call Center",
-            subUrl: "/call-center",
-          },
-          {
-            subTitle: "CRM",
-            subUrl: "/crm",
-          },
-          {
-            subTitle: "HR Management",
-            subUrl: "/hr-management",
-          },
-          {
-            subTitle: "HRM",
-            subUrl: "/hrm",
-          },
-          {
-            subTitle: "OTA",
-            subUrl: "/ota",
-          },
-          {
-            subTitle: "Courier System",
-            subUrl: "/courier",
-          },
-          {
-            subTitle: "Delivery",
-            subUrl: "/delivery",
-          },
-          {
-            subTitle: "Logistics",
-            subUrl: "/logistics",
-          },
-          {
-            subTitle: "Podcast",
-            subUrl: "/podcast",
-          },
-          {
-            subTitle: "Music",
-            subUrl: "/music",
-          },
-          {
-            subTitle: "Restaurant POS",
-            subUrl: "/restaurant",
-          },
-          {
-            subTitle: "POS System",
-            subUrl: "/pos",
-          },
-          {
-            subTitle: "SaaS",
-            subUrl: "/saas",
+            subTitle: "Inicio",
+            subUrl: "/inicio",
           },
         ],
       },
@@ -380,54 +380,54 @@ const navData = [
   {
     category: "apps",
     links: [
-      {
-        title: "CRM",
-        hasSub: true,
-        icon: "ti ti-coins",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Target Audience",
-            subUrl: "/audience",
-          },
-          {
-            subTitle: "Company",
-            subUrl: "/company",
-          },
-          {
-            subTitle: "Task",
-            subUrl: "/task",
-          },
-          {
-            subTitle: "Leads",
-            subUrl: "/leads",
-          },
-          {
-            subTitle: "Customer",
-            subUrl: "/customer",
-          },
-        ],
-      },
-      {
-        title: "HRM",
-        hasSub: true,
-        icon: "ti ti-user-square-rounded",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Add Employee",
-            subUrl: "/add-employee",
-          },
-          {
-            subTitle: "All Employee",
-            subUrl: "/all-employee",
-          },
-          {
-            subTitle: "Attendance",
-            subUrl: "/attendance",
-          },
-        ],
-      },
+      // {
+      //   title: "CRM",
+      //   hasSub: true,
+      //   icon: "ti ti-coins",
+      //   url: "#",
+      //   subLinks: [
+      //     {
+      //       subTitle: "Target Audience",
+      //       subUrl: "/audience",
+      //     },
+      //     {
+      //       subTitle: "Company",
+      //       subUrl: "/company",
+      //     },
+      //     {
+      //       subTitle: "Task",
+      //       subUrl: "/task",
+      //     },
+      //     {
+      //       subTitle: "Leads",
+      //       subUrl: "/leads",
+      //     },
+      //     {
+      //       subTitle: "Customer",
+      //       subUrl: "/customer",
+      //     },
+      //   ],
+      // },
+      // {
+      //   title: "HRM",
+      //   hasSub: true,
+      //   icon: "ti ti-user-square-rounded",
+      //   url: "#",
+      //   subLinks: [
+      //     {
+      //       subTitle: "Add Employee",
+      //       subUrl: "/add-employee",
+      //     },
+      //     {
+      //       subTitle: "All Employee",
+      //       subUrl: "/all-employee",
+      //     },
+      //     {
+      //       subTitle: "Attendance",
+      //       subUrl: "/attendance",
+      //     },
+      //   ],
+      // },
       {
         title: "eCommerce",
         hasSub: true,
@@ -456,160 +456,160 @@ const navData = [
           },
         ],
       },
-      {
-        url: "/calendar",
-        title: "Calendar",
-        icon: "ti ti-calendar-month",
-      },
-      {
-        url: "/chat",
-        title: "Chat",
-        icon: "ti ti-messages",
-      },
-      {
-        url: "/email",
-        title: "Email",
-        icon: "ti ti-mail",
-      },
-      {
-        title: "Email Templates",
-        hasSub: true,
-        icon: "ti ti-mail-forward",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Card Declined",
-            subUrl: "/card-declined",
-          },
-          {
-            subTitle: "Promotional",
-            subUrl: "/promotion",
-          },
-          {
-            subTitle: "Subscription Confirm",
-            subUrl: "/subscription-confirm",
-          },
-          {
-            subTitle: "Welcome",
-            subUrl: "/welcome-mail",
-          },
-          {
-            subTitle: "Reset Password",
-            subUrl: "/reset-password-mail",
-          },
-        ],
-      },
-      {
-        url: "/invoices",
-        title: "Invoices",
-        icon: "ti ti-file-invoice",
-      },
-      {
-        url: "/contact",
-        title: "Contact",
-        icon: "ti ti-phone-call",
-      },
+      // {
+      //   url: "/calendar",
+      //   title: "Calendar",
+      //   icon: "ti ti-calendar-month",
+      // },
+      // {
+      //   url: "/chat",
+      //   title: "Chat",
+      //   icon: "ti ti-messages",
+      // },
+      // {
+      //   url: "/email",
+      //   title: "Email",
+      //   icon: "ti ti-mail",
+      // },
+      // {
+      //   title: "Email Templates",
+      //   hasSub: true,
+      //   icon: "ti ti-mail-forward",
+      //   url: "#",
+      //   subLinks: [
+      //     {
+      //       subTitle: "Card Declined",
+      //       subUrl: "/card-declined",
+      //     },
+      //     {
+      //       subTitle: "Promotional",
+      //       subUrl: "/promotion",
+      //     },
+      //     {
+      //       subTitle: "Subscription Confirm",
+      //       subUrl: "/subscription-confirm",
+      //     },
+      //     {
+      //       subTitle: "Welcome",
+      //       subUrl: "/welcome-mail",
+      //     },
+      //     {
+      //       subTitle: "Reset Password",
+      //       subUrl: "/reset-password-mail",
+      //     },
+      //   ],
+      // },
+      // {
+      //   url: "/invoices",
+      //   title: "Invoices",
+      //   icon: "ti ti-file-invoice",
+      // },
+      // {
+      //   url: "/contact",
+      //   title: "Contact",
+      //   icon: "ti ti-phone-call",
+      // },
     ],
   },
   {
     category: "pages",
     links: [
-      {
-        title: "Authentication",
-        hasSub: true,
-        icon: "ti ti-lock-access",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Login 01",
-            subUrl: "/login",
-          },
-          {
-            subTitle: "Login 02",
-            subUrl: "/login-2",
-          },
-          {
-            subTitle: "Login 03",
-            subUrl: "/login-3",
-          },
-          {
-            subTitle: "Registration 01",
-            subUrl: "/registration",
-          },
-          {
-            subTitle: "Registration 02",
-            subUrl: "/registration-2",
-          },
-          {
-            subTitle: "Reset Password",
-            subUrl: "/reset-password",
-          },
-          {
-            subTitle: "Update Password",
-            subUrl: "/update-password",
-          },
-          {
-            subTitle: "Login Status",
-            subUrl: "/login-status",
-          },
-          {
-            subTitle: "Account Deactivated",
-            subUrl: "/account-deactivated",
-          },
-          {
-            subTitle: "Welcome",
-            subUrl: "/welcome",
-          },
-          {
-            subTitle: "Verify Email",
-            subUrl: "/email-verify",
-          },
-          {
-            subTitle: "Two Factor Verification",
-            subUrl: "/two-factor",
-          },
-          {
-            subTitle: "Multi Step Signup",
-            subUrl: "/multi-step-signup",
-          },
-        ],
-      },
-      {
-        title: "Error Pages",
-        hasSub: true,
-        icon: "ti ti-face-id-error",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Error 400",
-            subUrl: "/error-400",
-          },
-          {
-            subTitle: "Error 403",
-            subUrl: "/error-403",
-          },
-          {
-            subTitle: "Error 404",
-            subUrl: "/error-404",
-          },
-          {
-            subTitle: "Error 408",
-            subUrl: "/error-408",
-          },
-          {
-            subTitle: "Error 500",
-            subUrl: "/error-500",
-          },
-          {
-            subTitle: "Error 503",
-            subUrl: "/error-503",
-          },
-          {
-            subTitle: "Error 504",
-            subUrl: "/error-504",
-          },
-        ],
-      },
+      // {
+      //   title: "Authentication",
+      //   hasSub: true,
+      //   icon: "ti ti-lock-access",
+      //   url: "#",
+      //   subLinks: [
+      //     {
+      //       subTitle: "Login 01",
+      //       subUrl: "/login",
+      //     },
+      //     {
+      //       subTitle: "Login 02",
+      //       subUrl: "/login-2",
+      //     },
+      //     {
+      //       subTitle: "Login 03",
+      //       subUrl: "/login-3",
+      //     },
+      //     {
+      //       subTitle: "Registration 01",
+      //       subUrl: "/registration",
+      //     },
+      //     {
+      //       subTitle: "Registration 02",
+      //       subUrl: "/registration-2",
+      //     },
+      //     {
+      //       subTitle: "Reset Password",
+      //       subUrl: "/reset-password",
+      //     },
+      //     {
+      //       subTitle: "Update Password",
+      //       subUrl: "/update-password",
+      //     },
+      //     {
+      //       subTitle: "Login Status",
+      //       subUrl: "/login-status",
+      //     },
+      //     {
+      //       subTitle: "Account Deactivated",
+      //       subUrl: "/account-deactivated",
+      //     },
+      //     {
+      //       subTitle: "Welcome",
+      //       subUrl: "/welcome",
+      //     },
+      //     {
+      //       subTitle: "Verify Email",
+      //       subUrl: "/email-verify",
+      //     },
+      //     {
+      //       subTitle: "Two Factor Verification",
+      //       subUrl: "/two-factor",
+      //     },
+      //     {
+      //       subTitle: "Multi Step Signup",
+      //       subUrl: "/multi-step-signup",
+      //     },
+      //   ],
+      // },
+      // {
+      //   title: "Error Pages",
+      //   hasSub: true,
+      //   icon: "ti ti-face-id-error",
+      //   url: "#",
+      //   subLinks: [
+      //     {
+      //       subTitle: "Error 400",
+      //       subUrl: "/error-400",
+      //     },
+      //     {
+      //       subTitle: "Error 403",
+      //       subUrl: "/error-403",
+      //     },
+      //     {
+      //       subTitle: "Error 404",
+      //       subUrl: "/error-404",
+      //     },
+      //     {
+      //       subTitle: "Error 408",
+      //       subUrl: "/error-408",
+      //     },
+      //     {
+      //       subTitle: "Error 500",
+      //       subUrl: "/error-500",
+      //     },
+      //     {
+      //       subTitle: "Error 503",
+      //       subUrl: "/error-503",
+      //     },
+      //     {
+      //       subTitle: "Error 504",
+      //       subUrl: "/error-504",
+      //     },
+      //   ],
+      // },
       {
         title: "User",
         hasSub: true,
@@ -626,100 +626,100 @@ const navData = [
           },
         ],
       },
-      {
-        title: "Additional",
-        hasSub: true,
-        icon: "ti ti-basket-dollar",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Coming Soon 01",
-            subUrl: "/coming-soon",
-          },
-          {
-            subTitle: "Coming Soon 02",
-            subUrl: "/coming-soon-2",
-          },
-          {
-            subTitle: "Pricing Table 01",
-            subUrl: "/pricing-table",
-          },
-          {
-            subTitle: "Pricing Table 02",
-            subUrl: "/pricing-table-2",
-          },
-          {
-            subTitle: "Under Construction",
-            subUrl: "/under-construction",
-          },
-        ],
-      },
-      {
-        url: "/utility",
-        title: "Utility",
-        icon: "ti ti-calendar-month",
-      },
+      // {
+      //   title: "Additional",
+      //   hasSub: true,
+      //   icon: "ti ti-basket-dollar",
+      //   url: "#",
+      //   subLinks: [
+      //     {
+      //       subTitle: "Coming Soon 01",
+      //       subUrl: "/coming-soon",
+      //     },
+      //     {
+      //       subTitle: "Coming Soon 02",
+      //       subUrl: "/coming-soon-2",
+      //     },
+      //     {
+      //       subTitle: "Pricing Table 01",
+      //       subUrl: "/pricing-table",
+      //     },
+      //     {
+      //       subTitle: "Pricing Table 02",
+      //       subUrl: "/pricing-table-2",
+      //     },
+      //     {
+      //       subTitle: "Under Construction",
+      //       subUrl: "/under-construction",
+      //     },
+      //   ],
+      // },
+      // {
+      //   url: "/utility",
+      //   title: "Utility",
+      //   icon: "ti ti-calendar-month",
+      // },
     ],
   },
-  {
-    category: "components",
-    links: [
-      {
-        title: "Advance UI",
-        hasSub: true,
-        icon: "ti ti-components",
-        url: "#",
-        subLinks: [
-          {
-            subTitle: "Sweet Alert",
-            subUrl: "/sweet-alert",
-          },
-          {
-            subTitle: "Nestable List",
-            subUrl: "/nestable-list",
-          },
-          {
-            subTitle: "Animation",
-            subUrl: "/animation",
-          },
-          {
-            subTitle: "Swiper Slider",
-            subUrl: "/swiper-slider",
-          },
-        ],
-      },
-      {
-        url: "/form",
-        title: "Forms",
-        icon: "ti ti-forms",
-      },
-      {
-        url: "/table",
-        title: "Tables",
-        icon: "ti ti-table",
-      },
-      {
-        url: "/charts",
-        title: "Charts",
-        icon: "ti ti-chart-bar",
-      },
-      {
-        url: "/icon",
-        title: "Icons",
-        icon: "ti ti-icons",
-      },
-      {
-        url: "/map",
-        title: "Maps",
-        icon: "ti ti-map-pin",
-      },
-      {
-        url: "/file-manager",
-        title: "File Manager",
-        icon: "ti ti-file-text",
-      },
-    ],
-  },
+  // {
+  //   category: "components",
+  //   links: [
+  //     {
+  //       title: "Advance UI",
+  //       hasSub: true,
+  //       icon: "ti ti-components",
+  //       url: "#",
+  //       subLinks: [
+  //         {
+  //           subTitle: "Sweet Alert",
+  //           subUrl: "/sweet-alert",
+  //         },
+  //         {
+  //           subTitle: "Nestable List",
+  //           subUrl: "/nestable-list",
+  //         },
+  //         {
+  //           subTitle: "Animation",
+  //           subUrl: "/animation",
+  //         },
+  //         {
+  //           subTitle: "Swiper Slider",
+  //           subUrl: "/swiper-slider",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       url: "/form",
+  //       title: "Forms",
+  //       icon: "ti ti-forms",
+  //     },
+  //     {
+  //       url: "/table",
+  //       title: "Tables",
+  //       icon: "ti ti-table",
+  //     },
+  //     {
+  //       url: "/charts",
+  //       title: "Charts",
+  //       icon: "ti ti-chart-bar",
+  //     },
+  //     {
+  //       url: "/icon",
+  //       title: "Icons",
+  //       icon: "ti ti-icons",
+  //     },
+  //     {
+  //       url: "/map",
+  //       title: "Maps",
+  //       icon: "ti ti-map-pin",
+  //     },
+  //     {
+  //       url: "/file-manager",
+  //       title: "File Manager",
+  //       icon: "ti ti-file-text",
+  //     },
+  //   ],
+  // },
 ];
 
 const callTableData = [

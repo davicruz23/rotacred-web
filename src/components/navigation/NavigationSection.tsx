@@ -67,11 +67,11 @@ const NavigationSection = () => {
               <Link to="/pos">POS System</Link>
             </li> */}
             <li>
-              <Link to="/saas">SaaS</Link>
+              <Link to="/inicio">inicio</Link>
             </li>
           </ul>
         </li>
-        <li className={`megamenu-item ${dropdown === "apps" ? "active" : ""}`}>
+        {/* <li className={`megamenu-item ${dropdown === "apps" ? "active" : ""}`}>
           <a>Apps</a>
           <button
             className="mobile-dropdown-btn"
@@ -295,7 +295,7 @@ const NavigationSection = () => {
         </li>
         <li>
           <Link to="/file-manager">File Manager</Link>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

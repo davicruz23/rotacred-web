@@ -131,7 +131,7 @@ const SideMenuNavSection = ({
             noTitle={noTitle}
           />
 
-          <NavSingleSection
+          {/* <NavSingleSection
             category="components"
             activeDropdown={activeDropdown}
             pathname={pathname}
@@ -139,8 +139,8 @@ const SideMenuNavSection = ({
             toggleDropdown={toggleDropdown}
             dashedDivider={dashedDivider}
             noTitle={noTitle}
-          />
-          {activeLayout !== "style-5" && (
+          /> */}
+          {/* {activeLayout !== "style-5" && (
             <MultilvlDropdown
               activeMultiLvl={activeMultiLvl}
               handleClick={handleClick}
@@ -148,7 +148,7 @@ const SideMenuNavSection = ({
               dashedDivider={dashedDivider}
               noTitle={noTitle}
             />
-          )}
+          )} */}
         </ul>
       </nav>
       {iconOnly && (
@@ -158,7 +158,7 @@ const SideMenuNavSection = ({
           style={{ zIndex: 99999 }}
         />
       )}
-      {!logoutBtn ? (
+      {/* {!logoutBtn ? (
         <div className={`call-center-logout ${dashedDivider ? "d-none" : ""}`}>
           <a className="btn btn-primary" href="#">
             Docs & Components
@@ -168,7 +168,7 @@ const SideMenuNavSection = ({
         <a href="#" className="sidenav-logout">
           <i className="ti ti-logout"></i> Log Out
         </a>
-      )}
+      )} */}
     </OverlayScrollbarsComponent>
   );
 };
