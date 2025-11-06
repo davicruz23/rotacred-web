@@ -71,7 +71,7 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
             <span className="d-none d-lg-inline">{currentDate}</span>
           </button>
 
-          <button className="btn btn-light d-flex align-items-center">
+          {/* <button className="btn btn-light d-flex align-items-center">
             <svg
               className="me-lg-2"
               xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,7 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
               <span className="d-block">240 Calls</span>
             </div>
             <img alt="" className="shape-img" src="/img/icons/shape.svg" />
-          </button>
+          </button> */}
         </div>
       </div>
 

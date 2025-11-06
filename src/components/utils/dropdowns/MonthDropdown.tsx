@@ -4,25 +4,34 @@ import { Option } from "../../../types";
 import { useAppSelector } from "../../../redux/hooks";
 
 const monthDropdownOptions: Option[] = [
-  { value: "1", label: "6 months" },
-  { value: "2", label: "12 months" },
-  { value: "3", label: "18 months" },
+  { value: "6", label: "6 months" },
+  { value: "12", label: "12 months" },
 ];
 
 type Props = {
   color?: string;
+  onMonthChange?: (months: number) => void;
 };
 
-const MonthDropdown = ({ color }: Props) => {
-  const [monthDropdown, setMonthDropdown] = useState<Option | null>(null);
+const MonthDropdown = ({ color, onMonthChange }: Props) => {
+  const [monthDropdown, setMonthDropdown] = useState<Option>(monthDropdownOptions[0]);
   const darkMode = useAppSelector((state) => state.theme.isDark);
+
+  const handleChange = (selectedOption: Option | null) => {
+    if (selectedOption) {
+      setMonthDropdown(selectedOption);
+      if (onMonthChange) {
+        onMonthChange(parseInt(selectedOption.value));
+      }
+    }
+  };
 
   return (
     <Select
       options={monthDropdownOptions}
       className="ar-select"
       value={monthDropdown}
-      onChange={(selectedOption) => setMonthDropdown(selectedOption as Option)}
+      onChange={handleChange}
       placeholder="6 months"
       styles={{
         control: (baseStyles) => ({

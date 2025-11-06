@@ -2,7 +2,6 @@ import { useAppSelector } from "../../redux/hooks";
 import CampaignCard from "../cards/CampaignCard";
 import CustomerCard from "../cards/CustomerCard";
 import GoalsCard from "../cards/GoalsCard";
-import MapLocationCard2 from "../cards/MapLocationCard2";
 import RecentCustomerCard from "../cards/RecentCustomerCard";
 import SessionsByDeviceCard from "../cards/SessionsByDeviceCard";
 import SessionsCard from "../cards/SessionsCard";
@@ -21,30 +20,30 @@ const SaasMain = () => {
         <div className="row g-4">
           <div
             className={`col-12 col-sm-6 col-lg-4 ${activeLayout === "style-1" ||
-                activeLayout === "style-3" ||
-                activeLayout === "style-4"
-                ? "col-xxl col-xl-4"
-                : "col-xl"
+              activeLayout === "style-3" ||
+              activeLayout === "style-4"
+              ? "col-xxl col-xl-4"
+              : "col-xl"
               }`}
           >
             <TotalSaleCard2 />
           </div>
           <div
             className={`col-12 col-sm-6 col-lg-4 ${activeLayout === "style-1" ||
-                activeLayout === "style-3" ||
-                activeLayout === "style-4"
-                ? "col-xxl col-xl-4"
-                : "col-xl"
+              activeLayout === "style-3" ||
+              activeLayout === "style-4"
+              ? "col-xxl col-xl-4"
+              : "col-xl"
               }`}
           >
             <TotalOrderCard4 />
           </div>
           <div
             className={`col-12 col-sm-6 col-lg-4 ${activeLayout === "style-1" ||
-                activeLayout === "style-3" ||
-                activeLayout === "style-4"
-                ? "col-xxl col-xl-4"
-                : "col-xl"
+              activeLayout === "style-3" ||
+              activeLayout === "style-4"
+              ? "col-xxl col-xl-4"
+              : "col-xl"
               }`}
           >
             <VisitorCard />
@@ -74,10 +73,10 @@ const SaasMain = () => {
 
       <div
         className={`col-12 col-lg-6 ${activeLayout === "style-1" ||
-            activeLayout === "style-3" ||
-            activeLayout === "style-4"
-            ? "col-xxl-3 col-xl-6"
-            : "col-xl-3"
+          activeLayout === "style-3" ||
+          activeLayout === "style-4"
+          ? "col-xxl-3 col-xl-6"
+          : "col-xl-3"
           }`}
       >
         <div className="row g-4">
@@ -97,10 +96,10 @@ const SaasMain = () => {
 
       <div
         className={`col-12 ${activeLayout === "style-1" ||
-            activeLayout === "style-3" ||
-            activeLayout === "style-4"
-            ? "col-lg-12 col-xxl-4 col-xl-6"
-            : "col-lg-6 col-xl-4"
+          activeLayout === "style-3" ||
+          activeLayout === "style-4"
+          ? "col-lg-12 col-xxl-4 col-xl-6"
+          : "col-lg-6 col-xl-4"
           }`}
       >
         <CampaignCard />

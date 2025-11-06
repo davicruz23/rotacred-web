@@ -20,7 +20,13 @@ const TotalSaleCard2 = () => {
 
   if (loading) return <div>Carregando...</div>;
 
-  const valor = data?.totalSale?.toFixed(2) ?? "0.00";
+  const valorFormatado = data
+    ? data.totalSale.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    })
+    : "R$ 0,00"
+
   const percentual = data?.percentual ?? 0;
   const isPositive = percentual >= 0;
 
@@ -33,7 +39,7 @@ const TotalSaleCard2 = () => {
         <h6 className="mb-0 fw-medium text-white">Total Vendido</h6>
       </div>
 
-      <h3 className="title my-4 text-white">${valor}</h3>
+      <h3 className="title my-4 text-white">{valorFormatado}</h3>
 
       <div className="subtitle text-white">
         <i
@@ -48,7 +54,7 @@ const TotalSaleCard2 = () => {
         >
           {Math.abs(percentual).toFixed(1)}%
         </span>{" "}
-        {isPositive ? "de aumento" : "de queda"} neste mês
+        {isPositive ? "de aumento" : "de queda"} no mês
       </div>
     </div>
   );

@@ -15,6 +15,15 @@ const SessionsByDeviceChart = ({ data }: Props) => {
   useEffect(() => {
     if (!chartRef.current) return;
 
+    const total = data.PENDENTE + data.RECUSADA + data.APROVADA;
+    const percentuais = total
+      ? [
+          (data.PENDENTE / total) * 100,
+          (data.RECUSADA / total) * 100,
+          (data.APROVADA / total) * 100,
+        ]
+      : [0, 0, 0];
+
     const chartOptions = {
       chart: {
         height: 250,
@@ -48,18 +57,18 @@ const SessionsByDeviceChart = ({ data }: Props) => {
           },
           dataLabels: {
             show: true,
-            name: { show: true, fontSize: "16px", fontWeight: 600 },
+            name: { show: true, fontSize: "14px", fontWeight: 500 },
             value: {
               show: true,
-              fontSize: "14px",
+              fontSize: "13px",
               fontWeight: 400,
-              formatter: (val: number) => val.toFixed(0),
+              formatter: (val: number) => `${val.toFixed(0)}%`,
             },
           },
         },
       },
       colors: ["#FF7049", "#845ADF", "#20C997"],
-      series: [data.PENDENTE, data.RECUSADA, data.APROVADA],
+      series: percentuais,
       labels: ["Pendente", "Recusada", "Aprovada"],
       responsive: [
         {
