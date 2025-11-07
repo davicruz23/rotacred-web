@@ -429,31 +429,99 @@ const navData = [
       //   ],
       // },
       {
-        title: "eCommerce",
+        title: "Produtos",
         hasSub: true,
         icon: "ti ti-shopping-cart-star",
         url: "#",
         subLinks: [
+          // {
+          //   subTitle: "All Customer",
+          //   subUrl: "/all-customer",
+          // },
           {
-            subTitle: "All Customer",
-            subUrl: "/all-customer",
-          },
-          {
-            subTitle: "Add Product",
-            subUrl: "/add-product",
-          },
-          {
-            subTitle: "All Product",
+            subTitle: "Todos Produtos",
             subUrl: "/all-product",
           },
           {
-            subTitle: "Category",
-            subUrl: "/category",
+            subTitle: "Adicionar Produtos",
+            subUrl: "/add-product",
+          },
+          // {
+          //   subTitle: "Atualizar Produtos",
+          //   subUrl: "/update-product",
+          // },
+          // {
+          //   subTitle: "Category",
+          //   subUrl: "/category",
+          // },
+          // {
+          //   subTitle: "Order",
+          //   subUrl: "/order",
+          // },
+        ],
+      },
+      {
+        title: "Relatórios",
+        hasSub: true,
+        icon: "ti ti-file-description",
+        url: "#",
+        subLinks: [
+          // {
+          //   subTitle: "All Customer",
+          //   subUrl: "/all-customer",
+          // },
+          {
+            subTitle: "Todos Produtos",
+            subUrl: "/all-product",
           },
           {
-            subTitle: "Order",
-            subUrl: "/order",
+            subTitle: "Adicionar Produtos",
+            subUrl: "/add-product",
           },
+          // {
+          //   subTitle: "Atualizar Produtos",
+          //   subUrl: "/update-product",
+          // },
+          // {
+          //   subTitle: "Category",
+          //   subUrl: "/category",
+          // },
+          // {
+          //   subTitle: "Order",
+          //   subUrl: "/order",
+          // },
+        ],
+      },
+      {
+        title: "Comissões",
+        hasSub: true,
+        icon: "ti ti-cash",
+        url: "#",
+        subLinks: [
+          // {
+          //   subTitle: "All Customer",
+          //   subUrl: "/all-customer",
+          // },
+          {
+            subTitle: "Cobrador",
+            subUrl: "/commision-collector",
+          },
+          {
+            subTitle: "Vendedor",
+            subUrl: "/commission-seller",
+          },
+          // {
+          //   subTitle: "Atualizar Produtos",
+          //   subUrl: "/update-product",
+          // },
+          // {
+          //   subTitle: "Category",
+          //   subUrl: "/category",
+          // },
+          // {
+          //   subTitle: "Order",
+          //   subUrl: "/order",
+          // },
         ],
       },
       // {

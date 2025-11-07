@@ -1,34 +1,27 @@
+import { useNavigate } from "react-router-dom";
 import { AllProductDataType } from "../../types";
 
 type Props = {
   tableData: AllProductDataType[];
   handleDelete: (id: number) => void;
 };
+
 const AllProductTable = ({ tableData, handleDelete }: Props) => {
+  const navigate = useNavigate();
   return (
-    <table
-      className="table table-dashed table-hover digi-dataTable all-product-table"
-      id="allProductTable"
-    >
+    <table className="table table-dashed table-hover digi-dataTable all-product-table">
       <thead>
         <tr>
           <th className="no-sort">
             <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="markAllProduct"
-              />
+              <input className="form-check-input" type="checkbox" />
             </div>
           </th>
-          <th>Product</th>
-          <th>SKU</th>
-          <th>Stock</th>
-          <th>Price</th>
-          <th>Sales</th>
-          <th>Rating</th>
-          <th>Published</th>
-          <th>Action</th>
+          <th>Produtos</th>
+          <th>Estoque</th>
+          <th>Preço</th>
+          <th>Status</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -41,43 +34,28 @@ const AllProductTable = ({ tableData, handleDelete }: Props) => {
             </td>
             <td>
               <div className="table-product-card">
-                <div className="part-img">
-                  <img src={item.image} alt="Image" />
-                </div>
                 <div className="part-txt">
-                  <span className="product-name">{item.product_name}</span>
-                  <span className="product-category">
-                    Category: {item.category}
-                  </span>
+                  <span className="product-name">{item.name}</span>
+                  <span className="product-category">Marca: {item.brand}</span>
                 </div>
               </div>
             </td>
-            <td>CSJ{item.sku}</td>
-            <td>{item.stock}</td>
-            <td>${item.price}</td>
-            <td>{item.sales}</td>
-            <td>
-              <div className="rating">
-                <div className="star">
-                  <i className="fa-sharp fa-solid fa-star starred"></i>
-                  <i className="fa-sharp fa-solid fa-star starred"></i>
-                  <i className="fa-sharp fa-solid fa-star starred"></i>
-                  <i className="fa-sharp fa-solid fa-star starred"></i>
-                  <i className="fa-sharp fa-solid fa-star"></i>
-                </div>
-                <div className="rating-amount mt-2">({item.rating})</div>
-              </div>
-            </td>
-            <td>{item.published} 01:05 PM</td>
+            <td>{item.amount}</td>
+            <td>${item.value}</td>
+            <td>{item.status}</td>
             <td>
               <div className="btn-box">
-                <button>
-                  <i className="fa-light fa-eye"></i>
-                </button>
-                <button>
+                <button
+                  title="Editar"
+                  onClick={() => navigate(`/update-product/${item.id}`)}
+                >
                   <i className="fa-light fa-pen"></i>
                 </button>
-                <button onClick={() => handleDelete(item.id)}>
+                <button
+                  title="Deletar"
+                  onClick={() => handleDelete(item.id)}
+                  className="text-danger"
+                >
                   <i className="fa-light fa-trash"></i>
                 </button>
               </div>
@@ -88,4 +66,5 @@ const AllProductTable = ({ tableData, handleDelete }: Props) => {
     </table>
   );
 };
+
 export default AllProductTable;

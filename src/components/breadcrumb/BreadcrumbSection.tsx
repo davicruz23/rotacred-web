@@ -12,7 +12,7 @@ const BreadcrumbSection = ({ link, title }: Props) => {
 
       <div className="btn-box">
         <Link to={link} className="btn btn-sm btn-primary">
-          View All
+          Ver todos
         </Link>
       </div>
     </div>

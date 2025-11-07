@@ -23,11 +23,11 @@ const TableBottomControls = <T,>({
     <div className="table-bottom-control">
       {!hideInfo && (
         <div className="dataTables_info">
-          Showing {indexOfFirstData + 1} to{" "}
+          Exibindo {indexOfFirstData + 1} para {" "}
           {indexOfLastData > dataList.length
             ? dataList.length
             : indexOfLastData}{" "}
-          of {dataList.length}
+          de {dataList.length}
         </div>
       )}
       <div className="dataTables_paginate paging_simple_numbers">

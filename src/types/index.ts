@@ -91,15 +91,11 @@ export type AllCustomerDataType = {
 
 export type AllProductDataType = {
   id: number;
-  product_name: string;
-  category: string;
-  sku: number;
-  image: string;
-  stock: number;
-  price: number;
-  sales: number;
-  rating: number;
-  published: string;
+  name: string;
+  brand: string;
+  amount: number;
+  status: string;
+  value: number;
 };
 
 export type Option = {

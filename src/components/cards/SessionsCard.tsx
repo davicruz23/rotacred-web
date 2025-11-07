@@ -21,12 +21,12 @@ const SessionsCard = () => {
         <div className="icon-wrap">
           <i className="ti ti-truck"></i>
         </div>
-        <h6 className="mb-0 fw-medium text-white">Total de Cidades</h6>
+        <h6 className="mb-0 fw-medium text-white">Carregamentos</h6>
       </div>
 
       <h3 className="title my-4 text-white">{total.toLocaleString("pt-BR")}</h3>
 
-      <div className="subtitle text-white">Total de cidades</div>
+      <div className="subtitle text-white">Total de Carregamentos</div>
     </div>
   );
 };
