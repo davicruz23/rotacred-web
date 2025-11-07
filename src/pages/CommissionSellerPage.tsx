@@ -46,7 +46,7 @@ const CommissionSellerPage = () => {
   };
 
   return (
-    <div className="container-fluid px-4 my-4">
+    <div className="container-fluid px-1 my-1">
       <BreadcrumbSection title="Comissão do Vendedor" link="/inicio" />
 
       <div className="card shadow-sm mt-3">
@@ -113,7 +113,7 @@ const CommissionSellerPage = () => {
                 onClick={handleSearch}
                 className="btn btn-primary w-100 btn-lg"
               >
-                Buscar Comissão
+                Calcular Comissão
               </button>
             </div>
           </div>

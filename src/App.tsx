@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate  } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 // import CallCenterPage from "./pages/CallCenterPage";
 // import CrmPage from "./pages/CrmPage";
@@ -86,6 +86,9 @@ import InnerLayoutStyle6 from "./components/layout/InnerLayoutStyle6";
 import UpdateProductPage from "./pages/UpdateProductPage";
 import CommissionCollectorrPage from "./pages/CommissionCollectorrPage";
 import CommissionSellerPage from "./pages/CommissionSellerPage";
+import ReportClientsPage from "./pages/ReportClientsPage";
+import RepostProductsPage from "./pages/ReportCharginsPage";
+import ReportCharginsPage from "./pages/ReportCharginsPage";
 
 function App() {
   const activeLayout = useAppSelector((state) => state.layout.isLayout);
@@ -138,9 +141,11 @@ function App() {
             <Route path="/all-customer" element={<AllCustomerPage />} />
             <Route path="/add-product" element={<AddNewProductPage />} />
             <Route path="/update-product/:id" element={<UpdateProductPage />} />
-            <Route path="/commision-collector" element={<CommissionCollectorrPage />}/>
-            <Route path="/commission-seller" element={<CommissionSellerPage />}/>
+            <Route path="/commision-collector" element={<CommissionCollectorrPage />} />
+            <Route path="/commission-seller" element={<CommissionSellerPage />} />
             <Route path="/all-product" element={<AllProductPage />} />
+            <Route path="/report-clients" element={<ReportClientsPage />} />
+            <Route path="/report-chargings" element={<ReportCharginsPage />} />
             <Route path="/category" element={<CategoryPage />} />
             <Route path="/order" element={<OrderListPage />} />
             <Route path="/calendar" element={<CalenderPage />} />

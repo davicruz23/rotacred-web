@@ -378,7 +378,7 @@ const navData = [
     ],
   },
   {
-    category: "apps",
+    category: "gestão",
     links: [
       // {
       //   title: "CRM",
@@ -471,12 +471,12 @@ const navData = [
           //   subUrl: "/all-customer",
           // },
           {
-            subTitle: "Todos Produtos",
-            subUrl: "/all-product",
+            subTitle: "Carregamentos",
+            subUrl: "/report-chargings",
           },
           {
-            subTitle: "Adicionar Produtos",
-            subUrl: "/add-product",
+            subTitle: "Clientes",
+            subUrl: "/report-clients",
           },
           // {
           //   subTitle: "Atualizar Produtos",

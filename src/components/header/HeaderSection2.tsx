@@ -28,7 +28,7 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
   const toggleDropdown = (dropdown: string) => {
     setActiveDropdown(activeDropdown === dropdown ? "" : dropdown);
   };
-  const currentDate = new Date().toLocaleDateString("en-GB", {
+  const currentDate = new Date().toLocaleDateString("pt-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",
