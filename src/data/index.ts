@@ -524,63 +524,26 @@ const navData = [
           // },
         ],
       },
-      // {
-      //   url: "/calendar",
-      //   title: "Calendar",
-      //   icon: "ti ti-calendar-month",
-      // },
-      // {
-      //   url: "/chat",
-      //   title: "Chat",
-      //   icon: "ti ti-messages",
-      // },
-      // {
-      //   url: "/email",
-      //   title: "Email",
-      //   icon: "ti ti-mail",
-      // },
-      // {
-      //   title: "Email Templates",
-      //   hasSub: true,
-      //   icon: "ti ti-mail-forward",
-      //   url: "#",
-      //   subLinks: [
-      //     {
-      //       subTitle: "Card Declined",
-      //       subUrl: "/card-declined",
-      //     },
-      //     {
-      //       subTitle: "Promotional",
-      //       subUrl: "/promotion",
-      //     },
-      //     {
-      //       subTitle: "Subscription Confirm",
-      //       subUrl: "/subscription-confirm",
-      //     },
-      //     {
-      //       subTitle: "Welcome",
-      //       subUrl: "/welcome-mail",
-      //     },
-      //     {
-      //       subTitle: "Reset Password",
-      //       subUrl: "/reset-password-mail",
-      //     },
-      //   ],
-      // },
-      // {
-      //   url: "/invoices",
-      //   title: "Invoices",
-      //   icon: "ti ti-file-invoice",
-      // },
-      // {
-      //   url: "/contact",
-      //   title: "Contact",
-      //   icon: "ti ti-phone-call",
-      // },
+      {
+        title: "Cobradores",
+        hasSub: true,
+        icon: "ti ti-user-check",
+        url: "#",
+        subLinks: [
+          {
+            subTitle: "Atribuir Cidades",
+            subUrl: "/collector-cities",
+          },
+          {
+            subTitle: "Cobranças",
+            subUrl: "/collector-sales",
+          },
+        ],
+      },
     ],
   },
   {
-    category: "pages",
+    category: "administração",
     links: [
       // {
       //   title: "Authentication",
@@ -679,7 +642,7 @@ const navData = [
       //   ],
       // },
       {
-        title: "User",
+        title: "Usuarios",
         hasSub: true,
         icon: "ti ti-user-star",
         url: "#",

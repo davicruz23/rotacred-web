@@ -122,7 +122,7 @@ const SideMenuNavSection = ({
           />
 
           <NavSingleSection
-            category="pages"
+            category="administração"
             activeDropdown={activeDropdown}
             pathname={pathname}
             iconOnly={iconOnly}

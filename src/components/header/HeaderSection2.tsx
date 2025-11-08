@@ -50,9 +50,8 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
   }, []);
   return (
     <header
-      className={`top-header-area d-flex flex-wrap flex-sm-nowrap align-items-center justify-content-between  ${
-        isHeaderFixed ? "header-sticky" : ""
-      }`}
+      className={`top-header-area d-flex flex-wrap flex-sm-nowrap align-items-center justify-content-between  ${isHeaderFixed ? "header-sticky" : ""
+        }`}
       id="stickyHeader"
     >
       <div className="left-side-content-area d-flex align-items-center justify-content-between">
@@ -128,17 +127,16 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
           className="ps-0 right-side-content d-flex align-items-center"
           ref={dropdownRef}
         >
-          <li className="nav-item dropdown">
+          {/* <li className="nav-item dropdown">
             <button className="btn dropdown-toggle" type="button">
               <img alt="" src="/img/icons/layer.svg" />
             </button>
-          </li>
+          </li> */}
 
-          <li className="nav-item dropdown">
+          {/* <li className="nav-item dropdown">
             <button
-              className={`btn dropdown-toggle ${
-                activeDropdown === "notification" ? "show" : ""
-              }`}
+              className={`btn dropdown-toggle ${activeDropdown === "notification" ? "show" : ""
+                }`}
               type="button"
               onClick={() => toggleDropdown("notification")}
             >
@@ -146,9 +144,8 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
             </button>
 
             <div
-              className={`dropdown-menu notifications-box dropdown-menu-end ${
-                activeDropdown === "notification" ? "show" : ""
-              }`}
+              className={`dropdown-menu notifications-box dropdown-menu-end ${activeDropdown === "notification" ? "show" : ""
+                }`}
             >
               <a className="dropdown-item" href="#">
                 <i className="ti ti-box bg-success"></i>
@@ -170,13 +167,12 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
                 View all <i className="ti ti-arrow-right"></i>
               </a>
             </div>
-          </li>
+          </li> */}
 
           <li className="nav-item dropdown ms-2">
             <button
-              className={`btn topbar-user-meta-data dropdown-toggle ${
-                activeDropdown === "user-profile" ? "show" : ""
-              }`}
+              className={`btn topbar-user-meta-data dropdown-toggle ${activeDropdown === "user-profile" ? "show" : ""
+                }`}
               type="button"
               onClick={() => toggleDropdown("user-profile")}
             >
@@ -184,9 +180,8 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
             </button>
 
             <div
-              className={`dropdown-menu dropdown-menu-end ${
-                activeDropdown === "user-profile" ? "show" : ""
-              }`}
+              className={`dropdown-menu dropdown-menu-end ${activeDropdown === "user-profile" ? "show" : ""
+                }`}
             >
               <div className="user-profile-area">
                 <a className="dropdown-item" href="#">
