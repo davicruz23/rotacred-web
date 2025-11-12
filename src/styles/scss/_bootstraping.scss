@@ -80,25 +80,31 @@ select {
   z-index: 30;
   top: 0;
   left: -300px;
-  width: 260px;
+  width: 280px;
   height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   transition-duration: 400ms;
+  padding-left: 30px;
 
   @media #{$breakpoint-md} {
     left: 0;
   }
 
   a {
-    padding-left: 30px;
-    padding-top: 33px;
-    display: block;
+    display: flex;
+    align-items: center;
 
     img {
-      width: auto;
-      max-height: 34px;
+      width: 200px;
+      height: auto;
+      max-height: 200px;
+      object-fit: contain;
     }
   }
 }
+
 
 .dark-mode-logo {
   display: none;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CustomerChart from "../charts/CustomerChart";
 import MonthDropdown from "../utils/dropdowns/MonthDropdown";
+import api from "../../services/api";
 
 interface SalesData {
   mes: string;
@@ -12,23 +13,20 @@ const CustomerCard = () => {
   const [salesData, setSalesData] = useState<SalesData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Função para buscar dados da API
-  const fetchSalesData = async (months: number) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:8081/api/dashboard/sales-per-month?meses=${months}`);
-      const data = await response.json();
-      setSalesData(data);
-    } catch (error) {
-      console.error("Erro ao buscar dados de vendas:", error);
-      setSalesData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchSalesData(selectedMonths);
+    setLoading(true);
+
+    api
+      .get(`/dashboard/sales-per-month?meses=${selectedMonths}`)
+      .then((response) => {
+        setSalesData(response.data);
+        console.log("sales-per-month:", response.data);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar dados de vendas:", err);
+        setSalesData([]);
+      })
+      .finally(() => setLoading(false));
   }, [selectedMonths]);
 
   const handleMonthChange = (months: number) => {
@@ -45,7 +43,7 @@ const CustomerCard = () => {
       </div>
 
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '260px' }}>
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "260px" }}>
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Carregando...</span>
           </div>

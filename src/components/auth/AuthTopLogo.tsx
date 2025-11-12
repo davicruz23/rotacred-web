@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 
 const AuthTopLogo = () => {
@@ -8,15 +7,24 @@ const AuthTopLogo = () => {
       <div className="logo">
         <a href="#">
           {darkMode ? (
-            <img src="/img/core-img/logo.png" alt="logo" />
+            <img src="/img/core-img/rotaa.png" alt="logo" />
           ) : (
-            <img src="/img/core-img/logo-white.png" alt="logo" />
+            <img
+              src="/img/core-img/rotaa.png"
+              alt="logo"
+              style={{
+                maxWidth: "400px",
+                height: "auto",
+                display: "block",
+                margin: "0 auto"
+              }}
+            />
           )}
         </a>
       </div>
-      <Link to="/">
+      {/* <Link to="/">
         <i className="fa-duotone fa-house-chimney"></i>
-      </Link>
+      </Link> */}
     </>
   );
 };

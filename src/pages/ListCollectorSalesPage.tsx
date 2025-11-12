@@ -68,7 +68,7 @@ const ListCollectorSalesPage = () => {
                   aria-expanded="false"
                   aria-controls={`coll-${collector.id}`}
                 >
-                  {collector.collectorName} ({collector.sales.length} vendas)
+                  {collector.collectorName} ({collector.sales.length} Cobranças)
                 </button>
               </h2>
 

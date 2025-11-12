@@ -52,12 +52,12 @@ const HeaderSection = ({ headerStyle }: Props) => {
           <Link className="crm-logo me-2 me-sm-4 me-xl-5" to="/">
             <img
               className="light-mode-logo"
-              src="/img/core-img/logo-white.png"
+              src="/img/core-img/ro.png"
               alt="logo"
             />
             <img
               className="dark-mode-logo"
-              src="/img/core-img/logo.png"
+              src="/img/core-img/ro.png"
               alt="logo"
             />
           </Link>

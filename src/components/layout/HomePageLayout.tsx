@@ -15,7 +15,7 @@ const HomePageLayout = () => {
   const pathName = location.pathname.slice(1) + "_page";
   return (
     <main className={pathName}>
-      <RightSidebarBtn />
+      {/* <RightSidebarBtn /> */}
       <RightSidebarSection />
       <Outlet />
       {/* Modals */}

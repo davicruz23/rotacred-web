@@ -169,36 +169,19 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
             </div>
           </li> */}
 
-          <li className="nav-item dropdown ms-2">
+          <li className="nav-item ms-2">
             <button
-              className={`btn topbar-user-meta-data dropdown-toggle ${activeDropdown === "user-profile" ? "show" : ""
-                }`}
+              className="btn topbar-user-meta-data"
               type="button"
-              onClick={() => toggleDropdown("user-profile")}
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.href = "/login"; // força redirecionamento
+              }}
             >
-              <img alt="" src="/img/bg-img/user.png" />
+              <i className="ti ti-logout" style={{ fontSize: 25 }}></i>
             </button>
-
-            <div
-              className={`dropdown-menu dropdown-menu-end ${activeDropdown === "user-profile" ? "show" : ""
-                }`}
-            >
-              <div className="user-profile-area">
-                <a className="dropdown-item" href="#">
-                  <i className="ti ti-user"></i> My profile
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="ti ti-settings"></i> Account settings
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="ti ti-heart"></i> Support
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="ti ti-lock"></i> Logout
-                </a>
-              </div>
-            </div>
           </li>
+
         </ul>
       </div>
     </header>
