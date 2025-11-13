@@ -4,9 +4,11 @@ import api from "../../services/api"; // 👈 importa o mesmo client que você j
 
 const SessionsByDeviceCard = () => {
   const [status, setStatus] = useState({
+    
+    APROVADA: 0,
     PENDENTE: 0,
     RECUSADA: 0,
-    APROVADA: 0,
+    
   });
   const [loading, setLoading] = useState(true);
 

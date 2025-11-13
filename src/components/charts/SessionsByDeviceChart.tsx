@@ -18,9 +18,9 @@ const SessionsByDeviceChart = ({ data }: Props) => {
     const total = data.PENDENTE + data.RECUSADA + data.APROVADA;
     const percentuais = total
       ? [
+          (data.APROVADA / total) * 100,
           (data.PENDENTE / total) * 100,
           (data.RECUSADA / total) * 100,
-          (data.APROVADA / total) * 100,
         ]
       : [0, 0, 0];
 
@@ -67,7 +67,7 @@ const SessionsByDeviceChart = ({ data }: Props) => {
           },
         },
       },
-      colors: ["#FF7049", "#845ADF", "#20C997"],
+      colors: ["#20C997", "#845ADF", "#FF7049"],
       series: percentuais,
       labels: ["Pendente", "Recusada", "Aprovada"],
       responsive: [

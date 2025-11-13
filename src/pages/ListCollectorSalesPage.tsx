@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+import { FaMapMarkerAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 type ProductType = {
   id: number;
@@ -13,6 +14,9 @@ type InstallmentType = {
   amount: number;
   paid: boolean;
   status: string | null;
+  isValid: boolean;
+  attempLongitude: number;
+  attempLatitude: number;
 };
 
 type SaleType = {
@@ -22,6 +26,8 @@ type SaleType = {
   paymentType: string;
   clientName: string;
   total: number;
+  longitude: number;
+  latitude: number;
   products: ProductType[];
   installments: InstallmentType[];
 };
@@ -37,7 +43,7 @@ const ListCollectorSalesPage = () => {
 
   const fetchCollectorsWithSales = async () => {
     try {
-      const response = await api.get("/collector/all");
+      const response = await api.get("/collector/all/sales");
       setCollectorData(response.data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -110,6 +116,24 @@ const ListCollectorSalesPage = () => {
                             <p><strong>Pagamento:</strong> {sale.paymentType}</p>
                             <p><strong>Total:</strong> R$ {sale.total}</p>
 
+                            {/* ✅ Botão estilizado do Google Maps */}
+                            {sale.latitude && sale.longitude && (
+                              <div className="mb-3">
+                                <button
+                                  className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
+                                  onClick={() =>
+                                    window.open(
+                                      `https://www.google.com/maps?q=${sale.latitude},${sale.longitude}`,
+                                      "_blank",
+                                      "noopener,noreferrer"
+                                    )
+                                  }
+                                >
+                                  <i className="bi bi-geo-alt-fill"></i> Ver no Mapa
+                                </button>
+                              </div>
+                            )}
+
                             <hr />
 
                             <h6>🛒 Produtos:</h6>
@@ -119,6 +143,7 @@ const ListCollectorSalesPage = () => {
                               ))}
                             </ul>
 
+
                             <h6 className="mt-3">💰 Parcelas:</h6>
                             <table className="table table-sm table-bordered">
                               <thead>
@@ -126,7 +151,9 @@ const ListCollectorSalesPage = () => {
                                   <th>#</th>
                                   <th>Vencimento</th>
                                   <th>Valor</th>
-                                  <th>Pago?</th>
+                                  <th>Pago</th>
+                                  <th>Localização da cobrança</th>
+                                  <th>Ver localização</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -135,9 +162,61 @@ const ListCollectorSalesPage = () => {
                                     <td>{i.id}</td>
                                     <td>{i.dueDate}</td>
                                     <td>R$ {i.amount}</td>
-                                    <td>{i.paid ? "✅" : "❌"}</td>
+                                    {/* <td>{i.paid ? "✅" : "Aguardando"}</td> */}
+                                    <td style={{ textAlign: "center" }}>
+                                      {i.paid ? (
+                                        <FaCheckCircle color="#28a745" size={18} title="Parcela Paga" />
+                                      ) : (
+                                        <FaTimesCircle color="#dc3545" size={18} title="Parcela Pendente" />
+                                      )}
+                                    </td>
+
+                                    <td style={{ textAlign: "center" }}>
+                                      {i.isValid ? (
+                                        <FaCheckCircle color="#28a745" size={18} title="Localização validada" />
+                                      ) : (
+                                        <FaTimesCircle color="#dc3545" size={18} title="Localização pendente" />
+                                      )}
+                                    </td>
+
+                                    {/* 📍 Coluna com botão para abrir mapa */}
+                                    <td
+                                      style={{ cursor: "pointer", textAlign: "center" }}
+                                      title="Abrir localização no Google Maps"
+                                      onClick={() => {
+                                        const lat = i.attempLatitude ?? sale.latitude;
+                                        const lon = i.attempLongitude ?? sale.longitude;
+
+                                        if (lat && lon) {
+                                          window.open(
+                                            `https://www.google.com/maps?q=${lat},${lon}`,
+                                            "_blank",
+                                            "noopener,noreferrer"
+                                          );
+                                        } else {
+                                          alert("Localização não disponível para esta parcela.");
+                                        }
+                                      }}
+                                    >
+                                      <FaMapMarkerAlt
+                                        size={18}
+                                        color="#007bff"
+                                        style={{
+                                          transition: "transform 0.2s, color 0.2s",
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          e.currentTarget.style.transform = "scale(1.2)";
+                                          e.currentTarget.style.color = "#0056b3";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.currentTarget.style.transform = "scale(1.0)";
+                                          e.currentTarget.style.color = "#007bff";
+                                        }}
+                                      />
+                                    </td>
                                   </tr>
                                 ))}
+
                               </tbody>
                             </table>
                           </div>
