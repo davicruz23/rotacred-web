@@ -84,13 +84,13 @@ const SaasMain = () => {
             <UsersCard2 />
           </div>
 
-          <div className="col-12">
+          {/* <div className="col-12">
             <GoalsCard />
           </div>
 
           <div className="col-12">
             <TrafficCard />
-          </div>
+          </div> */}
         </div>
       </div>
 

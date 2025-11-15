@@ -474,10 +474,10 @@ const navData = [
             subTitle: "Carregamentos",
             subUrl: "/report-chargings",
           },
-          {
-            subTitle: "Clientes",
-            subUrl: "/report-clients",
-          },
+          // {
+          //   subTitle: "Clientes",
+          //   subUrl: "/report-clients",
+          // },
           // {
           //   subTitle: "Atualizar Produtos",
           //   subUrl: "/update-product",
@@ -648,12 +648,12 @@ const navData = [
         url: "#",
         subLinks: [
           {
-            subTitle: "View Profile",
-            subUrl: "/view-profile",
+            subTitle: "Lista de Usuários",
+            subUrl: "/view-users",
           },
           {
-            subTitle: "Edit Profile",
-            subUrl: "/edit-profile",
+            subTitle: "Cadastrar Usuário",
+            subUrl: "/create-user",
           },
         ],
       },

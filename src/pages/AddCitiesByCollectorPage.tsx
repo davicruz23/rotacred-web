@@ -2,126 +2,153 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 
-type AssignedType = {
-  collectorId: number;
+type SaleType = {
+  id: number;
+  clientId: number;
+  clientName: string;
   city: string;
-  totalSalesAssigned: number;
+  state: string;
+  amount: number;
+};
+
+type GroupedType = {
+  city: string;
+  totalSales: number;
+  sales: SaleType[];
 };
 
 const AddCitiesByCollectorPage = () => {
   const [collectorList, setCollectorList] = useState<{ id: number; collectorName: string }[]>([]);
-  const [assignedResult, setAssignedResult] = useState<AssignedType | null>(null);
+  const [groupedSales, setGroupedSales] = useState<GroupedType[]>([]);
   const [selectedCollector, setSelectedCollector] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedSales, setSelectedSales] = useState<number[]>([]);
 
-  const [cityList, setCityList] = useState<string[]>([]);
-
-  // Busca cidades do backend
-  const fetchCities = async () => {
-    const response = await api.get("/address/cities");
-    setCityList(response.data);
+  const fetchGroupedSales = async () => {
+    const response = await api.get("/collector/grouped-by-city/assigment");
+    setGroupedSales(response.data);
   };
 
-  // Busca cobradores
   const fetchCollectors = async () => {
     const response = await api.get("/collector/name/all");
     setCollectorList(response.data);
   };
 
   useEffect(() => {
-    fetchCities();
+    fetchGroupedSales();
     fetchCollectors();
   }, []);
 
+  const toggleSale = (id: number) => {
+    setSelectedSales((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
   const handleAssign = async () => {
-    if (!selectedCollector || !selectedCity) {
-      alert("Selecione o cobrador e a cidade.");
+    if (!selectedCollector || selectedSales.length === 0) {
+      alert("Selecione o cobrador e as sales.");
       return;
     }
 
     try {
-      const response = await api.post(`/collector/${selectedCollector}/assign/${selectedCity}`);
-
-      setAssignedResult({
-        collectorId: response.data.collectorId,
-        city: response.data.city,
-        totalSalesAssigned: response.data.totalSalesAssigned,
+      await api.post(`/collector/assign-sales`, {
+        collectorId: Number(selectedCollector),
+        saleIds: selectedSales,
       });
 
-      // limpa seleção após atribuir
-      setSelectedCity("");
+      alert("Cobranças Direcionadas!");
+
+      setSelectedSales([]);
       setSelectedCollector("");
+
+      fetchGroupedSales();
+
     } catch (error) {
       console.error(error);
-      alert("Erro ao atribuir cidade.");
+      alert("Erro ao atribuir.");
     }
-  };
-
-  const getCollectorName = (id: number) => {
-    const found = collectorList.find((c) => c.id === id);
-    return found?.collectorName ?? "Carregando...";
   };
 
   return (
     <div className="container-fluid px-1 my-1">
-      <BreadcrumbSection title="Atribuir Cidade ao Cobrador" link="/inicio" />
+      <BreadcrumbSection title="Atribuir Cobranças ao Cobrador" link="/inicio" />
 
-      <div className="card shadow-sm p-4">
-        <h4 className="mb-4">Atribuição</h4>
+      <div className="card shadow-sm p-4 mb-4">
+        <h4 className="mb-3">Selecione o cobrador</h4>
 
-        <div className="row g-3">
-          <div className="col-md-4">
-            <label className="form-label">Selecione o Cobrador *</label>
-            <select
-              className="form-select"
-              value={selectedCollector}
-              onChange={(e) => setSelectedCollector(e.target.value)}
-            >
-              <option value="">-- selecione --</option>
-              {collectorList.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.collectorName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label">Selecione a Cidade *</label>
-            <select
-              className="form-select"
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-            >
-              <option value="">-- selecione --</option>
-              {cityList.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="col-md-2 d-flex align-items-end">
-            <button className="btn btn-success w-100" onClick={handleAssign}>
-              Atribuir
-            </button>
-          </div>
-        </div>
+        <select
+          className="form-select w-25"
+          value={selectedCollector}
+          onChange={(e) => setSelectedCollector(e.target.value)}
+        >
+          <option value="">-- selecione --</option>
+          {collectorList.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.collectorName}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {assignedResult && (
-        <div className="card shadow-sm mt-4 p-4">
-          <h4 className="mb-3">Última atribuição</h4>
+      <div className="accordion" id="accordionCities">
+        {groupedSales.map((group, index) => (
+          <div className="accordion-item" key={group.city}>
 
-          <p>
-            <strong>Cobrador:</strong> {getCollectorName(assignedResult.collectorId)}
-          </p>
-          <p>
-            <strong>Total de cobranças atribuídas:</strong> {assignedResult.totalSalesAssigned}
-          </p>
-        </div>
-      )}
+            <h2 className="accordion-header">
+              <button
+                className="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={`#collapse-${index}`}
+              >
+                {group.city} ({group.totalSales})
+              </button>
+            </h2>
+
+            <div
+              id={`collapse-${index}`}
+              className="accordion-collapse collapse"
+              data-bs-parent="#accordionCities"
+            >
+              <div className="accordion-body">
+
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Valor</th>
+                      <th className="text-end">Selecionar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.sales.map((sale) => (
+                      <tr key={sale.id}>
+                        <td>{sale.clientName}</td>
+                        <td>R$ {sale.amount}</td>
+                        <td className="text-end">
+                          <input
+                            type="checkbox"
+                            checked={selectedSales.includes(sale.id)}
+                            onChange={() => toggleSale(sale.id)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+      <div className="text-end mt-4">
+        <button className="btn btn-success px-4" onClick={handleAssign}>
+          Atribuir Selecionadas
+        </button>
+      </div>
     </div>
   );
 };

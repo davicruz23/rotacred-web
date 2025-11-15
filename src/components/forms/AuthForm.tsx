@@ -66,7 +66,7 @@ const AuthForm = ({ register }: Props) => {
         <input
           type="text"
           className="form-control"
-          placeholder={register ? "Full Name" : "CPF / Usuário"}
+          placeholder={register ? "Full Name" : "CPF"}
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
@@ -102,15 +102,15 @@ const AuthForm = ({ register }: Props) => {
 
       {!register && (
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <div className="form-check">
+          {/* <div className="form-check">
             <input className="form-check-input" type="checkbox" value="" id="loginCheckbox" />
             <label className="form-check-label text-white" htmlFor="loginCheckbox">
               Lembrar de mim
             </label>
-          </div>
-          <Link to="/reset-password" className="text-white fs-14">
+          </div> */}
+          {/* <Link to="/reset-password" className="text-white fs-14">
             Esqueceu a senha?
-          </Link>
+          </Link> */}
         </div>
       )}
       <button 

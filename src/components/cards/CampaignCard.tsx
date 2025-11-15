@@ -2,7 +2,7 @@ const CampaignCard = () => {
   return (
     <div className="card create-campaign-card full-height">
       <h4 className="text-white">
-        Real-Time Analytics at Your Fingertips Activate Now
+        Acesse essas funcionalidades do sistema
       </h4>
 
       <svg
@@ -411,11 +411,11 @@ const CampaignCard = () => {
       </svg>
 
       <div className="btn-group-wrap">
-        <a href="#" className="btn btn-light">
-          Create Campaign
+        <a href="/all-product" className="btn btn-light">
+          Produtos
         </a>
-        <a href="#" className="btn btn-primary">
-          Start Now
+        <a href="/collector-sales" className="btn btn-primary">
+          Cobranças
         </a>
       </div>
     </div>

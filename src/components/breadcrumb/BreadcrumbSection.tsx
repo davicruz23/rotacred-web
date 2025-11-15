@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 type Props = {
   link: string;
   title: string;
@@ -11,9 +9,9 @@ const BreadcrumbSection = ({ link, title }: Props) => {
       <h6 className="mb-0">{title}</h6>
 
       <div className="btn-box">
-        <Link to={link} className="btn btn-sm btn-primary">
+        {/* <Link to={link} className="btn btn-sm btn-primary">
           Ver todos
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

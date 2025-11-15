@@ -32,6 +32,8 @@ import ReportCharginsPage from "./pages/ReportCharginsPage";
 import AddCitiesByCollectorPage from "./pages/AddCitiesByCollectorPage";
 import ListCollectorSalesPage from "./pages/ListCollectorSalesPage";
 import GuestRoute from "./routes/GuestRoute"; // Importe o GuestRoute
+import ViewProfilePage from "./pages/ViewProfilePage";
+import CreateUsersPage from "./pages/CreateUsersPage";
 
 function App() {
   const activeLayout = useAppSelector((state) => state.layout.isLayout);
@@ -72,6 +74,8 @@ function App() {
 
               {/* ROTAS SOMENTE PARA ROLE_SUPERADMIN */}
               <Route element={<RoleRoute roles={["ROLE_SUPERADMIN"]} />}>
+                <Route path="/view-users" element={<ViewProfilePage />} />
+                <Route path="/create-user" element={<CreateUsersPage />} />
                 <Route path="/add-product" element={<AddNewProductPage />} />
                 <Route path="/update-product/:id" element={<UpdateProductPage />} />
                 <Route path="/commision-collector" element={<CommissionCollectorrPage />} />
