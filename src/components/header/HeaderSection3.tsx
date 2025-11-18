@@ -56,7 +56,7 @@ const HeaderSection3 = ({ toggleSidebarOpen }: Props) => {
                 type="search"
                 name="search"
                 className="from-control top-search mb-0"
-                placeholder="Search"
+                placeholder="Pesquisar"
                 onFocus={() => toggleDropdown("")}
               />
               <button type="submit" className="">

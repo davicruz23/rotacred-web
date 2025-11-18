@@ -36,7 +36,7 @@ const EmailTableHeader = ({ title }: Props) => {
           <input
             type="search"
             className="form-control"
-            placeholder="Search..."
+            placeholder="Pesquisar..."
           />
         </div>
 

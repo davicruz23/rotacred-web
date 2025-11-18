@@ -74,7 +74,7 @@ const HeaderSection4 = ({ toggleSidebarOpen }: Props) => {
               <input
                 className="from-control top-search mb-0"
                 name="search"
-                placeholder="Search"
+                placeholder="Pesquisar"
                 type="search"
               />
               <button className="" type="submit">

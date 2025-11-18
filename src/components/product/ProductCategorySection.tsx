@@ -34,7 +34,7 @@ const ProductCategorySection = () => {
             <input
               type="search"
               className="form-control"
-              placeholder="Search category"
+              placeholder="Pesquisar category"
             />
           </div>
         </form>

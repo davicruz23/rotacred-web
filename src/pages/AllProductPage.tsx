@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import TableFilter2 from "../components/filter/TableFilter2";
+// import TableFilter2 from "../components/filter/TableFilter2";
 import TableHeader from "../components/header/table-header/TableHeader";
 import AllProductTable from "../components/table/AllProductTable";
 import TableBottomControls from "../components/utils/TableBottomControls";
@@ -75,11 +75,11 @@ const AllProductPage = () => {
           <div className="panel-body">
             <div className="product-table-quantity">
               <ul>
-                <li className="text-white">All ({dataList.length})</li>
+                <li className="text-white">Todos ({dataList.length})</li>
               </ul>
             </div>
 
-            <TableFilter2 showCategory showProductType showProductStock />
+            {/* <TableFilter2 showCategory showProductType showProductStock /> */}
 
             {loading ? (
               <div className="text-center py-5">

@@ -57,7 +57,7 @@ const AllFilesTopSection = () => {
             type="search"
             id="fileSearch"
             className="form-control"
-            placeholder="Search...."
+            placeholder="Pesquisar...."
           />
           <button>
             <i className="fa-light fa-magnifying-glass"></i>

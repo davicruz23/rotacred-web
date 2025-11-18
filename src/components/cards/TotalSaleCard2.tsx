@@ -54,7 +54,7 @@ const TotalSaleCard2 = () => {
         >
           {Math.abs(percentual).toFixed(1)}%
         </span>{" "}
-        {isPositive ? "de aumento" : "de queda"} no mês
+        {isPositive ? "de aumento" : "de queda"}
       </div>
     </div>
   );

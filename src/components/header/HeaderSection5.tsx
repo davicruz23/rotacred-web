@@ -98,7 +98,7 @@ const HeaderSection5 = ({ toggleSidebarOpen }: Props) => {
                   type="search"
                   name="search"
                   className="from-control top-search mb-0"
-                  placeholder="Search"
+                  placeholder="Pesquisar"
                 />
                 <button type="submit" className="">
                   <img src="/img/icons/search.svg" alt="" />

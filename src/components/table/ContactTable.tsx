@@ -78,7 +78,7 @@ const ContactTable = () => {
                   <input
                     className="from-control top-search rounded-0 mb-0"
                     name="search"
-                    placeholder="Search"
+                    placeholder="Pesquisar"
                     type="search"
                   />
                   <button className="d-none" type="submit"></button>

@@ -446,6 +446,10 @@ const navData = [
             subTitle: "Adicionar Produtos",
             subUrl: "/add-product",
           },
+          {
+            subTitle: "Realizar Carregamento",
+            subUrl: "/new-charging",
+          },
           // {
           //   subTitle: "Atualizar Produtos",
           //   subUrl: "/update-product",

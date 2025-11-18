@@ -148,7 +148,7 @@ const ChatPage = () => {
                     <input
                       type="search"
                       className="form-control"
-                      placeholder="Search message..."
+                      placeholder="Pesquisar message..."
                     />
                   </div>
                 </div>

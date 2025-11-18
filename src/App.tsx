@@ -34,6 +34,7 @@ import ListCollectorSalesPage from "./pages/ListCollectorSalesPage";
 import GuestRoute from "./routes/GuestRoute"; // Importe o GuestRoute
 import ViewProfilePage from "./pages/ViewProfilePage";
 import CreateUsersPage from "./pages/CreateUsersPage";
+import NewChargingPage from "./pages/NewChargingPage";
 
 function App() {
   const activeLayout = useAppSelector((state) => state.layout.isLayout);
@@ -80,6 +81,7 @@ function App() {
                 <Route path="/update-product/:id" element={<UpdateProductPage />} />
                 <Route path="/commision-collector" element={<CommissionCollectorrPage />} />
                 <Route path="/commission-seller" element={<CommissionSellerPage />} />
+                <Route path="/new-charging" element={<NewChargingPage />} />
               </Route>
 
               {/* ROTAS PARA SUPERADMIN + FUNCIONÁRIO */}

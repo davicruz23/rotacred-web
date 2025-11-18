@@ -52,7 +52,7 @@ const TableHeader = ({
             <input
               type="search"
               className="form-control"
-              placeholder="Search..."
+              placeholder="Pesquisar..."
               aria-controls="targetAudienceTable"
             />
           </label>
