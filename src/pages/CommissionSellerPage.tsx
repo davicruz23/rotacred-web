@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+
+type SellerOption = {
+  idSeller: number;
+  nomeSeller: string;
+};
 
 type CommissionResponse = {
   sellerId: number;
@@ -11,6 +16,7 @@ type CommissionResponse = {
 };
 
 const CommissionSellerPage = () => {
+  const [sellers, setSellers] = useState<SellerOption[]>([]);
   const [sellerId, setsellerId] = useState<number | "">("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -18,6 +24,20 @@ const CommissionSellerPage = () => {
 
   const [response, setResponse] = useState<CommissionResponse | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadingSelles = async () => {
+      try {
+        const res = await api.get("/seller/name/all");
+        setSellers(res.data);
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao carregar vendedores.");
+      }
+    };
+
+    loadingSelles();
+  }, []);
 
   const handleSearch = async () => {
     if (!sellerId) {
@@ -56,18 +76,23 @@ const CommissionSellerPage = () => {
           {/* Form */}
           <div className="row g-3">
 
-            {/* ID do cobrador */}
+            {/* SELECT do cobrador */}
             <div className="col-md-4">
-              <label className="form-label">ID do Cobrador *</label>
-              <input
-                type="number"
+              <label className="form-label">Cobrador *</label>
+              <select
                 className="form-control"
                 value={sellerId}
                 onChange={(e) =>
                   setsellerId(e.target.value ? Number(e.target.value) : "")
                 }
-                required
-              />
+              >
+                <option value="">Selecione...</option>
+                {sellers.map((s) => (
+                  <option key={s.idSeller} value={s.idSeller}>
+                    {s.nomeSeller}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Data inicial */}
@@ -125,12 +150,33 @@ const CommissionSellerPage = () => {
 
           {response && (
             <div className="alert alert-success mt-4">
-              <h5>Resultado da Comissão</h5>
-              <p><strong>Cobrador:</strong> {response.sellerName}</p>
-              <p><strong>Período:</strong> {response.startDate} → {response.endDate}</p>
-              <p><strong>Comissão (R$):</strong> {response.commission.toFixed(2)}</p>
+              <h5>Comissão</h5>
+
+              <p>
+                <strong>Vendedor:</strong> {response.sellerName}
+              </p>
+
+              <p>
+                <strong>Período:</strong>{" "}
+                {(() => {
+                  const formatBr = (iso: string) => {
+                    const [y, m, d] = iso.split("T")[0].split("-");
+                    return `${d}/${m}/${y}`;
+                  };
+                  return `${formatBr(response.startDate)} Até ${formatBr(response.endDate)}`;
+                })()}
+              </p>
+
+              <p>
+                <strong>Comissão (R$):</strong>{" "}
+                {response.commission.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
             </div>
           )}
+
         </div>
       </div>
     </div>

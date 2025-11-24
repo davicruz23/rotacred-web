@@ -6,6 +6,7 @@ import { FaMapMarkerAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 type ProductType = {
   id: number;
   nameProduct: string;
+  quantity: number;
 };
 
 type InstallmentType = {
@@ -137,11 +138,14 @@ const ListCollectorSalesPage = () => {
                             <hr />
 
                             <h6>🛒 Produtos:</h6>
-                            <ul>
+                            <ul className="list-group">
                               {sale.products.map((p) => (
-                                <li key={p.id}>{p.nameProduct}</li>
+                                <li key={p.id} className="list-group-item">
+                                  <strong>{p.quantity}x</strong> {p.nameProduct}
+                                </li>
                               ))}
                             </ul>
+
 
 
                             <h6 className="mt-3">💰 Parcelas:</h6>

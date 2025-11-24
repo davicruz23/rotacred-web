@@ -4,11 +4,11 @@ import api from "../../services/api"; // 👈 importa o mesmo client que você j
 
 const SessionsByDeviceCard = () => {
   const [status, setStatus] = useState({
-    
+
     APROVADA: 0,
     PENDENTE: 0,
     RECUSADA: 0,
-    
+
   });
   const [loading, setLoading] = useState(true);
 
@@ -36,10 +36,7 @@ const SessionsByDeviceCard = () => {
         <SessionsByDeviceChart data={status} />
         <div className="sessions-by-device-content">
 
-          <div>
-            <p className="mb-2">Aprovadas</p>
-            <h5 className="mb-0">{status.APROVADA}</h5>
-          </div>
+
 
           <div className="mb-3">
             <p className="mb-2">Pendentes</p>
@@ -49,6 +46,11 @@ const SessionsByDeviceCard = () => {
           <div className="mb-3">
             <p className="mb-2">Recusadas</p>
             <h5 className="mb-0">{status.RECUSADA}</h5>
+          </div>
+
+          <div>
+            <p className="mb-2">Aprovadas</p>
+            <h5 className="mb-0">{status.APROVADA}</h5>
           </div>
 
 

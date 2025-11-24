@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+
+type CollectorOption = {
+  id: number;
+  collectorName: string;
+};
 
 type CommissionResponse = {
   collectorId: number;
@@ -11,7 +16,10 @@ type CommissionResponse = {
 };
 
 const CommissionCollectorPage = () => {
+
+  const [collectors, setCollectors] = useState<CollectorOption[]>([]);
   const [collectorId, setCollectorId] = useState<number | "">("");
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [saveHistory, setSaveHistory] = useState(false);
@@ -19,9 +27,23 @@ const CommissionCollectorPage = () => {
   const [response, setResponse] = useState<CommissionResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const loadCollectors = async () => {
+      try {
+        const res = await api.get("/collector/name/all");
+        setCollectors(res.data);
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao carregar cobradores.");
+      }
+    };
+
+    loadCollectors();
+  }, []);
+
   const handleSearch = async () => {
     if (!collectorId) {
-      alert("Informe o ID do cobrador!");
+      alert("Selecione o cobrador!");
       return;
     }
 
@@ -55,24 +77,28 @@ const CommissionCollectorPage = () => {
             <div className="card-body">
               <h4 className="card-title mb-4">Consultar Comissão</h4>
 
-              {/* Form */}
               <div className="row g-3">
 
-                {/* ID do cobrador */}
+                {/* SELECT do cobrador */}
                 <div className="col-md-4">
-                  <label className="form-label">ID do Cobrador *</label>
-                  <input
-                    type="number"
+                  <label className="form-label">Cobrador *</label>
+                  <select
                     className="form-control"
                     value={collectorId}
                     onChange={(e) =>
                       setCollectorId(e.target.value ? Number(e.target.value) : "")
                     }
-                    required
-                  />
+                  >
+                    <option value="">Selecione...</option>
+                    {collectors.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.collectorName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* Data inicial */}
+                {/* Datas etc... */}
                 <div className="col-md-4">
                   <label className="form-label">Data inicial</label>
                   <input
@@ -83,7 +109,6 @@ const CommissionCollectorPage = () => {
                   />
                 </div>
 
-                {/* Data final */}
                 <div className="col-md-4">
                   <label className="form-label">Data final</label>
                   <input
@@ -94,7 +119,6 @@ const CommissionCollectorPage = () => {
                   />
                 </div>
 
-                {/* Salvar histórico */}
                 <div className="col-md-12 mt-3">
                   <div className="form-check">
                     <input
@@ -127,10 +151,30 @@ const CommissionCollectorPage = () => {
 
               {response && (
                 <div className="alert alert-success mt-4">
-                  <h5>Resultado da Comissão</h5>
-                  <p><strong>Cobrador:</strong> {response.collectorName}</p>
-                  <p><strong>Período:</strong> {response.startDate} → {response.endDate}</p>
-                  <p><strong>Comissão (R$):</strong> {response.commission.toFixed(2)}</p>
+                  <h5>Comissão</h5>
+
+                  <p>
+                    <strong>Cobrador:</strong> {response.collectorName}
+                  </p>
+
+                  <p>
+                    <strong>Período:</strong>{" "}
+                    {(() => {
+                      const formatBr = (iso: string) => {
+                        const [y, m, d] = iso.split("T")[0].split("-");
+                        return `${d}/${m}/${y}`;
+                      };
+                      return `${formatBr(response.startDate)} Até ${formatBr(response.endDate)}`;
+                    })()}
+                  </p>
+
+                  <p>
+                    <strong>Comissão (R$):</strong>{" "}
+                    {response.commission.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </p>
                 </div>
               )}
             </div>
