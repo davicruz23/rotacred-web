@@ -439,11 +439,11 @@ const navData = [
           //   subUrl: "/all-customer",
           // },
           {
-            subTitle: "Todos Produtos",
+            subTitle: "Ver Estoque",
             subUrl: "/all-product",
           },
           {
-            subTitle: "Adicionar Produtos",
+            subTitle: "Adicionar Mercadorias",
             subUrl: "/add-product",
           },
           {

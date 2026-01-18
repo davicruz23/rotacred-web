@@ -145,7 +145,9 @@ const NewChargingPage = () => {
                     <tr>
                       <th>ID</th>
                       <th>Nome</th>
+                      <th>Disponível</th>
                       <th>Preço</th>
+                      <th>Status</th>
                       <th>Quantidade</th>
                     </tr>
                   </thead>
@@ -154,7 +156,9 @@ const NewChargingPage = () => {
                       <tr key={product.id}>
                         <td>{product.id}</td>
                         <td>{product.name}</td>
-                        <td>R$ {product.amount}</td>
+                        <td>{product.amount}</td>
+                        <td>R$ {product.value}</td>
+                        <td>{product.status}</td>
                         <td>
                           <input
                             type="number"

@@ -16,8 +16,8 @@ type InstallmentType = {
   paid: boolean;
   status: string | null;
   isValid: boolean;
-  attempLongitude: number;
-  attempLatitude: number;
+  attemptLongitude: number;
+  attemptLatitude: number;
 };
 
 type SaleType = {
@@ -45,6 +45,7 @@ const ListCollectorSalesPage = () => {
   const fetchCollectorsWithSales = async () => {
     try {
       const response = await api.get("/collector/all/sales");
+      console.log(response.data);
       setCollectorData(response.data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -66,7 +67,10 @@ const ListCollectorSalesPage = () => {
         <div className="accordion" id="accordionCollectors">
           {collectorData.map((collector) => (
             <div className="accordion-item" key={collector.id}>
-              <h2 className="accordion-header" id={`heading-coll-${collector.id}`}>
+              <h2
+                className="accordion-header"
+                id={`heading-coll-${collector.id}`}
+              >
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -93,7 +97,10 @@ const ListCollectorSalesPage = () => {
                   <div className="accordion" id={`sales-${collector.id}`}>
                     {collector.sales.map((sale) => (
                       <div className="accordion-item" key={sale.id}>
-                        <h2 className="accordion-header" id={`heading-sale-${sale.id}`}>
+                        <h2
+                          className="accordion-header"
+                          id={`heading-sale-${sale.id}`}
+                        >
                           <button
                             className="accordion-button collapsed bg-light"
                             type="button"
@@ -102,7 +109,8 @@ const ListCollectorSalesPage = () => {
                             aria-expanded="false"
                             aria-controls={`sale-${sale.id}`}
                           >
-                            Venda #{sale.id} — {sale.clientName} — R$ {sale.total}
+                            Venda #{sale.id} — {sale.clientName} — R${" "}
+                            {sale.total}
                           </button>
                         </h2>
 
@@ -113,9 +121,15 @@ const ListCollectorSalesPage = () => {
                           data-bs-parent={`#sales-${collector.id}`}
                         >
                           <div className="accordion-body">
-                            <p><strong>Data:</strong> {sale.saleDate}</p>
-                            <p><strong>Pagamento:</strong> {sale.paymentType}</p>
-                            <p><strong>Total:</strong> R$ {sale.total}</p>
+                            <p>
+                              <strong>Data:</strong> {sale.saleDate}
+                            </p>
+                            <p>
+                              <strong>Pagamento:</strong> {sale.paymentType}
+                            </p>
+                            <p>
+                              <strong>Total:</strong> R$ {sale.total}
+                            </p>
 
                             {/* ✅ Botão estilizado do Google Maps */}
                             {sale.latitude && sale.longitude && (
@@ -126,11 +140,12 @@ const ListCollectorSalesPage = () => {
                                     window.open(
                                       `https://www.google.com/maps?q=${sale.latitude},${sale.longitude}`,
                                       "_blank",
-                                      "noopener,noreferrer"
+                                      "noopener,noreferrer",
                                     )
                                   }
                                 >
-                                  <i className="bi bi-geo-alt-fill"></i> Ver no Mapa
+                                  <i className="bi bi-geo-alt-fill"></i> Ver no
+                                  Mapa
                                 </button>
                               </div>
                             )}
@@ -145,8 +160,6 @@ const ListCollectorSalesPage = () => {
                                 </li>
                               ))}
                             </ul>
-
-
 
                             <h6 className="mt-3">💰 Parcelas:</h6>
                             <table className="table table-sm table-bordered">
@@ -166,61 +179,102 @@ const ListCollectorSalesPage = () => {
                                     <td>{i.id}</td>
                                     <td>{i.dueDate}</td>
                                     <td>R$ {i.amount}</td>
-                                    {/* <td>{i.paid ? "✅" : "Aguardando"}</td> */}
                                     <td style={{ textAlign: "center" }}>
                                       {i.paid ? (
-                                        <FaCheckCircle color="#28a745" size={18} title="Parcela Paga" />
+                                        <FaCheckCircle
+                                          color="#28a745"
+                                          size={18}
+                                          title="Parcela Paga"
+                                        />
                                       ) : (
-                                        <FaTimesCircle color="#dc3545" size={18} title="Parcela Pendente" />
+                                        <FaTimesCircle
+                                          color="#dc3545"
+                                          size={18}
+                                          title="Parcela Pendente"
+                                        />
                                       )}
                                     </td>
 
                                     <td style={{ textAlign: "center" }}>
                                       {i.isValid ? (
-                                        <FaCheckCircle color="#28a745" size={18} title="Localização validada" />
+                                        <FaCheckCircle
+                                          color="#28a745"
+                                          size={18}
+                                          title="Localização validada"
+                                        />
                                       ) : (
-                                        <FaTimesCircle color="#dc3545" size={18} title="Localização pendente" />
+                                        <FaTimesCircle
+                                          color="#dc3545"
+                                          size={18}
+                                          title="Localização pendente"
+                                        />
                                       )}
                                     </td>
-
-                                    {/* 📍 Coluna com botão para abrir mapa */}
                                     <td
-                                      style={{ cursor: "pointer", textAlign: "center" }}
-                                      title="Abrir localização no Google Maps"
+                                      style={{
+                                        cursor:
+                                          i.attemptLatitude &&
+                                          i.attemptLongitude
+                                            ? "pointer"
+                                            : "not-allowed",
+                                        textAlign: "center",
+                                      }}
+                                      title={
+                                        i.attemptLatitude && i.attemptLongitude
+                                          ? "Abrir localização no Google Maps"
+                                          : "Localização indisponível"
+                                      }
                                       onClick={() => {
-                                        const lat = i.attempLatitude ?? sale.latitude;
-                                        const lon = i.attempLongitude ?? sale.longitude;
-
-                                        if (lat && lon) {
+                                        if (
+                                          i.attemptLatitude &&
+                                          i.attemptLongitude
+                                        ) {
                                           window.open(
-                                            `https://www.google.com/maps?q=${lat},${lon}`,
+                                            `https://www.google.com/maps?q=${i.attemptLatitude},${i.attemptLongitude}`,
                                             "_blank",
-                                            "noopener,noreferrer"
+                                            "noopener,noreferrer",
                                           );
-                                        } else {
-                                          alert("Localização não disponível para esta parcela.");
                                         }
                                       }}
                                     >
                                       <FaMapMarkerAlt
                                         size={18}
-                                        color="#007bff"
+                                        color={
+                                          i.attemptLatitude &&
+                                          i.attemptLongitude
+                                            ? "#007bff"
+                                            : "#ccc"
+                                        }
                                         style={{
-                                          transition: "transform 0.2s, color 0.2s",
+                                          transition:
+                                            "transform 0.2s, color 0.2s",
                                         }}
                                         onMouseEnter={(e) => {
-                                          e.currentTarget.style.transform = "scale(1.2)";
-                                          e.currentTarget.style.color = "#0056b3";
+                                          if (
+                                            i.attemptLatitude &&
+                                            i.attemptLongitude
+                                          ) {
+                                            e.currentTarget.style.transform =
+                                              "scale(1.2)";
+                                            e.currentTarget.style.color =
+                                              "#0056b3";
+                                          }
                                         }}
                                         onMouseLeave={(e) => {
-                                          e.currentTarget.style.transform = "scale(1.0)";
-                                          e.currentTarget.style.color = "#007bff";
+                                          if (
+                                            i.attemptLatitude &&
+                                            i.attemptLongitude
+                                          ) {
+                                            e.currentTarget.style.transform =
+                                              "scale(1.0)";
+                                            e.currentTarget.style.color =
+                                              "#007bff";
+                                          }
                                         }}
                                       />
                                     </td>
                                   </tr>
                                 ))}
-
                               </tbody>
                             </table>
                           </div>
@@ -228,7 +282,6 @@ const ListCollectorSalesPage = () => {
                       </div>
                     ))}
                   </div>
-
                 </div>
               </div>
             </div>
