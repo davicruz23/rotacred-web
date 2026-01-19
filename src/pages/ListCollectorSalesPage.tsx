@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
-import { FaMapMarkerAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaMapMarkerAlt, FaCheckCircle, FaTimesCircle, FaMinusCircle } from "react-icons/fa";
 
 type ProductType = {
   id: number;
@@ -196,20 +196,31 @@ const ListCollectorSalesPage = () => {
                                     </td>
 
                                     <td style={{ textAlign: "center" }}>
-                                      {i.isValid ? (
+                                      {i.isValid === true && (
                                         <FaCheckCircle
                                           color="#28a745"
                                           size={18}
                                           title="Localização validada"
                                         />
-                                      ) : (
+                                      )}
+
+                                      {i.isValid === false && (
                                         <FaTimesCircle
                                           color="#dc3545"
                                           size={18}
-                                          title="Localização pendente"
+                                          title="Localização inválida"
+                                        />
+                                      )}
+
+                                      {i.isValid == null && (
+                                        <FaMinusCircle
+                                          color="#6c757d"
+                                          size={18}
+                                          title="Localização não verificada"
                                         />
                                       )}
                                     </td>
+
                                     <td
                                       style={{
                                         cursor:

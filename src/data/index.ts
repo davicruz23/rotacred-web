@@ -535,12 +535,12 @@ const navData = [
         url: "#",
         subLinks: [
           {
-            subTitle: "Atribuir Cidades",
-            subUrl: "/collector-cities",
-          },
-          {
             subTitle: "Cobranças",
             subUrl: "/collector-sales",
+          },
+          {
+            subTitle: "Atribuir Cidades",
+            subUrl: "/collector-cities",
           },
         ],
       },
