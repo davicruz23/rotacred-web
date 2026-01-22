@@ -17,7 +17,7 @@ const AllProductTable = ({ tableData, handleDelete }: Props) => {
               <input className="form-check-input" type="checkbox" />
             </div>
           </th>
-          <th>Produtos</th>
+          <th>Nome</th>
           <th>Estoque</th>
           <th>Preço</th>
           <th>Status</th>

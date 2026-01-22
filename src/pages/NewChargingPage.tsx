@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import TableHeader from "../components/header/table-header/TableHeader";
-import AllProductTable from "../components/table/AllProductTable";
 import TableBottomControls from "../components/utils/TableBottomControls";
 import api from "../services/api";
 import { AllProductDataType } from "../types";
@@ -107,12 +106,12 @@ const NewChargingPage = () => {
         <div className="panel">
 
           <TableHeader
-            tableHeading="Carregar Produtos"
+            tableHeading="Atualizar Carregamento do Caminhão"
             tableHeaderData={allProductHeaderData}
           />
 
           {/* Descrição */}
-          <div className="p-3">
+          {/* <div className="p-3">
             <label className="form-label fw-bold text-white">Descrição</label>
             <input
               type="text"
@@ -121,7 +120,7 @@ const NewChargingPage = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Ex: Carregamento do caminhão..."
             />
-          </div>
+          </div> */}
 
           <div className="panel-body">
             <div className="product-table-quantity">

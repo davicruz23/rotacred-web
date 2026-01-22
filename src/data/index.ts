@@ -447,7 +447,7 @@ const navData = [
             subUrl: "/add-product",
           },
           {
-            subTitle: "Realizar Carregamento",
+            subTitle: "Atualizar Carregamento",
             subUrl: "/new-charging",
           },
           // {
