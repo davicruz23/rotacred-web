@@ -2,35 +2,45 @@ import { useState, useEffect } from "react";
 import TableHeader from "../components/header/table-header/TableHeader";
 import TableBottomControls from "../components/utils/TableBottomControls";
 import api from "../services/api";
-import { AllProductDataType } from "../types";
+import { AllProductDataType, ChargingType } from "../types";
 import { allProductHeaderData } from "../data";
 
 const NewChargingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage] = useState(10);
   const [dataList, setDataList] = useState<AllProductDataType[]>([]);
+  const [chargingList, setChargingList] = useState<ChargingType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Novo estado: quantidade por produto
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
-  // Descrição do carregamento
-  const [description, setDescription] = useState("");
+  const fetchChargings = async () => {
+    try {
+      const response = await api.get("/charging/all");
+      if (response.status === 200) {
+        setChargingList(response.data);
+      } else {
+        alert("Erro ao carregar produtos");
+      }
+    } catch (error: any) {
+      console.error(error);
+      alert("Erro ao conectar com o servidor");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Busca produtos do backend
   const fetchProducts = async () => {
     try {
       const response = await api.get("/product/all");
       if (response.status === 200) {
         setDataList(response.data);
 
-        // Inicializa quantidades em 0
         const initialQuantities: any = {};
         response.data.forEach((p: any) => {
           initialQuantities[p.id] = 0;
         });
         setQuantities(initialQuantities);
-
       } else {
         alert("Erro ao carregar produtos");
       }
@@ -44,15 +54,14 @@ const NewChargingPage = () => {
 
   useEffect(() => {
     fetchProducts();
+    fetchChargings();
   }, []);
 
-  // Atualiza quantidade
   const handleQuantityChange = (productId: number, value: string) => {
     const num = Number(value);
     setQuantities({ ...quantities, [productId]: num >= 0 ? num : 0 });
   };
 
-  // Enviar carregamento
   const handleSendCharging = async () => {
     const items = Object.entries(quantities)
       .filter(([_, qty]) => qty > 0)
@@ -66,18 +75,24 @@ const NewChargingPage = () => {
       return;
     }
 
-    const payload = {
-      description,
-      date: new Date().toISOString().split("T")[0],
-      items,
-    };
-
     try {
-      const response = await api.post("/charging", payload);
+      // usa PUT e envia apenas a lista de items (array)
+      const response = await api.put("/charging/add", items);
+
       if (response.status === 200 || response.status === 201) {
         alert("Carregamento enviado com sucesso!");
-        setDescription("");
-        // zera quantidades
+
+        // atualiza o estoque local (subtrai a quantidade enviada)
+        setDataList((prev) =>
+          prev.map((p) => {
+            const sentQty = quantities[p.id] || 0;
+            return sentQty > 0 ? { ...p, amount: p.amount - sentQty } : p;
+          }),
+        );
+
+        await loadCharging();
+
+        // reseta quantidades
         const reset: any = {};
         Object.keys(quantities).forEach((id) => (reset[id] = 0));
         setQuantities(reset);
@@ -90,7 +105,11 @@ const NewChargingPage = () => {
     }
   };
 
-  // Pagination logic
+  const loadCharging = async () => {
+    const response = await api.get("/charging/all");
+    setChargingList(response.data);
+  };
+
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = dataList.slice(indexOfFirstData, indexOfLastData);
@@ -104,23 +123,72 @@ const NewChargingPage = () => {
     <div className="row g-4">
       <div className="col-12">
         <div className="panel">
-
           <TableHeader
-            tableHeading="Atualizar Carregamento do Caminhão"
+            tableHeading="Carregamento Atual"
             tableHeaderData={allProductHeaderData}
           />
 
-          {/* Descrição */}
-          {/* <div className="p-3">
-            <label className="form-label fw-bold text-white">Descrição</label>
-            <input
-              type="text"
-              className="form-control"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Ex: Carregamento do caminhão..."
-            />
-          </div> */}
+          <div className="panel-body">
+            <div className="product-table-quantity">
+              <ul>
+                <li className="text-white">
+                  Carregamento ({chargingList.length})
+                </li>
+              </ul>
+            </div>
+
+            {loading ? (
+              <div className="text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Carregando...</span>
+                </div>
+              </div>
+            ) : (
+              <div className="table-responsive">
+                {/* Tabela com input de quantidade */}
+                <table className="table table-striped text-white">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Disponível</th>
+                      <th>Preço</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {chargingList.map((charging) =>
+                      [...charging.chargingItems]
+                        .sort((a, b) => a.id - b.id)
+                        .map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.productId}</td>
+                            <td>{item.nameProduct}</td>
+                            <td>{item.quantity}</td>
+                            <td>R$ {item.priceProduct.toFixed(2)}</td>
+                            <td>
+                              {item.quantity > 0
+                                ? "Disponível"
+                                : "Indisponível"}
+                            </td>
+                          </tr>
+                        )),
+                    )}
+                  </tbody>
+                </table>
+
+                <TableBottomControls
+                  indexOfFirstData={indexOfFirstData}
+                  indexOfLastData={indexOfLastData}
+                  dataList={dataList}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  paginate={paginate}
+                  pageNumbers={pageNumbers}
+                />
+              </div>
+            )}
+          </div>
 
           <div className="panel-body">
             <div className="product-table-quantity">
@@ -137,7 +205,6 @@ const NewChargingPage = () => {
               </div>
             ) : (
               <div className="table-responsive">
-
                 {/* Tabela com input de quantidade */}
                 <table className="table table-striped text-white">
                   <thead>
@@ -194,7 +261,6 @@ const NewChargingPage = () => {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>

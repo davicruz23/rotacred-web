@@ -443,7 +443,7 @@ const navData = [
             subUrl: "/all-product",
           },
           {
-            subTitle: "Adicionar Mercadorias",
+            subTitle: "Adicionar Produtos",
             subUrl: "/add-product",
           },
           {

@@ -98,6 +98,26 @@ export type AllProductDataType = {
   value: number;
 };
 
+export type ChargingItemType = {
+  id: number;
+  productId: number;
+  chargingId: number;
+  quantity: number;
+  nameProduct: string;
+  brand: string;
+  priceProduct: number;
+};
+
+export type ChargingType = {
+  id: number;
+  chargingDate: string;
+  userName: string;
+  description: string;
+  data: string;
+  chargingItems: ChargingItemType[];
+};
+
+
 export type Option = {
   value: string;
   label: string;
