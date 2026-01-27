@@ -94,7 +94,7 @@ export type AllProductDataType = {
   name: string;
   brand: string;
   amount: number;
-  status: string;
+  status: ProductStatus;
   value: number;
 };
 
@@ -106,6 +106,7 @@ export type ChargingItemType = {
   nameProduct: string;
   brand: string;
   priceProduct: number;
+  status: ProductStatus;
 };
 
 export type ChargingType = {
@@ -122,6 +123,15 @@ export type Option = {
   value: string;
   label: string;
 };
+
+export enum ProductStatus {
+  DISPONIVEL = 1,
+  INDISPONIVEL = 2,
+  ZERADO = 3,
+  POUCO = 4,
+  MUITOPOUCO = 5
+}
+
 
 export type CategoryDataType = {
   id: number;

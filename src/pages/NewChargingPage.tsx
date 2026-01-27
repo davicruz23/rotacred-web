@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import TableHeader from "../components/header/table-header/TableHeader";
 import TableBottomControls from "../components/utils/TableBottomControls";
 import api from "../services/api";
 import { AllProductDataType, ChargingType } from "../types";
 import { allProductHeaderData } from "../data";
+import { ProductStatusLabel } from "../enums/ProductStatusLabel";
 
 const NewChargingPage = () => {
+  const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage] = useState(10);
   const [dataList, setDataList] = useState<AllProductDataType[]>([]);
@@ -120,7 +124,7 @@ const NewChargingPage = () => {
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="row g-4">
+    <div className="table table-dashed table-hover digi-dataTable all-product-table">
       <div className="col-12">
         <div className="panel">
           <TableHeader
@@ -151,7 +155,7 @@ const NewChargingPage = () => {
                     <tr>
                       <th>ID</th>
                       <th>Nome</th>
-                      <th>Disponível</th>
+                      <th>Em Estoque</th>
                       <th>Preço</th>
                       <th>Status</th>
                     </tr>
@@ -166,11 +170,7 @@ const NewChargingPage = () => {
                             <td>{item.nameProduct}</td>
                             <td>{item.quantity}</td>
                             <td>R$ {item.priceProduct.toFixed(2)}</td>
-                            <td>
-                              {item.quantity > 0
-                                ? "Disponível"
-                                : "Indisponível"}
-                            </td>
+                            <td>{ProductStatusLabel[item.status]}</td>
                           </tr>
                         )),
                     )}
@@ -211,10 +211,11 @@ const NewChargingPage = () => {
                     <tr>
                       <th>ID</th>
                       <th>Nome</th>
-                      <th>Disponível</th>
+                      <th>Em Estoque</th>
                       <th>Preço</th>
                       <th>Status</th>
                       <th>Quantidade</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -224,7 +225,7 @@ const NewChargingPage = () => {
                         <td>{product.name}</td>
                         <td>{product.amount}</td>
                         <td>R$ {product.value}</td>
-                        <td>{product.status}</td>
+                        <td>{ProductStatusLabel[product.status]}</td>
                         <td>
                           <input
                             type="number"
@@ -236,6 +237,18 @@ const NewChargingPage = () => {
                             }
                             style={{ width: "100px" }}
                           />
+                        </td>
+                        <td>
+                          <div className="btn-box">
+                            <button
+                              title="Editar"
+                              onClick={() =>
+                                navigate(`/update-product/${product.id}`)
+                              }
+                            >
+                              <i className="fa-light fa-pen"></i>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

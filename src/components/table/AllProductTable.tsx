@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { AllProductDataType } from "../../types";
+import { ProductStatusLabel } from "../../enums/ProductStatusLabel";
 
 type Props = {
   tableData: AllProductDataType[];
@@ -42,7 +43,7 @@ const AllProductTable = ({ tableData, handleDelete }: Props) => {
             </td>
             <td>{item.amount}</td>
             <td>${item.value}</td>
-            <td>{item.status}</td>
+            <td>{ProductStatusLabel[item.status]}</td>
             <td>
               <div className="btn-box">
                 <button
