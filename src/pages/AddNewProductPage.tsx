@@ -12,7 +12,7 @@ const AddNewProductPage = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setProduct((prev) => ({
@@ -31,8 +31,6 @@ const AddNewProductPage = () => {
       if (response.status === 200 || response.status === 201) {
         alert("Produto cadastrado com sucesso!");
         setProduct({ name: "", brand: "", amount: 0, value: 0, status: 1 });
-      } else {
-        alert("Erro ao cadastrar produto.");
       }
     } catch (error: any) {
       console.error(error);
@@ -92,7 +90,8 @@ const AddNewProductPage = () => {
                   onChange={(e) =>
                     setProduct((prev) => ({
                       ...prev,
-                      amount: e.target.value === "" ? 0 : Number(e.target.value),
+                      amount:
+                        e.target.value === "" ? 0 : Number(e.target.value),
                     }))
                   }
                   className="form-control"
@@ -101,7 +100,6 @@ const AddNewProductPage = () => {
                   required
                 />
               </div>
-
 
               <div className="col-md-6">
                 <label className="form-label">Valor (R$)</label>
@@ -114,7 +112,8 @@ const AddNewProductPage = () => {
                     onChange={(e) =>
                       setProduct((prev) => ({
                         ...prev,
-                        value: e.target.value === "" ? 0 : Number(e.target.value),
+                        value:
+                          e.target.value === "" ? 0 : Number(e.target.value),
                       }))
                     }
                     className="form-control"
@@ -126,10 +125,7 @@ const AddNewProductPage = () => {
                 </div>
               </div>
               <div className="col-12 mt-4">
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-lg w-100"
-                >
+                <button type="submit" className="btn btn-primary btn-lg w-100">
                   Adicionar Produto
                 </button>
               </div>

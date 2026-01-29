@@ -107,6 +107,7 @@ function App() {
           <Route path="/error-504" element={<Error504Page />} />
         </Route>
 
+        <Route path="*" element={<Error404Page />} />
       </Routes>
     </Router>
   );

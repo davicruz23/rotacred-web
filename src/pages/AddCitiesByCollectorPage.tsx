@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
+import { useNavigate } from "react-router-dom";
 
 type SaleType = {
   id: number;
@@ -22,6 +23,7 @@ const AddCitiesByCollectorPage = () => {
   const [groupedSales, setGroupedSales] = useState<GroupedType[]>([]);
   const [selectedCollector, setSelectedCollector] = useState("");
   const [selectedSales, setSelectedSales] = useState<number[]>([]);
+  const navigate = useNavigate();
 
   const fetchGroupedSales = async () => {
     const response = await api.get("/collector/grouped-by-city/assigment");
@@ -46,7 +48,7 @@ const AddCitiesByCollectorPage = () => {
 
   const handleAssign = async () => {
     if (!selectedCollector || selectedSales.length === 0) {
-      alert("Selecione o cobrador e as sales.");
+      alert("Selecione o cobrador e as Vendas.");
       return;
     }
 
@@ -63,9 +65,14 @@ const AddCitiesByCollectorPage = () => {
 
       fetchGroupedSales();
 
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao atribuir.");
+    } catch (err: any) {
+      if (err?.response?.status === 404) {
+        navigate("/error-404", { replace: true });
+        return;
+      }
+
+      navigate("/error-500", { replace: true });
+      return;
     }
   };
 

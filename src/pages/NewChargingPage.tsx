@@ -7,44 +7,120 @@ import { AllProductDataType, ChargingType } from "../types";
 import { allProductHeaderData } from "../data";
 import { ProductStatusLabel } from "../enums/ProductStatusLabel";
 
+type PageResponse<T> = {
+  content: T[];
+
+  totalElements?: number;
+  totalPages?: number;
+  number?: number;
+  size?: number;
+
+  page?: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+};
+
+const normalizePage = <T,>(data: PageResponse<T>) => {
+  const page = data.page ?? {
+    size: data.size ?? 10,
+    number: data.number ?? 0,
+    totalElements: data.totalElements ?? 0,
+    totalPages: data.totalPages ?? 0,
+  };
+
+  return {
+    content: data.content ?? [],
+    size: page.size,
+    number: page.number,
+    totalElements: page.totalElements,
+    totalPages: page.totalPages,
+  };
+};
+
 const NewChargingPage = () => {
   const navigate = useNavigate();
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [dataPerPage] = useState(10);
+
   const [dataList, setDataList] = useState<AllProductDataType[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [searchName, setSearchName] = useState("");
+
+  const [chargingPage, setChargingPage] = useState(0);
+  const [chargingTotalElements, setChargingTotalElements] = useState(0);
+  const [chargingTotalPages, setChargingTotalPages] = useState(0);
+  const [chargingPerPage] = useState(10);
+
   const [chargingList, setChargingList] = useState<ChargingType[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
-  const fetchChargings = async () => {
+  const fetchChargings = async (page = chargingPage, name = searchName) => {
     try {
-      const response = await api.get("/charging/all");
+      const response = await api.get<PageResponse<ChargingType>>(
+        "/charging/all",
+        {
+          params: {
+            page,
+            size: chargingPerPage,
+            name: name?.trim() || undefined,
+          },
+        },
+      );
+
       if (response.status === 200) {
-        setChargingList(response.data);
+        const normalized = normalizePage(response.data);
+
+        setChargingList(normalized.content);
+        setChargingTotalElements(normalized.totalElements);
+        setChargingTotalPages(normalized.totalPages);
+        setChargingPage(normalized.number);
       } else {
-        alert("Erro ao carregar produtos");
+        alert("Erro ao carregar carregamentos");
       }
     } catch (error: any) {
       console.error(error);
       alert("Erro ao conectar com o servidor");
-    } finally {
-      setLoading(false);
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = currentPage, name = searchName) => {
     try {
-      const response = await api.get("/product/all");
-      if (response.status === 200) {
-        setDataList(response.data);
+      setLoading(true);
 
-        const initialQuantities: any = {};
-        response.data.forEach((p: any) => {
-          initialQuantities[p.id] = 0;
+      const response = await api.get<PageResponse<AllProductDataType>>(
+        "/product/all",
+        {
+          params: {
+            page,
+            size: dataPerPage,
+            name: name?.trim() || undefined,
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        const normalized = normalizePage(response.data);
+
+        setDataList(normalized.content);
+        setTotalElements(normalized.totalElements);
+        setTotalPages(normalized.totalPages);
+        setCurrentPage(normalized.number);
+
+        setQuantities((prev) => {
+          const updated = { ...prev };
+          normalized.content.forEach((p) => {
+            if (updated[p.id] === undefined) updated[p.id] = 0;
+          });
+          return updated;
         });
-        setQuantities(initialQuantities);
       } else {
         alert("Erro ao carregar produtos");
       }
@@ -57,8 +133,20 @@ const NewChargingPage = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchChargings();
+    const timeout = setTimeout(() => {
+      setCurrentPage(0);
+      setChargingPage(0);
+
+      fetchProducts(0, searchName);
+      fetchChargings(0, searchName);
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [searchName]);
+
+  useEffect(() => {
+    fetchProducts(0, "");
+    fetchChargings(0, "");
   }, []);
 
   const handleQuantityChange = (productId: number, value: string) => {
@@ -80,13 +168,11 @@ const NewChargingPage = () => {
     }
 
     try {
-      // usa PUT e envia apenas a lista de items (array)
       const response = await api.put("/charging/add", items);
 
       if (response.status === 200 || response.status === 201) {
         alert("Carregamento enviado com sucesso!");
 
-        // atualiza o estoque local (subtrai a quantidade enviada)
         setDataList((prev) =>
           prev.map((p) => {
             const sentQty = quantities[p.id] || 0;
@@ -94,12 +180,13 @@ const NewChargingPage = () => {
           }),
         );
 
-        await loadCharging();
+        await fetchChargings(0, searchName);
 
-        // reseta quantidades
         const reset: any = {};
         Object.keys(quantities).forEach((id) => (reset[id] = 0));
         setQuantities(reset);
+
+        await fetchProducts(currentPage, searchName);
       } else {
         alert("Erro ao enviar carregamento.");
       }
@@ -109,169 +196,264 @@ const NewChargingPage = () => {
     }
   };
 
-  const loadCharging = async () => {
-    const response = await api.get("/charging/all");
-    setChargingList(response.data);
+  const paginate = (pageNumber: number) => {
+    const pageIndex = pageNumber - 1;
+    setCurrentPage(pageIndex);
+    fetchProducts(pageIndex, searchName);
   };
 
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = dataList.slice(indexOfFirstData, indexOfLastData);
+  const paginateCharging = (pageNumber: number) => {
+    const pageIndex = pageNumber - 1;
+    setChargingPage(pageIndex);
+    fetchChargings(pageIndex, searchName);
+  };
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const chargingPageNumbers = Array.from(
+    { length: chargingTotalPages },
+    (_, i) => i + 1,
+  );
 
-  const totalPages = Math.ceil(dataList.length / dataPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const indexOfFirstData = currentPage * dataPerPage;
+  const indexOfLastData = indexOfFirstData + dataList.length;
 
   return (
     <div className="table table-dashed table-hover digi-dataTable all-product-table">
       <div className="col-12">
         <div className="panel">
-          <TableHeader
-            tableHeading="Carregamento Atual"
-            tableHeaderData={allProductHeaderData}
-          />
 
-          <div className="panel-body">
-            <div className="product-table-quantity">
-              <ul>
-                <li className="text-white">
-                  Carregamento ({chargingList.length})
-                </li>
-              </ul>
-            </div>
+          <div className="panel-header px-3 pt-3">
+            <div className="row g-2 align-items-center">
+              <div className="col-12 col-md-6">
+                <div className="input-group" style={{ width: "420px" }}>
+                  <span className="input-group-text">
+                    <i className="fa-light fa-magnifying-glass"></i>
+                  </span>
 
-            {loading ? (
-              <div className="text-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Carregando...</span>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Pesquisar por nome do produto..."
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                  />
+
+                  {searchName?.trim() && (
+                    <button
+                      className="btn btn-outline-secondary" 
+                      type="button"
+                      onClick={() => setSearchName("")}
+                      title="Limpar"
+                    >
+                      <i className="fa-light fa-xmark"></i>
+                    </button>
+                  )}
                 </div>
               </div>
-            ) : (
-              <div className="table-responsive">
-                {/* Tabela com input de quantidade */}
-                <table className="table table-striped text-white">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nome</th>
-                      <th>Em Estoque</th>
-                      <th>Preço</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {chargingList.map((charging) =>
-                      [...charging.chargingItems]
-                        .sort((a, b) => a.id - b.id)
-                        .map((item) => (
-                          <tr key={item.id}>
-                            <td>{item.productId}</td>
-                            <td>{item.nameProduct}</td>
-                            <td>{item.quantity}</td>
-                            <td>R$ {item.priceProduct.toFixed(2)}</td>
-                            <td>{ProductStatusLabel[item.status]}</td>
-                          </tr>
-                        )),
-                    )}
-                  </tbody>
-                </table>
 
-                <TableBottomControls
-                  indexOfFirstData={indexOfFirstData}
-                  indexOfLastData={indexOfLastData}
-                  dataList={dataList}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  paginate={paginate}
-                  pageNumbers={pageNumbers}
-                />
+              <div className="col-12 col-md-6 text-md-end">
+                <small className="text-muted">
+                  {searchName?.trim()
+                    ? `Filtrando por: "${searchName}"`
+                    : "Digite algo para pesquisar"}
+                </small>
               </div>
-            )}
+            </div>
           </div>
 
           <div className="panel-body">
-            <div className="product-table-quantity">
-              <ul>
-                <li className="text-white">Produtos ({dataList.length})</li>
-              </ul>
-            </div>
+            <div className="accordion" id="chargingAccordion">
+              <div className="accordion-item bg-transparent border-0 mb-3">
+                <h2 className="accordion-header" id="headingCharging">
+                  <button
+                    className="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseCharging"
+                    aria-expanded="true"
+                    aria-controls="collapseCharging"
+                  >
+                    <span className="text-black">CARREGAMENTO ATUAL</span>
+                  </button>
+                </h2>
 
-            {loading ? (
-              <div className="text-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Carregando...</span>
+                <div
+                  id="collapseCharging"
+                  className="accordion-collapse collapse"
+                  aria-labelledby="headingCharging"
+                  // data-bs-parent="#chargingAccordion"
+                >
+                  <div className="accordion-body">
+                    {loading ? (
+                      <div className="text-center py-5">
+                        <div
+                          className="spinner-border text-primary"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Carregando...</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="table-responsive">
+                          <table className="table table-striped text-white">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Em Estoque</th>
+                                <th>Preço</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {chargingList.map((charging) =>
+                                [...charging.chargingItems]
+                                  .sort((a, b) => a.id - b.id)
+                                  .map((item) => (
+                                    <tr key={item.id}>
+                                      <td>{item.productId}</td>
+                                      <td>{item.nameProduct}</td>
+                                      <td>{item.quantity}</td>
+                                      <td>R$ {item.priceProduct.toFixed(2)}</td>
+                                      <td>{ProductStatusLabel[item.status]}</td>
+                                    </tr>
+                                  )),
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <TableBottomControls
+                          indexOfFirstData={chargingPage * chargingPerPage}
+                          indexOfLastData={
+                            chargingPage * chargingPerPage + chargingList.length
+                          }
+                          dataList={chargingList}
+                          currentPage={chargingPage + 1}
+                          totalPages={chargingTotalPages}
+                          paginate={paginateCharging}
+                          pageNumbers={chargingPageNumbers}
+                        />
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            ) : (
-              <div className="table-responsive">
-                {/* Tabela com input de quantidade */}
-                <table className="table table-striped text-white">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nome</th>
-                      <th>Em Estoque</th>
-                      <th>Preço</th>
-                      <th>Status</th>
-                      <th>Quantidade</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentData.map((product) => (
-                      <tr key={product.id}>
-                        <td>{product.id}</td>
-                        <td>{product.name}</td>
-                        <td>{product.amount}</td>
-                        <td>R$ {product.value}</td>
-                        <td>{ProductStatusLabel[product.status]}</td>
-                        <td>
-                          <input
-                            type="number"
-                            min="0"
-                            className="form-control"
-                            value={quantities[product.id] || 0}
-                            onChange={(e) =>
-                              handleQuantityChange(product.id, e.target.value)
-                            }
-                            style={{ width: "100px" }}
+              <div className="accordion-item bg-transparent border-0">
+                <h2 className="accordion-header" id="headingProducts">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseProducts"
+                    aria-expanded="false"
+                    aria-controls="collapseProducts"
+                  >
+                    <span className="text-black">
+                      PRODUTOS DO ESTOQUE ({totalElements})
+                    </span>
+                  </button>
+                </h2>
+
+                <div
+                  id="collapseProducts"
+                  className="accordion-collapse collapse"
+                  aria-labelledby="headingProducts"
+                  // data-bs-parent="#chargingAccordion"
+                >
+                  <div className="accordion-body">
+                    {loading ? (
+                      <div className="text-center py-5">
+                        <div
+                          className="spinner-border text-primary"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Carregando...</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="table-responsive">
+                          <table className="table table-striped text-white">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Em Estoque</th>
+                                <th>Preço</th>
+                                <th>Status</th>
+                                <th>Quantidade</th>
+                                <th>Ações</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {dataList.map((product) => (
+                                <tr key={product.id}>
+                                  <td>{product.id}</td>
+                                  <td>{product.name}</td>
+                                  <td>{product.amount}</td>
+                                  <td>R$ {product.value}</td>
+                                  <td>{ProductStatusLabel[product.status]}</td>
+                                  <td>
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      className="form-control"
+                                      value={quantities[product.id] || 0}
+                                      onChange={(e) =>
+                                        handleQuantityChange(
+                                          product.id,
+                                          e.target.value,
+                                        )
+                                      }
+                                      style={{ width: "100px" }}
+                                    />
+                                  </td>
+                                  <td>
+                                    <div className="btn-box">
+                                      <button
+                                        title="Editar"
+                                        onClick={() =>
+                                          navigate(
+                                            `/update-product/${product.id}`,
+                                          )
+                                        }
+                                      >
+                                        <i className="fa-light fa-pen"></i>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+
+                          <TableBottomControls
+                            indexOfFirstData={indexOfFirstData}
+                            indexOfLastData={indexOfLastData}
+                            dataList={dataList}
+                            currentPage={currentPage + 1}
+                            totalPages={totalPages}
+                            paginate={paginate}
+                            pageNumbers={pageNumbers}
                           />
-                        </td>
-                        <td>
-                          <div className="btn-box">
-                            <button
-                              title="Editar"
-                              onClick={() =>
-                                navigate(`/update-product/${product.id}`)
-                              }
-                            >
-                              <i className="fa-light fa-pen"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
 
-                <TableBottomControls
-                  indexOfFirstData={indexOfFirstData}
-                  indexOfLastData={indexOfLastData}
-                  dataList={dataList}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  paginate={paginate}
-                  pageNumbers={pageNumbers}
-                />
+                        <div className="text-end p-3">
+                          <button
+                            className="btn btn-primary"
+                            onClick={handleSendCharging}
+                          >
+                            Enviar Carregamento
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
-
-            {/* Botão enviar */}
-            <div className="text-end p-3">
-              <button className="btn btn-primary" onClick={handleSendCharging}>
-                Enviar Carregamento
-              </button>
             </div>
           </div>
         </div>

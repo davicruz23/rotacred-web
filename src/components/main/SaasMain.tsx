@@ -1,14 +1,12 @@
 import { useAppSelector } from "../../redux/hooks";
 import CampaignCard from "../cards/CampaignCard";
 import CustomerCard from "../cards/CustomerCard";
-import GoalsCard from "../cards/GoalsCard";
 import RecentCustomerCard from "../cards/RecentCustomerCard";
 import SessionsByDeviceCard from "../cards/SessionsByDeviceCard";
 import SessionsCard from "../cards/SessionsCard";
 import TotalOrderCard4 from "../cards/TotalOrderCard4";
 import TotalSaleCard2 from "../cards/TotalSaleCard2";
 import SalesByProductCard from "../cards/TotalVendasPorProduto";
-import TrafficCard from "../cards/TrafficCard";
 import UsersCard from "../cards/UsersCard";
 import UsersCard2 from "../cards/UsersCard2";
 import VisitorCard from "../cards/VisitorCard";

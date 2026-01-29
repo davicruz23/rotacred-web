@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CustomerChart from "../charts/CustomerChart";
 import MonthDropdown from "../utils/dropdowns/MonthDropdown";
 import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 interface SalesData {
   mes: string;
@@ -12,6 +13,7 @@ const CustomerCard = () => {
   const [selectedMonths, setSelectedMonths] = useState<number>(6);
   const [salesData, setSalesData] = useState<SalesData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -20,11 +22,19 @@ const CustomerCard = () => {
       .get(`/dashboard/sales-per-month?meses=${selectedMonths}`)
       .then((response) => {
         setSalesData(response.data);
-        console.log("sales-per-month:", response.data);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error("Erro ao buscar dados de vendas:", err);
         setSalesData([]);
+
+        if (err?.response?.status === 404) {
+        navigate("/error-404", { replace: true });
+        return;
+      }
+
+      // outros erros (500, etc)
+      navigate("/error-500", { replace: true });
+      return;
       })
       .finally(() => setLoading(false));
   }, [selectedMonths]);

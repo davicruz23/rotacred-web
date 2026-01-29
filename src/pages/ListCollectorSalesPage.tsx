@@ -45,7 +45,6 @@ const ListCollectorSalesPage = () => {
   const fetchCollectorsWithSales = async () => {
     try {
       const response = await api.get("/collector/all/sales");
-      console.log(response.data);
       setCollectorData(response.data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);

@@ -14,8 +14,6 @@ const isTokenExpired = (token: string): boolean => {
 const PrivateRoute = () => {
   const token = localStorage.getItem("token");
 
-  console.log("token :"+token)
-
   const isValidToken = token &&
     token !== "undefined" &&
     token !== "null" &&

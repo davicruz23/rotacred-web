@@ -20,20 +20,34 @@ const UptadeProductPage = () => {
     try {
       const response = await api.get(`/product/${id}`);
       setProduct(response.data);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Erro ao carregar produto");
+
+      if (err?.response?.status === 404) {
+        navigate("/error-404", { replace: true });
+        return;
+      }
+
+      // outros erros (500, etc)
+      navigate("/error-500", { replace: true });
+      return;
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!id) {
+      navigate("/error-404", { replace: true });
+      return;
+    }
+
     fetchProduct();
   }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setProduct((prev) => ({
       ...prev,
       [name]: value === "" ? 0 : Number(value),
@@ -42,17 +56,24 @@ const UptadeProductPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       await api.put(`/product/${id}`, {
         id,
         amount: product.amount,
         value: product.value,
       });
-      alert("Produto atualizado com sucesso!");
+
       navigate("/all-product");
     } catch (err: any) {
       console.error(err);
-      alert("Erro ao atualizar produto");
+
+      if (err?.response?.status === 404) {
+        navigate("/error-404", { replace: true });
+        return;
+      }
+
+      navigate("/error-500", { replace: true });
     }
   };
 
@@ -106,7 +127,6 @@ const UptadeProductPage = () => {
       </div>
     </div>
   );
-
 };
 
 export default UptadeProductPage;
