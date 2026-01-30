@@ -35,6 +35,7 @@ import GuestRoute from "./routes/GuestRoute"; // Importe o GuestRoute
 import ViewProfilePage from "./pages/ViewProfilePage";
 import CreateUsersPage from "./pages/CreateUsersPage";
 import NewChargingPage from "./pages/NewChargingPage";
+import ReportProductsPage from "./pages/ReportProducts";
 
 function App() {
   const activeLayout = useAppSelector((state) => state.layout.isLayout);
@@ -89,6 +90,7 @@ function App() {
                 <Route path="/all-product" element={<AllProductPage />} />
                 <Route path="/report-clients" element={<ReportClientsPage />} />
                 <Route path="/report-chargings" element={<ReportCharginsPage />} />
+                <Route path="/report-products" element={<ReportProductsPage />} />
                 <Route path="/collector-cities" element={<AddCitiesByCollectorPage />} />
                 <Route path="/collector-sales" element={<ListCollectorSalesPage />} />
               </Route>

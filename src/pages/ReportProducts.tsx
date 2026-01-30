@@ -1,17 +1,12 @@
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
 
-const ReportCharginsPage = () => {
-  const chargingId = 1;
+const ReportProductsPage = () => {
 
   const handleGeneratePdf = async () => {
-    if (!chargingId) {
-      alert("Informe o ID do carregamento");
-      return;
-    }
 
     try {
-      const response = await api.get(`/report/${chargingId}/chargings`, {
+      const response = await api.get(`/report/products`, {
         responseType: "blob",
       });
 
@@ -20,7 +15,7 @@ const ReportCharginsPage = () => {
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = `carregamento-${chargingId}.pdf`;
+      link.download = `estoque.pdf`;
       link.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
@@ -34,7 +29,7 @@ const ReportCharginsPage = () => {
       <BreadcrumbSection title="Relatório - Carregamentos" link="/inicio" />
 
       <div className="card shadow-sm mt-4 p-4">
-        <h4 className="mb-4">Relatório de Carregamento</h4>
+        <h4 className="mb-4">Relatório de Produtos</h4>
 
         <div className="row g-3">
           <div className="col-md-2 d-flex align-items-end">
@@ -48,4 +43,4 @@ const ReportCharginsPage = () => {
   );
 };
 
-export default ReportCharginsPage;
+export default ReportProductsPage;

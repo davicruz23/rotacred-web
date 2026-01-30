@@ -475,9 +475,14 @@ const navData = [
           //   subUrl: "/all-customer",
           // },
           {
+            subTitle: "Produtos",
+            subUrl: "/report-products",
+          },
+          {
             subTitle: "Carregamentos",
             subUrl: "/report-chargings",
           },
+          
           // {
           //   subTitle: "Clientes",
           //   subUrl: "/report-clients",
