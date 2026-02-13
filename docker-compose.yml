@@ -8,8 +8,10 @@ services:
     ports:
       - "3000:80"
     networks:
-      - rotacred_net
+      - app_net
+    depends_on:
+      - app 
 
 networks:
-  rotacred_net:
+  app_net:
     external: true
