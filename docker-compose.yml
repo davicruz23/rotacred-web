@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  frontend:
+    container_name: rotacred_front
+    build: .
+    restart: always
+    ports:
+      - "3000:80"
+    networks:
+      - rotacred_net
+
+networks:
+  rotacred_net:
+    external: true
+
+logging:
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"

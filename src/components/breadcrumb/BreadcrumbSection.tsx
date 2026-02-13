@@ -3,7 +3,7 @@ type Props = {
   title: string;
 };
 
-const BreadcrumbSection = ({ link, title }: Props) => {
+const BreadcrumbSection = ({title }: Props) => {
   return (
     <div className="dashboard-breadcrumb d-flex align-items-center">
       <h6 className="mb-0">{title}</h6>

@@ -75,12 +75,6 @@ const AllProductPage = () => {
     fetchProducts(0, searchName);
   };
 
-  const handleClearSearch = () => {
-    setSearchName("");
-    setCurrentPage(0);
-    fetchProducts(0, "");
-  };
-
   const handleDelete = async (id: number) => {
     if (!window.confirm("Tem certeza que deseja deletar este produto?")) return;
 

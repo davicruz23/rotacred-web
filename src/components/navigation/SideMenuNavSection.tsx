@@ -5,7 +5,6 @@ import { Tooltip } from "react-tooltip";
 import { useAppSelector } from "../../redux/hooks";
 import { navData } from "../../data"; // Assuming `navData` is imported correctly
 import NavSingleSection from "./NavSingleSection";
-import MultilvlDropdown from "./MultilvlDropdown";
 
 type MultiLevelState = {
   firstLvl: boolean;
@@ -24,7 +23,6 @@ const SideMenuNavSection = ({
   dashedDivider,
   noTitle,
   iconOnly,
-  logoutBtn,
   noDefaultOpen,
 }: Props) => {
   const location = useLocation();
@@ -54,7 +52,7 @@ const SideMenuNavSection = ({
   const activeLayout = useAppSelector((state) => state.layout.isLayout);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const [activeMultiLvl, setActiveMultiLvl] = useState<MultiLevelState>({
+  const [, setActiveMultiLvl] = useState<MultiLevelState>({
     firstLvl: false,
     secondLvl: false,
   });
@@ -68,13 +66,6 @@ const SideMenuNavSection = ({
         dropdown === "secondLvl" ? !prevState.secondLvl : prevState.secondLvl,
     }));
     setActiveDropdown(dropdown);
-  };
-
-  const handleClick = (level: keyof MultiLevelState) => {
-    setActiveMultiLvl((prevState) => ({
-      ...prevState,
-      [level]: !prevState[level],
-    }));
   };
 
   useEffect(() => {

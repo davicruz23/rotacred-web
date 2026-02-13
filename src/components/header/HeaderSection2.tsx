@@ -3,7 +3,7 @@ type Props = {
   toggleSidebarOpen: () => void;
 };
 const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
-  const [activeDropdown, setActiveDropdown] = useState<string>("");
+  const [, setActiveDropdown] = useState<string>("");
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
   const dropdownRef = useRef<HTMLUListElement>(null);
@@ -25,9 +25,6 @@ const HeaderSection2 = ({ toggleSidebarOpen }: Props) => {
     };
   }, []);
 
-  const toggleDropdown = (dropdown: string) => {
-    setActiveDropdown(activeDropdown === dropdown ? "" : dropdown);
-  };
   const currentDate = new Date().toLocaleDateString("pt-GB", {
     day: "numeric",
     month: "long",

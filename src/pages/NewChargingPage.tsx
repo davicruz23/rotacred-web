@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import TableHeader from "../components/header/table-header/TableHeader";
 import TableBottomControls from "../components/utils/TableBottomControls";
 import api from "../services/api";
 import { AllProductDataType, ChargingType } from "../types";
-import { allProductHeaderData } from "../data";
 import { ProductStatusLabel } from "../enums/ProductStatusLabel";
 
 type PageResponse<T> = {
@@ -53,7 +51,7 @@ const NewChargingPage = () => {
   const [searchName, setSearchName] = useState("");
 
   const [chargingPage, setChargingPage] = useState(0);
-  const [chargingTotalElements, setChargingTotalElements] = useState(0);
+  const [, setChargingTotalElements] = useState(0);
   const [chargingTotalPages, setChargingTotalPages] = useState(0);
   const [chargingPerPage] = useState(10);
 
@@ -144,10 +142,6 @@ const NewChargingPage = () => {
     return () => clearTimeout(timeout);
   }, [searchName]);
 
-  useEffect(() => {
-    fetchProducts(0, "");
-    fetchChargings(0, "");
-  }, []);
 
   const handleQuantityChange = (productId: number, value: string) => {
     const num = Number(value);

@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import BreadcrumbSection from "../components/breadcrumb/BreadcrumbSection";
-import { FaMapMarkerAlt, FaCheckCircle, FaTimesCircle, FaMinusCircle } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaMinusCircle,
+} from "react-icons/fa";
 
 type ProductType = {
   id: number;
@@ -27,6 +32,7 @@ type SaleType = {
   paymentType: string;
   clientName: string;
   total: number;
+  saleStatus: string;
   longitude: number;
   latitude: number;
   products: ProductType[];
@@ -94,203 +100,237 @@ const ListCollectorSalesPage = () => {
                   )}
 
                   <div className="accordion" id={`sales-${collector.id}`}>
-                    {collector.sales.map((sale) => (
-                      <div className="accordion-item" key={sale.id}>
-                        <h2
-                          className="accordion-header"
-                          id={`heading-sale-${sale.id}`}
-                        >
-                          <button
-                            className="accordion-button collapsed bg-light"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target={`#sale-${sale.id}`}
-                            aria-expanded="false"
-                            aria-controls={`sale-${sale.id}`}
+                    {collector.sales.map((sale) => {
+                      const isReadOnlySale =
+                        sale.saleStatus === "DEFEITO_PRODUTO" ||
+                        sale.saleStatus === "DESISTENCIA";
+                        console.log("qual estatus veio",sale.saleStatus);
+
+                      return (
+                        <div className="accordion-item" key={sale.id}>
+                          <h2
+                            className="accordion-header"
+                            id={`heading-sale-${sale.id}`}
                           >
-                            Venda #{sale.id} — {sale.clientName} — R${" "}
-                            {sale.total}
-                          </button>
-                        </h2>
+                            <button
+                              className={`accordion-button collapsed ${
+                                isReadOnlySale
+                                  ? "bg-secondary text-white"
+                                  : "bg-light"
+                              }`}
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target={`#sale-${sale.id}`}
+                              aria-expanded="false"
+                              aria-controls={`sale-${sale.id}`}
+                            >
+                              Venda #{sale.id} — {sale.clientName} — R${" "}
+                              {sale.total}
+                              {isReadOnlySale}
+                            </button>
+                          </h2>
 
-                        <div
-                          id={`sale-${sale.id}`}
-                          className="accordion-collapse collapse"
-                          aria-labelledby={`heading-sale-${sale.id}`}
-                          data-bs-parent={`#sales-${collector.id}`}
-                        >
-                          <div className="accordion-body">
-                            <p>
-                              <strong>Data:</strong> {sale.saleDate}
-                            </p>
-                            <p>
-                              <strong>Pagamento:</strong> {sale.paymentType}
-                            </p>
-                            <p>
-                              <strong>Total:</strong> R$ {sale.total}
-                            </p>
+                          <div
+                            id={`sale-${sale.id}`}
+                            className="accordion-collapse collapse"
+                            aria-labelledby={`heading-sale-${sale.id}`}
+                            data-bs-parent={`#sales-${collector.id}`}
+                          >
+                            <div className="accordion-body">
+                              <p>
+                                <strong>Data:</strong> {sale.saleDate}
+                              </p>
+                              <p>
+                                <strong>Pagamento:</strong> {sale.paymentType}
+                              </p>
+                              <p>
+                                <strong>Total:</strong> R$ {sale.total}
+                              </p>
 
-                            {/* ✅ Botão estilizado do Google Maps */}
-                            {sale.latitude && sale.longitude && (
-                              <div className="mb-3">
-                                <button
-                                  className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
-                                  onClick={() =>
-                                    window.open(
-                                      `https://www.google.com/maps?q=${sale.latitude},${sale.longitude}`,
-                                      "_blank",
-                                      "noopener,noreferrer",
-                                    )
-                                  }
-                                >
-                                  <i className="bi bi-geo-alt-fill"></i> Ver no
-                                  Mapa
-                                </button>
-                              </div>
-                            )}
+                              {/* ✅ Botão estilizado do Google Maps */}
+                              {sale.latitude && sale.longitude && (
+                                <div className="mb-3">
+                                  <button
+                                    className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
+                                    disabled={isReadOnlySale}
+                                    onClick={() => {
+                                      if (isReadOnlySale) return;
 
-                            <hr />
+                                      window.open(
+                                        `https://www.google.com/maps?q=${sale.latitude},${sale.longitude}`,
+                                        "_blank",
+                                        "noopener,noreferrer",
+                                      );
+                                    }}
+                                    title={
+                                      isReadOnlySale
+                                        ? "Venda bloqueada (DEFEITO_PRODUTO/DESISTENCIA)"
+                                        : "Abrir localização no Google Maps"
+                                    }
+                                  >
+                                    <i className="bi bi-geo-alt-fill"></i> Ver
+                                    no Mapa
+                                  </button>
+                                </div>
+                              )}
 
-                            <h6>🛒 Produtos:</h6>
-                            <ul className="list-group">
-                              {sale.products.map((p) => (
-                                <li key={p.id} className="list-group-item">
-                                  <strong>{p.quantity}x</strong> {p.nameProduct}
-                                </li>
-                              ))}
-                            </ul>
+                              <hr />
 
-                            <h6 className="mt-3">💰 Parcelas:</h6>
-                            <table className="table table-sm table-bordered">
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Vencimento</th>
-                                  <th>Valor</th>
-                                  <th>Pago</th>
-                                  <th>Localização da cobrança</th>
-                                  <th>Ver localização</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {sale.installments.map((i) => (
-                                  <tr key={i.id}>
-                                    <td>{i.id}</td>
-                                    <td>{i.dueDate}</td>
-                                    <td>R$ {i.amount}</td>
-                                    <td style={{ textAlign: "center" }}>
-                                      {i.paid ? (
-                                        <FaCheckCircle
-                                          color="#28a745"
-                                          size={18}
-                                          title="Parcela Paga"
-                                        />
-                                      ) : (
-                                        <FaTimesCircle
-                                          color="#dc3545"
-                                          size={18}
-                                          title="Parcela Pendente"
-                                        />
-                                      )}
-                                    </td>
-
-                                    <td style={{ textAlign: "center" }}>
-                                      {i.isValid === true && (
-                                        <FaCheckCircle
-                                          color="#28a745"
-                                          size={18}
-                                          title="Localização validada"
-                                        />
-                                      )}
-
-                                      {i.isValid === false && (
-                                        <FaTimesCircle
-                                          color="#dc3545"
-                                          size={18}
-                                          title="Localização inválida"
-                                        />
-                                      )}
-
-                                      {i.isValid == null && (
-                                        <FaMinusCircle
-                                          color="#6c757d"
-                                          size={18}
-                                          title="Localização não verificada"
-                                        />
-                                      )}
-                                    </td>
-
-                                    <td
-                                      style={{
-                                        cursor:
-                                          i.attemptLatitude &&
-                                          i.attemptLongitude
-                                            ? "pointer"
-                                            : "not-allowed",
-                                        textAlign: "center",
-                                      }}
-                                      title={
-                                        i.attemptLatitude && i.attemptLongitude
-                                          ? "Abrir localização no Google Maps"
-                                          : "Localização indisponível"
-                                      }
-                                      onClick={() => {
-                                        if (
-                                          i.attemptLatitude &&
-                                          i.attemptLongitude
-                                        ) {
-                                          window.open(
-                                            `https://www.google.com/maps?q=${i.attemptLatitude},${i.attemptLongitude}`,
-                                            "_blank",
-                                            "noopener,noreferrer",
-                                          );
-                                        }
-                                      }}
-                                    >
-                                      <FaMapMarkerAlt
-                                        size={18}
-                                        color={
-                                          i.attemptLatitude &&
-                                          i.attemptLongitude
-                                            ? "#007bff"
-                                            : "#ccc"
-                                        }
-                                        style={{
-                                          transition:
-                                            "transform 0.2s, color 0.2s",
-                                        }}
-                                        onMouseEnter={(e) => {
-                                          if (
-                                            i.attemptLatitude &&
-                                            i.attemptLongitude
-                                          ) {
-                                            e.currentTarget.style.transform =
-                                              "scale(1.2)";
-                                            e.currentTarget.style.color =
-                                              "#0056b3";
-                                          }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                          if (
-                                            i.attemptLatitude &&
-                                            i.attemptLongitude
-                                          ) {
-                                            e.currentTarget.style.transform =
-                                              "scale(1.0)";
-                                            e.currentTarget.style.color =
-                                              "#007bff";
-                                          }
-                                        }}
-                                      />
-                                    </td>
-                                  </tr>
+                              <h6>🛒 Produtos:</h6>
+                              <ul className="list-group">
+                                {sale.products.map((p) => (
+                                  <li key={p.id} className="list-group-item">
+                                    <strong>{p.quantity}x</strong>{" "}
+                                    {p.nameProduct}
+                                  </li>
                                 ))}
-                              </tbody>
-                            </table>
+                              </ul>
+
+                              <h6 className="mt-3">💰 Parcelas:</h6>
+                              <table className="table table-sm table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Vencimento</th>
+                                    <th>Valor</th>
+                                    <th>Pago</th>
+                                    <th>Localização da cobrança</th>
+                                    <th>Ver localização</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {sale.installments.map((i) => (
+                                    <tr key={i.id}>
+                                      <td>{i.id}</td>
+                                      <td>{i.dueDate}</td>
+                                      <td>R$ {i.amount}</td>
+                                      <td style={{ textAlign: "center" }}>
+                                        {i.paid ? (
+                                          <FaCheckCircle
+                                            color="#28a745"
+                                            size={18}
+                                            title="Parcela Paga"
+                                          />
+                                        ) : (
+                                          <FaTimesCircle
+                                            color="#dc3545"
+                                            size={18}
+                                            title="Parcela Pendente"
+                                          />
+                                        )}
+                                      </td>
+
+                                      <td style={{ textAlign: "center" }}>
+                                        {i.isValid === true && (
+                                          <FaCheckCircle
+                                            color="#28a745"
+                                            size={18}
+                                            title="Localização validada"
+                                          />
+                                        )}
+
+                                        {i.isValid === false && (
+                                          <FaTimesCircle
+                                            color="#dc3545"
+                                            size={18}
+                                            title="Localização inválida"
+                                          />
+                                        )}
+
+                                        {i.isValid == null && (
+                                          <FaMinusCircle
+                                            color="#6c757d"
+                                            size={18}
+                                            title="Localização não verificada"
+                                          />
+                                        )}
+                                      </td>
+
+                                      <td
+                                        style={{
+                                          cursor:
+                                            !isReadOnlySale &&
+                                            i.attemptLatitude &&
+                                            i.attemptLongitude
+                                              ? "pointer"
+                                              : "not-allowed",
+                                          textAlign: "center",
+                                          opacity: isReadOnlySale ? 0.6 : 1,
+                                        }}
+                                        title={
+                                          isReadOnlySale
+                                            ? "Venda bloqueada (DEFEITO_PRODUTO/DESISTENCIA)"
+                                            : i.attemptLatitude &&
+                                                i.attemptLongitude
+                                              ? "Abrir localização no Google Maps"
+                                              : "Localização indisponível"
+                                        }
+                                        onClick={() => {
+                                          if (isReadOnlySale) return;
+
+                                          if (
+                                            i.attemptLatitude &&
+                                            i.attemptLongitude
+                                          ) {
+                                            window.open(
+                                              `https://www.google.com/maps?q=${i.attemptLatitude},${i.attemptLongitude}`,
+                                              "_blank",
+                                              "noopener,noreferrer",
+                                            );
+                                          }
+                                        }}
+                                      >
+                                        <FaMapMarkerAlt
+                                          size={18}
+                                          color={
+                                            isReadOnlySale
+                                              ? "#ccc"
+                                              : i.attemptLatitude &&
+                                                  i.attemptLongitude
+                                                ? "#007bff"
+                                                : "#ccc"
+                                          }
+                                          style={{
+                                            transition:
+                                              "transform 0.2s, color 0.2s",
+                                          }}
+                                          onMouseEnter={(e) => {
+                                            if (isReadOnlySale) return;
+
+                                            if (
+                                              i.attemptLatitude &&
+                                              i.attemptLongitude
+                                            ) {
+                                              e.currentTarget.style.transform =
+                                                "scale(1.2)";
+                                              e.currentTarget.style.color =
+                                                "#0056b3";
+                                            }
+                                          }}
+                                          onMouseLeave={(e) => {
+                                            if (isReadOnlySale) return;
+
+                                            if (
+                                              i.attemptLatitude &&
+                                              i.attemptLongitude
+                                            ) {
+                                              e.currentTarget.style.transform =
+                                                "scale(1.0)";
+                                              e.currentTarget.style.color =
+                                                "#007bff";
+                                            }
+                                          }}
+                                        />
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>

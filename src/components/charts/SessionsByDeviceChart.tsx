@@ -67,7 +67,7 @@ const SessionsByDeviceChart = ({ data }: Props) => {
           },
         },
       },
-      colors: ["#20C997", "#845ADF", "#FF7049"],
+      colors: ["#20C997", "#FF7049", "#845ADF"],
       series: percentuais,
       labels: ["Pendente", "Recusada", "Aprovada"],
       responsive: [
