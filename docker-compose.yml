@@ -9,8 +9,6 @@ services:
       - "3000:80"
     networks:
       - app_net
-    depends_on:
-      - app 
 
 networks:
   app_net:
