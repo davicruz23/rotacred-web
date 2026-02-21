@@ -8,10 +8,21 @@ import {
   FaMinusCircle,
 } from "react-icons/fa";
 
+type SaleReturnsType = {
+  saleReturnId: number;
+  productId: number;
+  productName: string;
+  quantityReturned: number;
+  valueAbatido: number;
+  returnDate: string;
+  status: string;
+};
+
 type ProductType = {
   id: number;
   nameProduct: string;
   quantity: number;
+  price: number;
 };
 
 type InstallmentType = {
@@ -37,6 +48,7 @@ type SaleType = {
   latitude: number;
   products: ProductType[];
   installments: InstallmentType[];
+  saleReturns: SaleReturnsType[];
 };
 
 type CollectorType = {
@@ -45,12 +57,26 @@ type CollectorType = {
   sales: SaleType[];
 };
 
+enum SaleStatusFilter {
+  TODOS = 0,
+  ATIVOS = 1,
+  DESISTENCIA = 4,
+  REAVIDO = 5,
+}
+
 const ListCollectorSalesPage = () => {
   const [collectorData, setCollectorData] = useState<CollectorType[]>([]);
+  const [statusFilter, setStatusFilter] = useState<number>(0);
 
-  const fetchCollectorsWithSales = async () => {
+  const fetchCollectorsWithSales = async (status?: number) => {
     try {
-      const response = await api.get("/collector/all/sales");
+      let url = "/collector/all/sales";
+
+      if (status && status !== 0) {
+        url += `?status=${status}`;
+      }
+
+      const response = await api.get(url);
       setCollectorData(response.data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -59,8 +85,8 @@ const ListCollectorSalesPage = () => {
   };
 
   useEffect(() => {
-    fetchCollectorsWithSales();
-  }, []);
+    fetchCollectorsWithSales(statusFilter);
+  }, [statusFilter]);
 
   return (
     <div className="container-fluid px-1 my-1">
@@ -68,6 +94,22 @@ const ListCollectorSalesPage = () => {
 
       <div className="card p-4 shadow-sm">
         <h3 className="mb-4">Lista de cobranças</h3>
+
+        <div className="row mb-3">
+          <div className="col-md-4">
+            <label className="form-label fw-semibold">Filtrar por status</label>
+            <select
+              className="form-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(Number(e.target.value))}
+            >
+              <option value={SaleStatusFilter.TODOS}>TODOS</option>
+              <option value={SaleStatusFilter.ATIVOS}>ATIVOS</option>
+              <option value={SaleStatusFilter.REAVIDO}>RECUPERADOS</option>
+              <option value={SaleStatusFilter.DESISTENCIA}>DESISTÊNCIAS</option>
+            </select>
+          </div>
+        </div>
 
         <div className="accordion" id="accordionCollectors">
           {collectorData.map((collector) => (
@@ -104,7 +146,6 @@ const ListCollectorSalesPage = () => {
                       const isReadOnlySale =
                         sale.saleStatus === "DEFEITO_PRODUTO" ||
                         sale.saleStatus === "DESISTENCIA";
-                        console.log("qual estatus veio",sale.saleStatus);
 
                       return (
                         <div className="accordion-item" key={sale.id}>
@@ -124,8 +165,7 @@ const ListCollectorSalesPage = () => {
                               aria-expanded="false"
                               aria-controls={`sale-${sale.id}`}
                             >
-                              Venda #{sale.id} — {sale.clientName} — R${" "}
-                              {sale.total}
+                              Venda #{sale.id} — {sale.clientName}
                               {isReadOnlySale}
                             </button>
                           </h2>
@@ -177,15 +217,62 @@ const ListCollectorSalesPage = () => {
                               <hr />
 
                               <h6>🛒 Produtos:</h6>
-                              <ul className="list-group">
+                              <ul className="list-group mb-3">
                                 {sale.products.map((p) => (
                                   <li key={p.id} className="list-group-item">
                                     <strong>{p.quantity}x</strong>{" "}
-                                    {p.nameProduct}
+                                    {p.nameProduct} — R$ {p.price}
                                   </li>
                                 ))}
                               </ul>
 
+                              {/* 🔁 BLOCO DE DEVOLUÇÕES */}
+                              {sale.saleReturns &&
+                                sale.saleReturns.length > 0 && (
+                                  <>
+                                    <h6 className="text-danger">
+                                      🔁 Observações:
+                                    </h6>
+                                    <ul className="list-group mb-3">
+                                      {sale.saleReturns.map((s) => (
+                                        <li
+                                          key={s.saleReturnId}
+                                          className="list-group-item border-danger"
+                                        >
+                                          <div className="d-flex justify-content-between align-items-center">
+                                            <div>
+                                              <strong>
+                                                Produto: {s.productName}
+                                              </strong>
+                                              <div>
+                                                Valor abatido das parcelas: R${" "}
+                                                {s.valueAbatido}
+                                              </div>
+                                              <small className="text-muted">
+                                                Data: {s.returnDate}
+                                              </small>
+                                            </div>
+
+                                            <span
+                                              className={`badge ${
+                                                s.status === "DANIFICADO"
+                                                  ? "bg-danger"
+                                                  : s.status === "DESISTENCIA"
+                                                    ? "bg-warning text-dark"
+                                                    : s.status ===
+                                                        "DEVOLVIDO_CLIENTE"
+                                                      ? "bg-info"
+                                                      : "bg-secondary"
+                                              }`}
+                                            >
+                                              {s.status}
+                                            </span>
+                                          </div>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </>
+                                )}
                               <h6 className="mt-3">💰 Parcelas:</h6>
                               <table className="table table-sm table-bordered">
                                 <thead>
