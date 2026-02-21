@@ -29,7 +29,7 @@ const SalesByProductChart = ({ data }: Props) => {
     <ResponsiveContainer width={400} height={300}>
       <BarChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="name" tick={false} axisLine={false} tickLine={false} />
         <YAxis />
         <Tooltip
           formatter={(value: any, name: string) =>
@@ -40,7 +40,7 @@ const SalesByProductChart = ({ data }: Props) => {
               : value
           }
         />
-        <Bar dataKey="quantidade" fill="#3b82f6" name="Qtd Vendida" />
+        {/* <Bar dataKey="quantidade" fill="#3b82f6" name="Qtd Vendida" /> */}
         <Bar dataKey="valor" fill="#10b981" name="Valor Total (R$)" />
       </BarChart>
     </ResponsiveContainer>
