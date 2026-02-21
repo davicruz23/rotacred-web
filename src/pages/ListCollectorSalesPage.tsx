@@ -49,6 +49,7 @@ type SaleType = {
   products: ProductType[];
   installments: InstallmentType[];
   saleReturns: SaleReturnsType[];
+  nparcel: number;
 };
 
 type CollectorType = {
@@ -181,7 +182,10 @@ const ListCollectorSalesPage = () => {
                                 <strong>Data:</strong> {sale.saleDate}
                               </p>
                               <p>
-                                <strong>Pagamento:</strong> {sale.paymentType}
+                                <strong>Método:</strong> {sale.paymentType}
+                              </p>
+                              <p>
+                                <strong>Parcelas:</strong> {sale.nparcel}x
                               </p>
                               <p>
                                 <strong>Total:</strong> R$ {sale.total}
@@ -286,9 +290,9 @@ const ListCollectorSalesPage = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {sale.installments.map((i) => (
+                                  {sale.installments.map((i, index) => (
                                     <tr key={i.id}>
-                                      <td>{i.id}</td>
+                                      <td>{index + 1}</td>
                                       <td>{i.dueDate}</td>
                                       <td>R$ {i.amount}</td>
                                       <td style={{ textAlign: "center" }}>
