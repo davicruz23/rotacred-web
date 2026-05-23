@@ -63,7 +63,7 @@ const BRAZIL_STATES = [
 
 const STORE_AND_APPROVE_ENDPOINT = "/sale/store-and-approve";
 const PRODUCTS_ENDPOINT = "/product/all";
-
+const CPF_VALIDATOR = "/cpf/validar";
 
 const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
@@ -284,6 +284,13 @@ const S: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     color: "#1a1a1a",
   },
+
+  gridClient: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: 16,
+    alignItems: "start",
+  },
 };
 
 const getSaveBtn = (disabled: boolean): React.CSSProperties => ({
@@ -302,7 +309,6 @@ const getSaveBtn = (disabled: boolean): React.CSSProperties => ({
   gap: 8,
 });
 
-
 const DirectSalePage = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -317,6 +323,8 @@ const DirectSalePage = () => {
   const [cashPaid, setCashPaid] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+
+  const [cpfError, setCpfError] = useState("");
 
   const [client, setClient] = useState<ClientForm>({
     name: "",
@@ -445,13 +453,57 @@ const DirectSalePage = () => {
       prev.filter((item) => item.productId !== productId),
     );
 
+  async function validateCpf(cpf: string): Promise<boolean> {
+    const cleanCpf = cpf.replace(/\D/g, "");
+
+    setCpfError("");
+
+    if (!cleanCpf) {
+      setCpfError("CPF é obrigatório.");
+      return false;
+    }
+
+    if (cleanCpf.length !== 11) {
+      setCpfError("CPF deve ter 11 dígitos.");
+      return false;
+    }
+
+    try {
+      const response = await api.get<boolean>(`${CPF_VALIDATOR}/${cleanCpf}`);
+
+      const isValid = response.data;
+
+      if (!isValid) {
+        setCpfError("CPF inválido.");
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Erro ao validar CPF:", error);
+      setCpfError("Verificar CPF digitado.");
+      return false;
+    }
+  }
+
   const handleSubmit = async () => {
+    const cpfIsValid = await validateCpf(client.cpf);
+
+    if (!cpfIsValid) {
+      return;
+    }
+
     if (!client.name.trim()) {
       alert("Informe o nome do cliente");
       return;
     }
     if (selectedProducts.length === 0) {
       alert("Adicione pelo menos um produto");
+      return;
+    }
+
+    if (!client.cpf || client.cpf.trim() === "") {
+      alert("CPF é obrigatório.");
       return;
     }
 
@@ -552,7 +604,7 @@ const DirectSalePage = () => {
               <div style={S.cardTitle}>Dados do cliente</div>
             </div>
             <div style={S.cardBody}>
-              <div style={S.grid2}>
+              <div style={S.gridClient}>
                 <div style={S.field}>
                   <label style={S.label}>Nome</label>
                   <input
@@ -564,12 +616,27 @@ const DirectSalePage = () => {
                 </div>
                 <div style={S.field}>
                   <label style={S.label}>CPF</label>
+
                   <input
-                    style={S.input}
+                    style={{
+                      ...S.input,
+                      borderColor: cpfError ? "#dc2626" : S.input.borderColor,
+                    }}
                     type="text"
                     value={client.cpf}
-                    onChange={(e) => handleClientChange("cpf", e.target.value)}
+                    required
+                    maxLength={14}
+                    onChange={(e) => {
+                      handleClientChange("cpf", e.target.value);
+                      setCpfError("");
+                    }}
                   />
+
+                  {cpfError && (
+                    <small style={{ color: "#dc2626", marginTop: 4 }}>
+                      {cpfError}
+                    </small>
+                  )}
                 </div>
                 <div style={S.field}>
                   <label style={S.label}>Telefone</label>

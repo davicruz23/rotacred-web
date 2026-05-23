@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TableBottomControls from "../components/utils/TableBottomControls";
 import api from "../services/api";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 type ProductType = {
   id: number;
@@ -13,6 +14,7 @@ type InstallmentType = {
   id: number;
   dueDate: string;
   amount: number;
+  paid: boolean;
 };
 
 type SaleType = {
@@ -20,6 +22,7 @@ type SaleType = {
   saleDate: string;
   paymentType: string;
   clientName: string;
+  statusSale: string;
   products: ProductType[];
   installments: InstallmentType[];
   nparcel: number;
@@ -33,9 +36,23 @@ type PageResponse<T> = {
   size: number;
 };
 
+type AdminPaymentInstallmentType = {
+  id: number;
+  dueDate: string;
+  amount: number;
+  paid: boolean;
+};
+
+type AdminPaymentInfoType = {
+  saleId: number;
+  clientName: string;
+  openBalance: number;
+  installments: AdminPaymentInstallmentType[];
+};
+
 enum SaleStatusFilter {
   TODOS = 0,
-  ATIVOS = 1,
+  ATIVO = 1,
   DEFEITO_PRODUTO = 2,
   DEVOLVIDO_CLIENTE = 3,
   DESISTENCIA = 4,
@@ -46,7 +63,7 @@ enum SaleStatusFilter {
 
 const SalesListPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [dataPerPage] = useState(5);
+  const [dataPerPage] = useState(10);
 
   const [dataList, setDataList] = useState<SaleType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,10 +75,24 @@ const SalesListPage = () => {
   const [cpf, setCpf] = useState("");
   const [status, setStatus] = useState("");
   const [saleDate, setSaleDate] = useState("");
+  const [unpaidOnly, setUnpaidOnly] = useState(false);
+
+  const [showDateModal, setShowDateModal] = useState(false);
+  const [selectedSale, setSelectedSale] = useState<SaleType | null>(null);
+  const [newFirstDueDate, setNewFirstDueDate] = useState("");
+  const [currentFirstDueDate, setCurrentFirstDueDate] = useState("");
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentSale, setPaymentSale] = useState<SaleType | null>(null);
+  const [adminPaymentAmount, setAdminPaymentAmount] = useState("");
+  const [adminPaymentMethod, setAdminPaymentMethod] = useState("PIX");
+  const [adminPaymentNote, setAdminPaymentNote] = useState("");
+  const [paymentSaleInfo, setPaymentSaleInfo] =
+    useState<AdminPaymentInfoType | null>(null);
 
   const fetchSales = async (
     page = 0,
-    filters = { clientName, cpf, status, saleDate },
+    filters = { clientName, cpf, status, saleDate, unpaidOnly },
   ) => {
     try {
       setLoading(true);
@@ -74,6 +105,7 @@ const SalesListPage = () => {
           cpf: filters.cpf.trim() || undefined,
           status: filters.status.trim() || undefined,
           saleDate: filters.saleDate || undefined,
+          unpaidOnly: filters.unpaidOnly || undefined,
         },
       });
 
@@ -103,13 +135,15 @@ const SalesListPage = () => {
     setCpf("");
     setStatus("");
     setSaleDate("");
+    setUnpaidOnly(false);
     setCurrentPage(0);
 
     fetchSales(0, {
       clientName: "",
       cpf: "",
-      status: "ATIVOS",
+      status: SaleStatusFilter.TODOS.toString(),
       saleDate: "",
+      unpaidOnly: false,
     });
   };
 
@@ -123,6 +157,129 @@ const SalesListPage = () => {
 
   const indexOfFirstData = currentPage * dataPerPage;
   const indexOfLastData = indexOfFirstData + dataList.length;
+
+  const openChangeDateModal = (sale: SaleType) => {
+    const firstDueDate = sale.installments
+      .filter((installment) => installment.amount > 0)
+      .slice(0, 1)[0]?.dueDate;
+
+    if (!firstDueDate) {
+      alert("Essa venda não possui primeira parcela.");
+      return;
+    }
+
+    setSelectedSale(sale);
+    setCurrentFirstDueDate(firstDueDate);
+    setNewFirstDueDate(firstDueDate);
+    setShowDateModal(true);
+  };
+
+  const parseDate = (date: string) => {
+    if (date.includes("/")) {
+      const [day, month, year] = date.split("/");
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    }
+
+    const [year, month, day] = date.split("-");
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  };
+
+  const handleChangeFirstDueDate = async () => {
+    if (!selectedSale) return;
+
+    if (parseDate(newFirstDueDate) < parseDate(currentFirstDueDate)) {
+      alert(
+        "A nova data não pode ser anterior à data atual da primeira parcela.",
+      );
+      return;
+    }
+
+    try {
+      await api.patch(
+        `/sale/sales/${selectedSale.id}/open-installments/due-dates`,
+        {
+          firstDueDate: newFirstDueDate,
+        },
+      );
+
+      setShowDateModal(false);
+      setSelectedSale(null);
+      fetchSales(currentPage);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao alterar a data da primeira parcela.");
+    }
+  };
+
+  const getOpenInstallments = (sale: SaleType) => {
+    return sale.installments.filter((installment) => !installment.paid);
+  };
+
+  const getSaleOpenBalance = (sale: SaleType) => {
+    return getOpenInstallments(sale).reduce(
+      (total, installment) => total + installment.amount,
+      0,
+    );
+  };
+
+  const openAdminPaymentModal = async (sale: SaleType) => {
+    try {
+      const response = await api.get<AdminPaymentInfoType>(
+        `/sale/${sale.id}/admin-payment-info`,
+      );
+
+      setPaymentSaleInfo(response.data);
+      setAdminPaymentAmount("");
+      setAdminPaymentMethod("PIX");
+      setAdminPaymentNote("");
+      setShowPaymentModal(true);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao carregar informações do pagamento.");
+    }
+  };
+
+  const handleAdminPayment = async () => {
+    if (!paymentSaleInfo) return;
+
+    const amount = Number(adminPaymentAmount);
+
+    if (!amount || amount <= 0) {
+      alert("Informe um valor válido.");
+      return;
+    }
+
+    if (amount > paymentSaleInfo.openBalance) {
+      alert("O pagamento não pode ser maior que o saldo devedor.");
+      return;
+    }
+
+    try {
+      await api.put(`/sale/${paymentSaleInfo.saleId}/admin-payment`, {
+        amount,
+        paymentMethod: adminPaymentMethod,
+        note: adminPaymentNote || null,
+      });
+
+      setShowPaymentModal(false);
+      setPaymentSaleInfo(null);
+      fetchSales(currentPage);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao registrar pagamento.");
+    }
+  };
+
+  const hasOpenInstallments = (sale: SaleType) => {
+    return sale.installments.some((installment) => !installment.paid);
+  };
+
+  const canShowPaymentButton = (sale: SaleType) => {
+    return (
+      sale.statusSale !== "FINALIZADO" &&
+      sale.installments.some((installment) => installment.paid !== true)
+    );
+  };
 
   return (
     <div className="row g-4">
@@ -143,7 +300,7 @@ const SalesListPage = () => {
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value={SaleStatusFilter.TODOS}>TODOS</option>
-                  <option value={SaleStatusFilter.ATIVOS}>ATIVOS</option>
+                  <option value={SaleStatusFilter.ATIVO}>ATIVOS</option>
                   <option value={SaleStatusFilter.REAVIDO}>RECUPERADOS</option>
                   <option value={SaleStatusFilter.DESISTENCIA}>
                     DESISTÊNCIAS
@@ -163,7 +320,7 @@ const SalesListPage = () => {
                 </select>
               </div>
 
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <input
                   type="text"
                   className="form-control"
@@ -173,7 +330,7 @@ const SalesListPage = () => {
                 />
               </div>
 
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <input
                   type="text"
                   className="form-control"
@@ -190,6 +347,17 @@ const SalesListPage = () => {
                   value={saleDate}
                   onChange={(e) => setSaleDate(e.target.value)}
                 />
+              </div>
+
+              <div className="col-md-2">
+                <select
+                  className="form-select"
+                  value={unpaidOnly ? "true" : "false"}
+                  onChange={(e) => setUnpaidOnly(e.target.value === "true")}
+                >
+                  <option value="false">TODAS</option>
+                  <option value="true">SEM PARCELA PAGA</option>
+                </select>
               </div>
 
               <div className="col-md-2 d-flex gap-2">
@@ -220,12 +388,13 @@ const SalesListPage = () => {
                 <table className="table table-bordered table-hover align-middle">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>Nº VENDA</th>
                       <th>Cliente</th>
                       <th>Data da Venda</th>
                       <th>Tipo de Pagamento</th>
                       <th>Total</th>
                       <th>Primeira Parcela</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
 
@@ -258,6 +427,35 @@ const SalesListPage = () => {
                               </span>
                             ))}
                         </td>
+
+                        <td>
+                          <div className="d-flex gap-2">
+                            {unpaidOnly && hasOpenInstallments(sale) && (
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-warning"
+                                title="Alterar data"
+                                onClick={() => openChangeDateModal(sale)}
+                              >
+                                <i className="bi bi-calendar-event"></i>
+                              </button>
+                            )}
+
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-success"
+                              title={
+                                canShowPaymentButton(sale)
+                                  ? "Registrar pagamento"
+                                  : "Venda finalizada ou sem parcelas em aberto"
+                              }
+                              disabled={!canShowPaymentButton(sale)}
+                              onClick={() => openAdminPaymentModal(sale)}
+                            >
+                              <i className="bi bi-cash-coin"></i>
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -277,6 +475,205 @@ const SalesListPage = () => {
           </div>
         </div>
       </div>
+      {showDateModal && (
+        <div className="modal fade show d-block" tabIndex={-1}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  Alterar data da primeira parcela
+                </h5>
+
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowDateModal(false)}
+                />
+              </div>
+
+              <div className="modal-body">
+                <p className="mb-2">
+                  Venda Nº <strong>{selectedSale?.id}</strong>
+                </p>
+
+                <label className="form-label">
+                  Nova data da primeira parcela
+                </label>
+
+                <input
+                  type="date"
+                  className="form-control"
+                  value={newFirstDueDate}
+                  min={currentFirstDueDate}
+                  onChange={(e) => setNewFirstDueDate(e.target.value)}
+                />
+
+                <small className="text-muted">
+                  A data não pode ser anterior a {currentFirstDueDate}.
+                </small>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowDateModal(false)}
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleChangeFirstDueDate}
+                >
+                  Salvar alteração
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDateModal && <div className="modal-backdrop fade show" />}
+
+      {showPaymentModal && paymentSaleInfo && (
+        <div className="modal fade show d-block" tabIndex={-1}>
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  Registrar pagamento administrativo
+                </h5>
+
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowPaymentModal(false)}
+                />
+              </div>
+
+              <div className="modal-body">
+                <p className="mb-1">
+                  Venda Nº <strong>{paymentSaleInfo.saleId}</strong>
+                </p>
+
+                <p className="mb-3">
+                  Cliente: <strong>{paymentSaleInfo.clientName}</strong>
+                </p>
+
+                <div className="table-responsive mb-3">
+                  <table className="table table-sm table-bordered align-middle">
+                    <thead>
+                      <tr>
+                        <th>Vencimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {paymentSaleInfo.installments.map((installment) => (
+                        <tr key={installment.id}>
+                          <td>{installment.dueDate}</td>
+                          <td>R$ {installment.amount.toFixed(2)}</td>
+                          <td>
+                            {installment.paid ? (
+                              <span className="badge bg-success">Pago</span>
+                            ) : (
+                              <span className="badge bg-warning text-dark">
+                                Em aberto
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="alert alert-info">
+                  Saldo devedor atual:{" "}
+                  <strong>R$ {paymentSaleInfo.openBalance.toFixed(2)}</strong>
+                </div>
+
+                <div className="row g-2">
+                  <div className="col-md-4">
+                    <label className="form-label">Valor recebido</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      min="0"
+                      step="0.01"
+                      value={adminPaymentAmount}
+                      onChange={(e) => setAdminPaymentAmount(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="col-md-4">
+                    <label className="form-label">Forma de pagamento</label>
+                    <select
+                      className="form-select"
+                      value={adminPaymentMethod}
+                      onChange={(e) => setAdminPaymentMethod(e.target.value)}
+                    >
+                      <option value="PIX">PIX</option>
+                      <option value="DINHEIRO">Dinheiro</option>
+                      <option value="CARTAO">Cartão</option>
+                    </select>
+                  </div>
+
+                  <div className="col-md-4">
+                    <label className="form-label">Saldo após pagamento</label>
+                    <input
+                      className="form-control"
+                      value={`R$ ${Math.max(
+                        paymentSaleInfo.openBalance -
+                          Number(adminPaymentAmount || 0),
+                        0,
+                      ).toFixed(2)}`}
+                      disabled
+                    />
+                  </div>
+
+                  <div className="col-12">
+                    <label className="form-label">Observação</label>
+                    <textarea
+                      className="form-control"
+                      rows={2}
+                      value={adminPaymentNote}
+                      onChange={(e) => setAdminPaymentNote(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setShowPaymentModal(false);
+                    setPaymentSaleInfo(null);
+                  }}
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={handleAdminPayment}
+                >
+                  Registrar pagamento
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPaymentModal && <div className="modal-backdrop fade show" />}
     </div>
   );
 };
