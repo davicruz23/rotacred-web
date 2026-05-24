@@ -88,6 +88,7 @@ const SalesListPage = () => {
   const [adminPaymentNote, setAdminPaymentNote] = useState("");
   const [paymentSaleInfo, setPaymentSaleInfo] =
     useState<AdminPaymentInfoType | null>(null);
+  const [appliedUnpaidOnly, setAppliedUnpaidOnly] = useState(false);
 
   const fetchSales = async (
     page = 0,
@@ -126,6 +127,7 @@ const SalesListPage = () => {
 
   const handleSearch = () => {
     setCurrentPage(0);
+    setAppliedUnpaidOnly(unpaidOnly);
     fetchSales(0);
   };
 
@@ -136,6 +138,7 @@ const SalesListPage = () => {
     setSaleDate("");
     setUnpaidOnly(false);
     setCurrentPage(0);
+    setAppliedUnpaidOnly(false);
 
     fetchSales(0, {
       clientName: "",
@@ -418,7 +421,7 @@ const SalesListPage = () => {
 
                         <td>
                           <div className="d-flex gap-2">
-                            {unpaidOnly && hasOpenInstallments(sale) && (
+                            {appliedUnpaidOnly && hasOpenInstallments(sale) && (
                               <button
                                 type="button"
                                 className="btn btn-sm btn-warning"
