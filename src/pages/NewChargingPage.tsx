@@ -39,8 +39,8 @@ const normalizePage = <T,>(data: PageResponse<T>) => {
 
 const S = {
   sectionCard: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     marginTop: 14,
     overflow: "hidden",
@@ -52,14 +52,14 @@ const S = {
     justifyContent: "space-between",
     padding: "14px 18px",
     cursor: "pointer",
-    background: "#f8f9fa",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     border: "none",
     width: "100%",
     textAlign: "left" as const,
   } as React.CSSProperties,
 
   sectionBody: {
-    borderTop: "0.5px solid #e0e0e0",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
   } as React.CSSProperties,
 
   dot: (color: string): React.CSSProperties => ({
@@ -81,23 +81,23 @@ const S = {
     padding: "8px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap" as const,
   } as React.CSSProperties,
 
   td: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle" as const,
   } as React.CSSProperties,
 
   tdMuted: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#aaa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-soft-muted, #aaa)",
     verticalAlign: "middle" as const,
     fontSize: 12,
   } as React.CSSProperties,
@@ -107,8 +107,8 @@ const S = {
     alignItems: "center",
     justifyContent: "space-between",
     padding: "10px 16px",
-    borderTop: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     flexWrap: "wrap" as const,
     gap: 8,
   } as React.CSSProperties,
@@ -125,32 +125,32 @@ const S = {
   } as React.CSSProperties,
 
   editBtn: {
-    background: "#f1f1f1",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-disabled-bg, #f1f1f1)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 6,
     padding: "5px 10px",
     fontSize: 13,
-    color: "#555",
+    color: "var(--rtc-muted, #555)",
     cursor: "pointer",
   } as React.CSSProperties,
 
   qtyInput: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 6,
     padding: "4px 8px",
     fontSize: 13,
     width: 80,
     outline: "none",
-    background: "#fff",
-    color: "#1a1a1a",
+    background: "var(--rtc-card-bg, #fff)",
+    color: "var(--rtc-text, #1a1a1a)",
   } as React.CSSProperties,
 
   searchWrap: {
     display: "flex",
     alignItems: "center",
     gap: 8,
-    background: "#fff",
-    border: "0.5px solid #d0d0d0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "0 12px",
     height: 38,
@@ -163,7 +163,7 @@ const S = {
     outline: "none",
     background: "transparent",
     fontSize: 13,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
     width: "100%",
   } as React.CSSProperties,
 };
@@ -354,7 +354,7 @@ const NewChargingPage = () => {
             <div style={S.searchWrap}>
               <i
                 className="fa-light fa-magnifying-glass"
-                style={{ color: "#aaa", fontSize: 14 }}
+                style={{ color: "var(--rtc-soft-muted, #aaa)", fontSize: 14 }}
               />
               <input
                 type="text"
@@ -371,7 +371,7 @@ const NewChargingPage = () => {
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    color: "#aaa",
+                    color: "var(--rtc-soft-muted, #aaa)",
                     fontSize: 14,
                     padding: 0,
                   }}
@@ -380,7 +380,7 @@ const NewChargingPage = () => {
                 </button>
               )}
             </div>
-            <div style={{ fontSize: 12, color: "#aaa", marginTop: 5 }}>
+            <div style={{ fontSize: 12, color: "var(--rtc-soft-muted, #aaa)", marginTop: 5 }}>
               {searchName?.trim()
                 ? `Filtrando por: "${searchName}"`
                 : "Digite algo para pesquisar"}
@@ -396,11 +396,11 @@ const NewChargingPage = () => {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={S.dot("#378ADD")} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--rtc-text, #1a1a1a)" }}>
                 Carregamento atual
               </span>
             </div>
-            <span style={{ fontSize: 11, color: "#aaa" }}>
+            <span style={{ fontSize: 11, color: "var(--rtc-soft-muted, #aaa)" }}>
               {openCharging ? "▲" : "▼"}
             </span>
           </button>
@@ -479,14 +479,14 @@ const NewChargingPage = () => {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={S.dot("#639922")} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--rtc-text, #1a1a1a)" }}>
                 Produtos do estoque
               </span>
-              <span style={{ fontSize: 12, color: "#aaa" }}>
+              <span style={{ fontSize: 12, color: "var(--rtc-soft-muted, #aaa)" }}>
                 {totalElements} itens
               </span>
             </div>
-            <span style={{ fontSize: 11, color: "#aaa" }}>
+            <span style={{ fontSize: 11, color: "var(--rtc-soft-muted, #aaa)" }}>
               {openProducts ? "▲" : "▼"}
             </span>
           </button>

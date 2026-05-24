@@ -105,11 +105,11 @@ const avatarColors = [
 const S = {
   // collector card
   collCard: {
-    border: "0.5px solid #e0e0e0",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     marginBottom: 10,
     overflow: "hidden",
-    background: "#fff",
+    background: "var(--rtc-card-bg, #fff)",
   } as React.CSSProperties,
 
   collHeader: {
@@ -118,7 +118,7 @@ const S = {
     justifyContent: "space-between",
     padding: "14px 18px",
     cursor: "pointer",
-    background: "#fff",
+    background: "var(--rtc-card-bg, #fff)",
     border: "none",
     width: "100%",
     textAlign: "left" as const,
@@ -140,13 +140,13 @@ const S = {
   }),
 
   collBody: {
-    borderTop: "0.5px solid #e0e0e0",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
     padding: "14px 16px",
   } as React.CSSProperties,
 
   // sale card
   saleCard: {
-    border: "0.5px solid #e0e0e0",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 8,
     marginBottom: 8,
     overflow: "hidden",
@@ -158,7 +158,7 @@ const S = {
     justifyContent: "space-between",
     padding: "12px 14px",
     cursor: "pointer",
-    background: isReadOnly ? "#F1EFE8" : "#f8f9fa",
+    background: isReadOnly ? "var(--rtc-muted-panel-bg, #F1EFE8)" : "var(--rtc-panel-bg, #f8f9fa)",
     border: "none",
     width: "100%",
     textAlign: "left" as const,
@@ -166,8 +166,8 @@ const S = {
 
   saleBody: {
     padding: "16px",
-    borderTop: "0.5px solid #e0e0e0",
-    background: "#fff",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-card-bg, #fff)",
   } as React.CSSProperties,
 
   infoGrid: {
@@ -178,7 +178,7 @@ const S = {
   } as React.CSSProperties,
 
   infoItem: {
-    background: "#f8f9fa",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     borderRadius: 8,
     padding: "10px 12px",
   } as React.CSSProperties,
@@ -186,7 +186,7 @@ const S = {
   sectionTitle: {
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
     textTransform: "uppercase" as const,
     letterSpacing: "0.6px",
     margin: "14px 0 8px",
@@ -209,14 +209,14 @@ const S = {
     alignItems: "center",
     padding: "8px 12px",
     borderRadius: 8,
-    border: "0.5px solid #e0e0e0",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     marginBottom: 6,
     fontSize: 13,
-    background: "#fff",
+    background: "var(--rtc-card-bg, #fff)",
   } as React.CSSProperties,
 
   returnItem: {
-    border: "0.5px solid #e0e0e0",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderLeft: "3px solid #E24B4A",
     borderRadius: 8,
     padding: "10px 12px",
@@ -242,11 +242,11 @@ const S = {
     gap: 6,
     padding: "7px 14px",
     borderRadius: 8,
-    border: disabled ? "0.5px solid #e0e0e0" : "0.5px solid #B5D4F4",
+    border: disabled ? "0.5px solid var(--rtc-border, #e0e0e0)" : "0.5px solid #B5D4F4",
     fontSize: 12,
     fontWeight: 500,
-    color: disabled ? "#aaa" : "#185FA5",
-    background: disabled ? "#f8f9fa" : "#E6F1FB",
+    color: disabled ? "var(--rtc-soft-muted, #aaa)" : "#185FA5",
+    background: disabled ? "var(--rtc-disabled-bg, #f8f9fa)" : "#E6F1FB",
     cursor: disabled ? "not-allowed" : "pointer",
     marginBottom: 14,
   }),
@@ -260,23 +260,23 @@ const S = {
   th: {
     textAlign: "left" as const,
     padding: "8px 10px",
-    borderBottom: "0.5px solid #e0e0e0",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   } as React.CSSProperties,
 
   td: {
     padding: "8px 10px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#222",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #222)",
     verticalAlign: "middle" as const,
   } as React.CSSProperties,
 
   tdCenter: {
     padding: "8px 10px",
-    borderBottom: "0.5px solid #e0e0e0",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
     textAlign: "center" as const,
     verticalAlign: "middle" as const,
   } as React.CSSProperties,
@@ -446,7 +446,7 @@ const ListCollectorSalesPage = () => {
                 <button
                   style={{
                     ...S.collHeader,
-                    background: isCollOpen ? "#f8f9fa" : "#fff",
+                    background: isCollOpen ? "var(--rtc-panel-bg, #f8f9fa)" : "var(--rtc-card-bg, #fff)",
                   }}
                   onClick={() => toggleCollector(collector.id)}
                 >
@@ -461,13 +461,13 @@ const ListCollectorSalesPage = () => {
                         style={{
                           fontSize: 15,
                           fontWeight: 600,
-                          color: "#1a1a1a",
+                          color: "var(--rtc-text, #1a1a1a)",
                         }}
                       >
                         {collector.collectorName}
                       </div>
                       <div
-                        style={{ fontSize: 12, color: "#888", marginTop: 1 }}
+                        style={{ fontSize: 12, color: "var(--rtc-muted, #888)", marginTop: 1 }}
                       >
                         {collector.sales.length} cobrança
                         {collector.sales.length !== 1 ? "s" : ""}
@@ -477,7 +477,7 @@ const ListCollectorSalesPage = () => {
                   <span
                     style={{
                       fontSize: 12,
-                      color: "#aaa",
+                      color: "var(--rtc-soft-muted, #aaa)",
                       transition: "transform 0.2s",
                       transform: isCollOpen ? "rotate(180deg)" : "rotate(0deg)",
                     }}
@@ -490,7 +490,7 @@ const ListCollectorSalesPage = () => {
                 {isCollOpen && (
                   <div style={S.collBody}>
                     {collector.sales.length === 0 && (
-                      <p style={{ color: "#aaa", fontSize: 13 }}>
+                      <p style={{ color: "var(--rtc-soft-muted, #aaa)", fontSize: 13 }}>
                         Nenhuma venda encontrada.
                       </p>
                     )}
@@ -513,7 +513,7 @@ const ListCollectorSalesPage = () => {
                                 style={{
                                   fontSize: 13,
                                   fontWeight: 600,
-                                  color: "#1a1a1a",
+                                  color: "var(--rtc-text, #1a1a1a)",
                                 }}
                               >
                                 Venda #{sale.id} — {sale.clientName}
@@ -521,7 +521,7 @@ const ListCollectorSalesPage = () => {
                               <div
                                 style={{
                                   fontSize: 12,
-                                  color: "#888",
+                                  color: "var(--rtc-muted, #888)",
                                   marginTop: 2,
                                 }}
                               >
@@ -543,7 +543,7 @@ const ListCollectorSalesPage = () => {
                                   <div
                                     style={{
                                       fontSize: 11,
-                                      color: "#888",
+                                      color: "var(--rtc-muted, #888)",
                                       marginBottom: 3,
                                     }}
                                   >
@@ -559,7 +559,7 @@ const ListCollectorSalesPage = () => {
                                   <div
                                     style={{
                                       fontSize: 11,
-                                      color: "#888",
+                                      color: "var(--rtc-muted, #888)",
                                       marginBottom: 3,
                                     }}
                                   >
@@ -575,7 +575,7 @@ const ListCollectorSalesPage = () => {
                                   <div
                                     style={{
                                       fontSize: 11,
-                                      color: "#888",
+                                      color: "var(--rtc-muted, #888)",
                                       marginBottom: 3,
                                     }}
                                   >
@@ -591,7 +591,7 @@ const ListCollectorSalesPage = () => {
                                   <div
                                     style={{
                                       fontSize: 11,
-                                      color: "#888",
+                                      color: "var(--rtc-muted, #888)",
                                       marginBottom: 3,
                                     }}
                                   >
@@ -630,7 +630,7 @@ const ListCollectorSalesPage = () => {
                                 <div key={p.id} style={S.productItem}>
                                   <span>
                                     <span
-                                      style={{ color: "#888", fontSize: 12 }}
+                                      style={{ color: "var(--rtc-muted, #888)", fontSize: 12 }}
                                     >
                                       {p.quantity}x
                                     </span>{" "}
@@ -671,7 +671,7 @@ const ListCollectorSalesPage = () => {
                                           <div
                                             style={{
                                               fontSize: 12,
-                                              color: "#888",
+                                              color: "var(--rtc-muted, #888)",
                                               marginTop: 2,
                                             }}
                                           >
@@ -680,7 +680,7 @@ const ListCollectorSalesPage = () => {
                                           <div
                                             style={{
                                               fontSize: 11,
-                                              color: "#aaa",
+                                              color: "var(--rtc-soft-muted, #aaa)",
                                               marginTop: 2,
                                             }}
                                           >

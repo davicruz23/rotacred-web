@@ -5,25 +5,12 @@ import {
   toggleDarkTheme,
   toggleLightTheme,
 } from "../../redux/features/themeSlice";
-import {
-  homepageList,
-  mainBackgroundImgList,
-  sidebarImgList,
-} from "../../data";
-import { toggleLayout } from "../../redux/features/layoutSlice";
-import { toggleSidebarBg } from "../../redux/features/sidebarBgSlice";
-import { toggleMainBg } from "../../redux/features/mainBgSlice";
 
 const RightSidebarSection = () => {
   const dispatch = useAppDispatch();
   const showRightSidebar = useAppSelector(
     (state) => state.rightSidebar.isRightSidebarOpen
   );
-  const activeSidebarImg = useAppSelector((state) => state.sidebarBg.sidebarBg);
-  const activeMainBackgroundImg = useAppSelector(
-    (state) => state.mainBg.mainBg
-  );
-  const activeLayout = useAppSelector((state) => state.layout.isLayout);
   const closeRightSidebar = () => {
     dispatch(toggleRightSidebarClose());
   };
@@ -34,15 +21,7 @@ const RightSidebarSection = () => {
   const toggleLight = () => {
     dispatch(toggleLightTheme());
   };
-  const changeLayout = (layout: string) => {
-    dispatch(toggleLayout(layout));
-  };
-  const changeSidebarBg = (img: string) => {
-    dispatch(toggleSidebarBg(img));
-  };
-  const changeMainBg = (img: string) => {
-    dispatch(toggleMainBg(img));
-  };
+
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

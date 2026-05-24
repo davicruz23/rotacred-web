@@ -69,8 +69,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginBottom: 14,
@@ -78,14 +78,14 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "14px 18px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   cardTitle: {
     fontSize: 13,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
     margin: 0,
   },
 
@@ -108,27 +108,27 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   input: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   select: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
@@ -137,8 +137,8 @@ const S: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 8,
-    background: "#fff",
-    border: "0.5px solid #d0d0d0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "0 12px",
     height: 38,
@@ -151,7 +151,7 @@ const S: Record<string, React.CSSProperties> = {
     outline: "none",
     background: "transparent",
     fontSize: 13,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
     width: "100%",
   },
 
@@ -159,7 +159,7 @@ const S: Record<string, React.CSSProperties> = {
     background: "none",
     border: "none",
     cursor: "pointer",
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 14,
     padding: 0,
     flexShrink: 0,
@@ -167,7 +167,7 @@ const S: Record<string, React.CSSProperties> = {
 
   hint: {
     fontSize: 12,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     marginTop: 5,
   },
 
@@ -182,9 +182,9 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap" as const,
   },
 
@@ -193,22 +193,22 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   td: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle" as const,
   },
 
   tdRight: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle" as const,
     textAlign: "right" as const,
   },
@@ -216,7 +216,7 @@ const S: Record<string, React.CSSProperties> = {
   tdEmpty: {
     padding: "24px 0",
     textAlign: "center" as const,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 13,
   },
 
@@ -243,13 +243,13 @@ const S: Record<string, React.CSSProperties> = {
   },
 
   qtyInput: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 6,
     padding: "5px 8px",
     fontSize: 13,
     width: 80,
-    background: "#fff",
-    color: "#1a1a1a",
+    background: "var(--rtc-card-bg, #fff)",
+    color: "var(--rtc-text, #1a1a1a)",
     outline: "none",
   },
 
@@ -267,22 +267,22 @@ const S: Record<string, React.CSSProperties> = {
   },
 
   summaryCard: {
-    background: "#f8f9fa",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 10,
     padding: "12px 16px",
   },
 
   summaryLabel: {
     fontSize: 11,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
     marginBottom: 4,
   },
 
   summaryValue: {
     fontSize: 18,
     fontWeight: 700,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   gridClient: {
@@ -298,8 +298,8 @@ const getSaveBtn = (disabled: boolean): React.CSSProperties => ({
   padding: "11px",
   borderRadius: 8,
   border: "none",
-  background: disabled ? "#f1f1f1" : "#185FA5",
-  color: disabled ? "#aaa" : "#E6F1FB",
+  background: disabled ? "var(--rtc-disabled-bg, #f1f1f1)" : "#185FA5",
+  color: disabled ? "var(--rtc-soft-muted, #aaa)" : "#E6F1FB",
   fontSize: 14,
   fontWeight: 600,
   cursor: disabled ? "not-allowed" : "pointer",
@@ -733,7 +733,7 @@ const DirectSalePage = () => {
                 <div style={S.searchWrap}>
                   <i
                     className="fa-light fa-magnifying-glass"
-                    style={{ color: "#aaa", fontSize: 14, flexShrink: 0 }}
+                    style={{ color: "var(--rtc-soft-muted, #aaa)", fontSize: 14, flexShrink: 0 }}
                   />
                   <input
                     type="text"
@@ -792,7 +792,7 @@ const DirectSalePage = () => {
                               (e.currentTarget as HTMLTableRowElement)
                                 .querySelectorAll("td")
                                 .forEach(
-                                  (td) => (td.style.background = "#f8f9fa"),
+                                  (td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"),
                                 )
                             }
                             onMouseLeave={(e) =>
@@ -874,7 +874,7 @@ const DirectSalePage = () => {
                         onMouseEnter={(e) =>
                           (e.currentTarget as HTMLTableRowElement)
                             .querySelectorAll("td")
-                            .forEach((td) => (td.style.background = "#f8f9fa"))
+                            .forEach((td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"))
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget as HTMLTableRowElement)

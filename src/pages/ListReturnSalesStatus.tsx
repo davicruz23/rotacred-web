@@ -45,8 +45,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginTop: 16,
@@ -54,14 +54,14 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "16px 20px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   cardTitle: {
     fontSize: 15,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
     margin: 0,
   },
 
@@ -80,27 +80,27 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 12,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   input: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "8px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   select: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "8px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
@@ -129,31 +129,31 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap",
   },
 
   td: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle",
   },
 
   tdMuted: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#aaa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 12,
     verticalAlign: "middle",
   },
 
   tdDesc: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#888",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-muted, #888)",
     fontSize: 12,
     verticalAlign: "middle",
     maxWidth: 200,
@@ -173,7 +173,7 @@ const S: Record<string, React.CSSProperties> = {
 
   pgInfo: {
     fontSize: 12,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
   },
 
   pgBtns: { display: "flex", gap: 4 },
@@ -192,13 +192,13 @@ const getPgBtnStyle = (
   active: boolean,
   disabled: boolean,
 ): React.CSSProperties => ({
-  border: "0.5px solid #d0d0d0",
+  border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
   borderRadius: 6,
   padding: "5px 10px",
   fontSize: 12,
   cursor: disabled ? "default" : "pointer",
-  background: active ? "#185FA5" : "#fff",
-  color: active ? "#E6F1FB" : "#1a1a1a",
+  background: active ? "#185FA5" : "var(--rtc-card-bg, #fff)",
+  color: active ? "#E6F1FB" : "var(--rtc-text, #1a1a1a)",
   opacity: disabled ? 0.4 : 1,
 });
 
@@ -323,7 +323,7 @@ const ListReturnSalesStatus = () => {
                         style={{
                           ...S.td,
                           textAlign: "center",
-                          color: "#aaa",
+                          color: "var(--rtc-soft-muted, #aaa)",
                           padding: "24px 0",
                         }}
                       >
@@ -338,7 +338,7 @@ const ListReturnSalesStatus = () => {
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLTableRowElement)
                           .querySelectorAll("td")
-                          .forEach((td) => (td.style.background = "#f8f9fa"));
+                          .forEach((td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"));
                       }}
                       onMouseLeave={(e) => {
                         (e.currentTarget as HTMLTableRowElement)

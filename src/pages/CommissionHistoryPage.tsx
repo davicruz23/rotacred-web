@@ -49,8 +49,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginTop: 16,
@@ -58,14 +58,14 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "14px 18px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   cardTitle: {
     fontSize: 17,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   cardBody: { padding: 18 },
@@ -81,34 +81,34 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 13,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   select: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 15,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   selectDisabled: {
-    border: "0.5px solid #e0e0e0",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 15,
-    color: "#aaa",
-    background: "#f8f9fa",
+    color: "var(--rtc-soft-muted, #aaa)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     outline: "none",
     width: "100%",
     cursor: "not-allowed",
   },
 
   tableWrap: {
-    borderTop: "0.5px solid #e0e0e0",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
     overflowX: "auto" as const,
   },
 
@@ -123,24 +123,24 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 13,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap" as const,
   },
 
   td: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle" as const,
     whiteSpace: "nowrap" as const,
   },
 
   tdMuted: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#aaa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 14,
     verticalAlign: "middle" as const,
     whiteSpace: "nowrap" as const,
@@ -148,7 +148,7 @@ const S: Record<string, React.CSSProperties> = {
 
   tdAmount: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
     color: "#3B6D11",
     fontWeight: 700,
     verticalAlign: "middle" as const,
@@ -158,7 +158,7 @@ const S: Record<string, React.CSSProperties> = {
   emptyCell: {
     padding: "28px 0",
     textAlign: "center" as const,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 15,
   },
 
@@ -167,19 +167,19 @@ const S: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "space-between",
     padding: "10px 18px",
-    borderTop: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     flexWrap: "wrap" as const,
     gap: 8,
   },
 
-  pgInfo: { fontSize: 13, color: "#aaa" },
+  pgInfo: { fontSize: 13, color: "var(--rtc-soft-muted, #aaa)" },
   pgBtns: { display: "flex", gap: 4 },
 
   spinnerWrap: {
     textAlign: "center" as const,
     padding: "24px 0",
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 15,
   },
 };
@@ -215,13 +215,13 @@ const getPgBtnStyle = (
   active: boolean,
   disabled: boolean,
 ): React.CSSProperties => ({
-  border: "0.5px solid #d0d0d0",
+  border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
   borderRadius: 6,
   padding: "5px 12px",
   fontSize: 13,
   cursor: disabled ? "default" : "pointer",
-  background: active ? "#185FA5" : "#fff",
-  color: active ? "#E6F1FB" : "#1a1a1a",
+  background: active ? "#185FA5" : "var(--rtc-card-bg, #fff)",
+  color: active ? "#E6F1FB" : "var(--rtc-text, #1a1a1a)",
   opacity: disabled ? 0.4 : 1,
 });
 
@@ -413,7 +413,7 @@ const CommissionHistory = () => {
                         onMouseEnter={(e) =>
                           (e.currentTarget as HTMLTableRowElement)
                             .querySelectorAll("td")
-                            .forEach((td) => (td.style.background = "#f8f9fa"))
+                            .forEach((td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"))
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget as HTMLTableRowElement)

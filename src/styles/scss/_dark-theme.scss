@@ -1,6 +1,17 @@
 /* Dark CSS */
 
 .dark-theme {
+   --rtc-card-bg: #232627;
+   --rtc-panel-bg: #141718;
+   --rtc-muted-panel-bg: #2b2d2e;
+   --rtc-disabled-bg: #2b2d2e;
+   --rtc-border: rgba(255, 255, 255, 0.12);
+   --rtc-input-border: rgba(255, 255, 255, 0.12);
+   --rtc-text: #dcd9d8;
+   --rtc-muted: #919191;
+   --rtc-soft-muted: #777f82;
+   --rtc-hover-bg: rgba(255, 255, 255, 0.04);
+
    color: #919191;
    background-color: #141718;
 
@@ -376,6 +387,33 @@
       color: #919191;
       background-color: transparent;
       border-color: rgba(255, 255, 255, 0.12);
+   }
+
+   .accordion-item {
+      color: #919191;
+      background-color: #232627;
+      border-color: rgba(255, 255, 255, 0.12);
+   }
+
+   .accordion-button {
+      color: #dcd9d8;
+      background-color: #232627;
+   }
+
+   .accordion-button:not(.collapsed),
+   .accordion-button:focus {
+      color: #dcd9d8;
+      background-color: #141718;
+      box-shadow: none;
+   }
+
+   .accordion-body {
+      color: #919191;
+      background-color: #232627;
+   }
+
+   .accordion-button::after {
+      filter: invert(1) grayscale(1);
    }
 
    .form-select::-webkit-input-placeholder,

@@ -5,8 +5,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginTop: 16,
@@ -14,20 +14,20 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "16px 20px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   cardTitle: {
     fontSize: 15,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
     margin: 0,
   },
 
   cardSub: {
     fontSize: 12,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
     marginTop: 3,
   },
 
@@ -45,34 +45,34 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 12,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   input: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   select: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   divider: {
     border: "none",
-    borderTop: "0.5px solid #e0e0e0",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
     margin: "4px 0 16px",
   },
 
@@ -102,8 +102,8 @@ const getSubmitBtnStyle = (disabled: boolean): React.CSSProperties => ({
   padding: "11px",
   borderRadius: 8,
   border: "none",
-  background: disabled ? "#f1f1f1" : "#185FA5",
-  color: disabled ? "#aaa" : "#E6F1FB",
+  background: disabled ? "var(--rtc-disabled-bg, #f1f1f1)" : "#185FA5",
+  color: disabled ? "var(--rtc-soft-muted, #aaa)" : "#E6F1FB",
   fontSize: 14,
   fontWeight: 600,
   cursor: disabled ? "not-allowed" : "pointer",

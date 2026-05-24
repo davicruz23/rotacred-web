@@ -25,8 +25,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginBottom: 14,
@@ -34,8 +34,8 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "14px 18px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -45,7 +45,7 @@ const S: Record<string, React.CSSProperties> = {
   cardTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   cardBody: { padding: 18 },
@@ -61,16 +61,16 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   input: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "8px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
@@ -99,9 +99,9 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap" as const,
   },
 
@@ -110,30 +110,30 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap" as const,
   },
 
   td: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle" as const,
   },
 
   tdMuted: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#aaa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 12,
     verticalAlign: "middle" as const,
   },
 
   tdActions: {
     padding: "9px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
     verticalAlign: "middle" as const,
   },
 
@@ -145,19 +145,19 @@ const S: Record<string, React.CSSProperties> = {
   },
 
   statusSelect: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 6,
     padding: "5px 8px",
     fontSize: 12,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
   },
 
   loadingCell: {
     padding: "24px 0",
     textAlign: "center" as const,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 13,
   },
 };
@@ -185,8 +185,8 @@ const getUpdateBtnStyle = (disabled: boolean): React.CSSProperties => ({
   fontSize: 12,
   fontWeight: 600,
   cursor: disabled ? "not-allowed" : "pointer",
-  background: disabled ? "#f1f1f1" : "#EAF3DE",
-  color: disabled ? "#aaa" : "#3B6D11",
+  background: disabled ? "var(--rtc-disabled-bg, #f1f1f1)" : "#EAF3DE",
+  color: disabled ? "var(--rtc-soft-muted, #aaa)" : "#3B6D11",
 });
 
 /* ── componente ── */
@@ -334,7 +334,7 @@ const UpdateSaleReturn = () => {
                         style={{
                           ...S.td,
                           textAlign: "center",
-                          color: "#aaa",
+                          color: "var(--rtc-soft-muted, #aaa)",
                           padding: "24px 0",
                         }}
                       >
@@ -349,7 +349,7 @@ const UpdateSaleReturn = () => {
                       onMouseEnter={(e) =>
                         (e.currentTarget as HTMLTableRowElement)
                           .querySelectorAll("td")
-                          .forEach((td) => (td.style.background = "#f8f9fa"))
+                          .forEach((td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"))
                       }
                       onMouseLeave={(e) =>
                         (e.currentTarget as HTMLTableRowElement)

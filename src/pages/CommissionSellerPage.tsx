@@ -31,8 +31,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginTop: 16,
@@ -41,14 +41,14 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "14px 18px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   cardTitle: {
     fontSize: 15,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   cardBody: { padding: 20 },
@@ -64,27 +64,27 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   input: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   select: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
@@ -109,13 +109,13 @@ const S: Record<string, React.CSSProperties> = {
 
   divider: {
     border: "none",
-    borderTop: "0.5px solid #e0e0e0",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
     margin: "16px 0",
   },
 
   resultCard: {
-    background: "#f8f9fa",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 10,
     padding: "18px 20px",
     marginTop: 20,
@@ -124,7 +124,7 @@ const S: Record<string, React.CSSProperties> = {
   resultTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
     marginBottom: 14,
     display: "flex",
     alignItems: "center",
@@ -139,22 +139,22 @@ const S: Record<string, React.CSSProperties> = {
   },
 
   resultItem: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 8,
     padding: "10px 12px",
   },
 
   resultLabel: {
     fontSize: 11,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
     marginBottom: 3,
   },
 
   resultValue: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   highlightItem: {
@@ -175,7 +175,7 @@ const S: Record<string, React.CSSProperties> = {
 
   highlightLabel: {
     fontSize: 11,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
     marginBottom: 4,
   },
 
@@ -186,7 +186,7 @@ const S: Record<string, React.CSSProperties> = {
 
   consultNote: {
     fontSize: 12,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
     marginTop: 10,
     fontStyle: "italic" as const,
   },
@@ -200,8 +200,8 @@ const getSubmitBtnStyle = (
   padding: "11px",
   borderRadius: 8,
   border: "none",
-  background: disabled ? "#f1f1f1" : isConsult ? "#185FA5" : "#3B6D11",
-  color: disabled ? "#aaa" : "#fff",
+  background: disabled ? "var(--rtc-disabled-bg, #f1f1f1)" : isConsult ? "#185FA5" : "#3B6D11",
+  color: disabled ? "var(--rtc-soft-muted, #aaa)" : "#fff",
   fontSize: 14,
   fontWeight: 600,
   cursor: disabled ? "not-allowed" : "pointer",

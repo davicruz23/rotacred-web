@@ -47,8 +47,8 @@ const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
 
   card: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     overflow: "hidden",
     marginTop: 16,
@@ -56,14 +56,14 @@ const S: Record<string, React.CSSProperties> = {
 
   cardHead: {
     padding: "14px 18px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
   },
 
   cardTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   table: {
@@ -77,23 +77,23 @@ const S: Record<string, React.CSSProperties> = {
     padding: "9px 12px",
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    color: "var(--rtc-muted, #888)",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     whiteSpace: "nowrap" as const,
   },
 
   td: {
     padding: "10px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#1a1a1a",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-text, #1a1a1a)",
     verticalAlign: "middle" as const,
   },
 
   tdMuted: {
     padding: "10px 12px",
-    borderBottom: "0.5px solid #e0e0e0",
-    color: "#aaa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 12,
     verticalAlign: "middle" as const,
   },
@@ -125,8 +125,8 @@ const S: Record<string, React.CSSProperties> = {
   },
 
   modalBox: {
-    background: "#fff",
-    border: "0.5px solid #e0e0e0",
+    background: "var(--rtc-card-bg, #fff)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
     borderRadius: 12,
     width: "100%",
     maxWidth: 400,
@@ -135,8 +135,8 @@ const S: Record<string, React.CSSProperties> = {
 
   modalHead: {
     padding: "14px 18px",
-    borderBottom: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderBottom: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -145,14 +145,14 @@ const S: Record<string, React.CSSProperties> = {
   modalTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   closeBtn: {
     background: "none",
     border: "none",
     fontSize: 16,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     cursor: "pointer",
     lineHeight: 1,
     padding: 0,
@@ -170,24 +170,24 @@ const S: Record<string, React.CSSProperties> = {
   label: {
     fontSize: 11,
     fontWeight: 600,
-    color: "#888",
+    color: "var(--rtc-muted, #888)",
   },
 
   input: {
-    border: "0.5px solid #d0d0d0",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 8,
     padding: "9px 12px",
     fontSize: 13,
-    color: "#1a1a1a",
-    background: "#fff",
+    color: "var(--rtc-text, #1a1a1a)",
+    background: "var(--rtc-card-bg, #fff)",
     outline: "none",
     width: "100%",
   },
 
   modalFoot: {
     padding: "12px 18px",
-    borderTop: "0.5px solid #e0e0e0",
-    background: "#f8f9fa",
+    borderTop: "0.5px solid var(--rtc-border, #e0e0e0)",
+    background: "var(--rtc-panel-bg, #f8f9fa)",
     display: "flex",
     gap: 8,
     justifyContent: "flex-end",
@@ -196,11 +196,11 @@ const S: Record<string, React.CSSProperties> = {
   cancelBtn: {
     padding: "7px 16px",
     borderRadius: 8,
-    border: "0.5px solid #d0d0d0",
-    background: "#fff",
+    border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
+    background: "var(--rtc-card-bg, #fff)",
     fontSize: 13,
     cursor: "pointer",
-    color: "#1a1a1a",
+    color: "var(--rtc-text, #1a1a1a)",
   },
 
   saveBtn: {
@@ -217,7 +217,7 @@ const S: Record<string, React.CSSProperties> = {
   emptyCell: {
     padding: "24px 0",
     textAlign: "center" as const,
-    color: "#aaa",
+    color: "var(--rtc-soft-muted, #aaa)",
     fontSize: 13,
   },
 };
@@ -308,7 +308,7 @@ const ViewProfilePage = () => {
                         onMouseEnter={(e) =>
                           (e.currentTarget as HTMLTableRowElement)
                             .querySelectorAll("td")
-                            .forEach((td) => (td.style.background = "#f8f9fa"))
+                            .forEach((td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"))
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget as HTMLTableRowElement)
