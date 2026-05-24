@@ -26,6 +26,7 @@ const normalizePage = <T,>(data: PageResponse<T>) => {
     totalElements: data.totalElements ?? 0,
     totalPages: data.totalPages ?? 0,
   };
+
   return {
     content: data.content ?? [],
     size: page.size,
@@ -134,6 +135,16 @@ const S = {
     cursor: "pointer",
   } as React.CSSProperties,
 
+  returnBtn: {
+    background: "#F4A100",
+    border: "none",
+    borderRadius: 6,
+    padding: "5px 10px",
+    fontSize: 13,
+    color: "#fff",
+    cursor: "pointer",
+  } as React.CSSProperties,
+
   qtyInput: {
     border: "0.5px solid var(--rtc-input-border, #d0d0d0)",
     borderRadius: 6,
@@ -165,6 +176,55 @@ const S = {
     fontSize: 13,
     color: "var(--rtc-text, #1a1a1a)",
     width: "100%",
+  } as React.CSSProperties,
+
+  modalOverlay: {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(0, 0, 0, 0.45)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    padding: 16,
+  } as React.CSSProperties,
+
+  modalBox: {
+    width: "100%",
+    maxWidth: 430,
+    background: "var(--rtc-card-bg, #fff)",
+    borderRadius: 12,
+    padding: 20,
+    boxShadow: "0 20px 45px rgba(0, 0, 0, 0.25)",
+  } as React.CSSProperties,
+
+  modalActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: 10,
+    marginTop: 20,
+  } as React.CSSProperties,
+
+  cancelBtn: {
+    background: "var(--rtc-disabled-bg, #f1f1f1)",
+    color: "var(--rtc-muted, #555)",
+    border: "0.5px solid var(--rtc-border, #e0e0e0)",
+    borderRadius: 8,
+    padding: "8px 16px",
+    fontSize: 13,
+    fontWeight: 600,
+    cursor: "pointer",
+  } as React.CSSProperties,
+
+  dangerBtn: {
+    background: "#C62828",
+    color: "#fff",
+    border: "none",
+    borderRadius: 8,
+    padding: "8px 16px",
+    fontSize: 13,
+    fontWeight: 600,
+    cursor: "pointer",
   } as React.CSSProperties,
 };
 
@@ -199,6 +259,19 @@ const NewChargingPage = () => {
   const [openCharging, setOpenCharging] = useState(true);
   const [openProducts, setOpenProducts] = useState(false);
 
+  const [returnModal, setReturnModal] = useState<{
+    type: "all" | "item";
+    chargingId?: number;
+    chargingItemId?: number;
+    productName?: string;
+  } | null>(null);
+
+  const [returnLoading, setReturnLoading] = useState(false);
+
+  const hasItemsToReturn = chargingList.some((charging) =>
+    charging.chargingItems?.some((item) => item.quantity > 0),
+  );
+
   const fetchChargings = async (page = chargingPage, name = searchName) => {
     try {
       const response = await api.get<PageResponse<ChargingType>>(
@@ -211,6 +284,7 @@ const NewChargingPage = () => {
           },
         },
       );
+
       if (response.status === 200) {
         const normalized = normalizePage(response.data);
         setChargingList(normalized.content);
@@ -229,23 +303,34 @@ const NewChargingPage = () => {
   const fetchProducts = async (page = currentPage, name = searchName) => {
     try {
       setLoading(true);
+
       const response = await api.get<PageResponse<AllProductDataType>>(
         "/product/all",
         {
-          params: { page, size: dataPerPage, name: name?.trim() || undefined },
+          params: {
+            page,
+            size: dataPerPage,
+            name: name?.trim() || undefined,
+          },
         },
       );
+
       if (response.status === 200) {
         const normalized = normalizePage(response.data);
         setDataList(normalized.content);
         setTotalElements(normalized.totalElements);
         setTotalPages(normalized.totalPages);
         setCurrentPage(normalized.number);
+
         setQuantities((prev) => {
           const updated = { ...prev };
+
           normalized.content.forEach((p) => {
-            if (updated[p.id] === undefined) updated[p.id] = 0;
+            if (updated[p.id] === undefined) {
+              updated[p.id] = 0;
+            }
           });
+
           return updated;
         });
       } else {
@@ -266,6 +351,7 @@ const NewChargingPage = () => {
       fetchProducts(0, searchName);
       fetchChargings(0, searchName);
     }, 400);
+
     return () => clearTimeout(timeout);
   }, [searchName]);
 
@@ -277,7 +363,10 @@ const NewChargingPage = () => {
   const handleSendCharging = async () => {
     const items = Object.entries(quantities)
       .filter(([_, qty]) => qty > 0)
-      .map(([id, qty]) => ({ productId: Number(id), quantity: qty }));
+      .map(([id, qty]) => ({
+        productId: Number(id),
+        quantity: qty,
+      }));
 
     if (items.length === 0) {
       alert("Digite quantidades em pelo menos um produto.");
@@ -286,18 +375,26 @@ const NewChargingPage = () => {
 
     try {
       const response = await api.put("/charging/add", items);
+
       if (response.status === 200 || response.status === 201) {
         alert("Carregamento enviado com sucesso!");
+
         setDataList((prev) =>
           prev.map((p) => {
             const sentQty = quantities[p.id] || 0;
             return sentQty > 0 ? { ...p, amount: p.amount - sentQty } : p;
           }),
         );
+
         await fetchChargings(0, searchName);
-        const reset: any = {};
-        Object.keys(quantities).forEach((id) => (reset[id] = 0));
+
+        const reset: { [key: number]: number } = {};
+        Object.keys(quantities).forEach((id) => {
+          reset[Number(id)] = 0;
+        });
+
         setQuantities(reset);
+
         await fetchProducts(currentPage, searchName);
       } else {
         alert("Erro ao enviar carregamento.");
@@ -305,6 +402,64 @@ const NewChargingPage = () => {
     } catch (error) {
       console.error(error);
       alert("Erro ao conectar com o servidor.");
+    }
+  };
+
+  const openReturnAllModal = () => {
+    const charging = chargingList[0];
+
+    if (!charging) {
+      alert("Nenhum carregamento encontrado.");
+      return;
+    }
+
+    if (!hasItemsToReturn) {
+      alert("Não existem itens no carregamento para devolver.");
+      return;
+    }
+
+    setReturnModal({
+      type: "all",
+      chargingId: charging.id,
+    });
+  };
+
+  const openReturnItemModal = (chargingItemId: number, productName: string) => {
+    setReturnModal({
+      type: "item",
+      chargingItemId,
+      productName,
+    });
+  };
+
+  const closeReturnModal = () => {
+    if (returnLoading) return;
+    setReturnModal(null);
+  };
+
+  const handleConfirmReturn = async () => {
+    if (!returnModal) return;
+
+    try {
+      setReturnLoading(true);
+
+      if (returnModal.type === "all") {
+        await api.post(`/charging/all/${returnModal.chargingId}`);
+      } else {
+        await api.post(`/charging/item/${returnModal.chargingItemId}`);
+      }
+
+      alert("Devolução realizada com sucesso!");
+
+      setReturnModal(null);
+
+      await fetchChargings(chargingPage, searchName);
+      await fetchProducts(currentPage, searchName);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao devolver produto para o estoque.");
+    } finally {
+      setReturnLoading(false);
     }
   };
 
@@ -324,6 +479,7 @@ const NewChargingPage = () => {
     { length: chargingTotalPages },
     (_, i) => i + 1,
   );
+
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
   const indexOfFirstData = currentPage * dataPerPage;
   const indexOfLastData = indexOfFirstData + dataList.length;
@@ -354,8 +510,12 @@ const NewChargingPage = () => {
             <div style={S.searchWrap}>
               <i
                 className="fa-light fa-magnifying-glass"
-                style={{ color: "var(--rtc-soft-muted, #aaa)", fontSize: 14 }}
+                style={{
+                  color: "var(--rtc-soft-muted, #aaa)",
+                  fontSize: 14,
+                }}
               />
+
               <input
                 type="text"
                 style={S.searchInput}
@@ -363,8 +523,10 @@ const NewChargingPage = () => {
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
               />
+
               {searchName?.trim() && (
                 <button
+                  type="button"
                   onClick={() => setSearchName("")}
                   title="Limpar"
                   style={{
@@ -380,7 +542,14 @@ const NewChargingPage = () => {
                 </button>
               )}
             </div>
-            <div style={{ fontSize: 12, color: "var(--rtc-soft-muted, #aaa)", marginTop: 5 }}>
+
+            <div
+              style={{
+                fontSize: 12,
+                color: "var(--rtc-soft-muted, #aaa)",
+                marginTop: 5,
+              }}
+            >
               {searchName?.trim()
                 ? `Filtrando por: "${searchName}"`
                 : "Digite algo para pesquisar"}
@@ -390,20 +559,53 @@ const NewChargingPage = () => {
 
         {/* ── Seção: Carregamento atual ── */}
         <div style={S.sectionCard}>
-          <button
+          <div
             style={S.sectionHeader}
             onClick={() => setOpenCharging((v) => !v)}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={S.dot("#378ADD")} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--rtc-text, #1a1a1a)" }}>
+
+              <span
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--rtc-text, #1a1a1a)",
+                }}
+              >
                 Carregamento atual
               </span>
             </div>
-            <span style={{ fontSize: 11, color: "var(--rtc-soft-muted, #aaa)" }}>
-              {openCharging ? "▲" : "▼"}
-            </span>
-          </button>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              {chargingList.length > 0 && (
+                <button
+                  type="button"
+                  style={{
+                    ...S.returnBtn,
+                    opacity: hasItemsToReturn ? 1 : 0.5,
+                    cursor: hasItemsToReturn ? "pointer" : "not-allowed",
+                  }}
+                  disabled={!hasItemsToReturn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openReturnAllModal();
+                  }}
+                >
+                  Devolver tudo
+                </button>
+              )}
+
+              <span
+                style={{
+                  fontSize: 11,
+                  color: "var(--rtc-soft-muted, #aaa)",
+                }}
+              >
+                {openCharging ? "▲" : "▼"}
+              </span>
+            </div>
+          </div>
 
           {openCharging && (
             <div style={S.sectionBody}>
@@ -417,11 +619,13 @@ const NewChargingPage = () => {
                         <tr>
                           <th style={S.th}>ID</th>
                           <th style={S.th}>Nome</th>
-                          <th style={S.th}>Em estoque</th>
+                          <th style={S.th}>No carregamento</th>
                           <th style={S.th}>Preço</th>
                           <th style={S.th}>Status</th>
+                          <th style={S.th}>Ações</th>
                         </tr>
                       </thead>
+
                       <tbody>
                         {chargingList.map((charging) =>
                           [...charging.chargingItems]
@@ -429,11 +633,15 @@ const NewChargingPage = () => {
                             .map((item) => (
                               <tr key={item.id}>
                                 <td style={S.tdMuted}>{item.productId}</td>
+
                                 <td style={S.td}>{item.nameProduct}</td>
+
                                 <td style={S.td}>{item.quantity}</td>
+
                                 <td style={S.td}>
                                   R$ {item.priceProduct.toFixed(2)}
                                 </td>
+
                                 <td style={S.td}>
                                   <span
                                     style={{
@@ -444,6 +652,30 @@ const NewChargingPage = () => {
                                   >
                                     {ProductStatusLabel[item.status]}
                                   </span>
+                                </td>
+
+                                <td style={S.td}>
+                                  <button
+                                    type="button"
+                                    style={{
+                                      ...S.returnBtn,
+                                      opacity: item.quantity > 0 ? 1 : 0.5,
+                                      cursor:
+                                        item.quantity > 0
+                                          ? "pointer"
+                                          : "not-allowed",
+                                    }}
+                                    disabled={item.quantity <= 0}
+                                    title="Devolver produto para o estoque"
+                                    onClick={() =>
+                                      openReturnItemModal(
+                                        item.id,
+                                        item.nameProduct,
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-light fa-rotate-left" />
+                                  </button>
                                 </td>
                               </tr>
                             )),
@@ -474,19 +706,39 @@ const NewChargingPage = () => {
         {/* ── Seção: Produtos do estoque ── */}
         <div style={S.sectionCard}>
           <button
+            type="button"
             style={S.sectionHeader}
             onClick={() => setOpenProducts((v) => !v)}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={S.dot("#639922")} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--rtc-text, #1a1a1a)" }}>
+
+              <span
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--rtc-text, #1a1a1a)",
+                }}
+              >
                 Produtos do estoque
               </span>
-              <span style={{ fontSize: 12, color: "var(--rtc-soft-muted, #aaa)" }}>
+
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "var(--rtc-soft-muted, #aaa)",
+                }}
+              >
                 {totalElements} itens
               </span>
             </div>
-            <span style={{ fontSize: 11, color: "var(--rtc-soft-muted, #aaa)" }}>
+
+            <span
+              style={{
+                fontSize: 11,
+                color: "var(--rtc-soft-muted, #aaa)",
+              }}
+            >
               {openProducts ? "▲" : "▼"}
             </span>
           </button>
@@ -510,13 +762,18 @@ const NewChargingPage = () => {
                           <th style={S.th}>Ações</th>
                         </tr>
                       </thead>
+
                       <tbody>
                         {dataList.map((product) => (
                           <tr key={product.id}>
                             <td style={S.tdMuted}>{product.id}</td>
+
                             <td style={S.td}>{product.name}</td>
+
                             <td style={S.td}>{product.amount}</td>
+
                             <td style={S.td}>R$ {product.value}</td>
+
                             <td style={S.td}>
                               <span
                                 style={{
@@ -528,6 +785,7 @@ const NewChargingPage = () => {
                                 {ProductStatusLabel[product.status]}
                               </span>
                             </td>
+
                             <td style={S.td}>
                               <input
                                 type="number"
@@ -542,8 +800,10 @@ const NewChargingPage = () => {
                                 }
                               />
                             </td>
+
                             <td style={S.td}>
                               <button
+                                type="button"
                                 style={S.editBtn}
                                 title="Editar"
                                 onClick={() =>
@@ -560,7 +820,10 @@ const NewChargingPage = () => {
                   </div>
 
                   <div
-                    style={{ ...S.footerBar, justifyContent: "space-between" }}
+                    style={{
+                      ...S.footerBar,
+                      justifyContent: "space-between",
+                    }}
                   >
                     <TableBottomControls
                       indexOfFirstData={indexOfFirstData}
@@ -571,7 +834,12 @@ const NewChargingPage = () => {
                       paginate={paginate}
                       pageNumbers={pageNumbers}
                     />
-                    <button style={S.sendBtn} onClick={handleSendCharging}>
+
+                    <button
+                      type="button"
+                      style={S.sendBtn}
+                      onClick={handleSendCharging}
+                    >
                       Enviar carregamento
                     </button>
                   </div>
@@ -581,6 +849,63 @@ const NewChargingPage = () => {
           )}
         </div>
       </div>
+
+      {returnModal && (
+        <div style={S.modalOverlay}>
+          <div style={S.modalBox}>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: 18,
+                color: "var(--rtc-text, #1a1a1a)",
+              }}
+            >
+              Confirmar devolução
+            </h3>
+
+            <p
+              style={{
+                marginTop: 12,
+                fontSize: 14,
+                color: "var(--rtc-muted, #555)",
+                lineHeight: 1.5,
+              }}
+            >
+              {returnModal.type === "all"
+                ? "Tem certeza que deseja devolver todos os produtos do carregamento para o estoque?"
+                : `Tem certeza que deseja devolver o produto "${returnModal.productName}" para o estoque?`}
+            </p>
+
+            <div style={S.modalActions}>
+              <button
+                type="button"
+                style={{
+                  ...S.cancelBtn,
+                  opacity: returnLoading ? 0.6 : 1,
+                  cursor: returnLoading ? "not-allowed" : "pointer",
+                }}
+                onClick={closeReturnModal}
+                disabled={returnLoading}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                style={{
+                  ...S.dangerBtn,
+                  opacity: returnLoading ? 0.7 : 1,
+                  cursor: returnLoading ? "not-allowed" : "pointer",
+                }}
+                onClick={handleConfirmReturn}
+                disabled={returnLoading}
+              >
+                {returnLoading ? "Devolvendo..." : "Confirmar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
