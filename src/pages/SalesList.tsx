@@ -83,7 +83,6 @@ const SalesListPage = () => {
   const [currentFirstDueDate, setCurrentFirstDueDate] = useState("");
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentSale, setPaymentSale] = useState<SaleType | null>(null);
   const [adminPaymentAmount, setAdminPaymentAmount] = useState("");
   const [adminPaymentMethod, setAdminPaymentMethod] = useState("PIX");
   const [adminPaymentNote, setAdminPaymentNote] = useState("");
@@ -209,17 +208,6 @@ const SalesListPage = () => {
       console.error(error);
       alert("Erro ao alterar a data da primeira parcela.");
     }
-  };
-
-  const getOpenInstallments = (sale: SaleType) => {
-    return sale.installments.filter((installment) => !installment.paid);
-  };
-
-  const getSaleOpenBalance = (sale: SaleType) => {
-    return getOpenInstallments(sale).reduce(
-      (total, installment) => total + installment.amount,
-      0,
-    );
   };
 
   const openAdminPaymentModal = async (sale: SaleType) => {
