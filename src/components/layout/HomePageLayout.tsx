@@ -8,13 +8,14 @@ import ExpandMailModal from "../modal/ExpandMailModal";
 import UploadFileModal from "../modal/UploadFileModal";
 import CreateFolderModal from "../modal/CreateFolderModal";
 import FileDetailsModal from "../modal/FileDetailsModal";
+import RightSidebarBtn from "../utils/RightSidebarBtn";
 
 const HomePageLayout = () => {
   const location = useLocation();
   const pathName = location.pathname.slice(1) + "_page";
   return (
     <main className={pathName}>
-      {/* <RightSidebarBtn /> */}
+      <RightSidebarBtn />
       <RightSidebarSection />
       <Outlet />
       {/* Modals */}

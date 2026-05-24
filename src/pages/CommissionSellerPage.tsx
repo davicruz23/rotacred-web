@@ -7,26 +7,223 @@ type SellerOption = {
   nomeSeller: string;
 };
 
+type CommissionReason =
+  | "ADIANTAMENTO"
+  | "FECHAMENTO_MENSAL"
+  | "CONSULTA"
+  | "OUTRO";
+
 type CommissionResponse = {
   sellerId: number;
   sellerName: string;
   startDate: string;
   endDate: string;
-  commission: number;
+  totalCommission: number;
+  paymentPercentage: number;
+  previousPaidAmount: number;
+  amountToPay: number;
+  reason: CommissionReason;
 };
+
+/* ── estilos ── */
+
+const S: Record<string, React.CSSProperties> = {
+  page: { padding: "0 4px" },
+
+  card: {
+    background: "#fff",
+    border: "0.5px solid #e0e0e0",
+    borderRadius: 12,
+    overflow: "hidden",
+    marginTop: 16,
+    marginBottom: 14,
+  },
+
+  cardHead: {
+    padding: "14px 18px",
+    borderBottom: "0.5px solid #e0e0e0",
+    background: "#f8f9fa",
+  },
+
+  cardTitle: {
+    fontSize: 15,
+    fontWeight: 600,
+    color: "#1a1a1a",
+  },
+
+  cardBody: { padding: 20 },
+
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+    gap: 14,
+  },
+
+  field: { display: "flex", flexDirection: "column" as const, gap: 5 },
+
+  label: {
+    fontSize: 11,
+    fontWeight: 600,
+    color: "#888",
+  },
+
+  input: {
+    border: "0.5px solid #d0d0d0",
+    borderRadius: 8,
+    padding: "9px 12px",
+    fontSize: 13,
+    color: "#1a1a1a",
+    background: "#fff",
+    outline: "none",
+    width: "100%",
+  },
+
+  select: {
+    border: "0.5px solid #d0d0d0",
+    borderRadius: 8,
+    padding: "9px 12px",
+    fontSize: 13,
+    color: "#1a1a1a",
+    background: "#fff",
+    outline: "none",
+    width: "100%",
+  },
+
+  alertInfo: {
+    background: "#E6F1FB",
+    color: "#185FA5",
+    border: "0.5px solid #B5D4F4",
+    borderRadius: 8,
+    padding: "10px 14px",
+    fontSize: 13,
+  },
+
+  alertWarn: {
+    background: "#FAEEDA",
+    color: "#854F0B",
+    border: "0.5px solid #F2D09A",
+    borderRadius: 8,
+    padding: "10px 14px",
+    fontSize: 13,
+  },
+
+  divider: {
+    border: "none",
+    borderTop: "0.5px solid #e0e0e0",
+    margin: "16px 0",
+  },
+
+  resultCard: {
+    background: "#f8f9fa",
+    border: "0.5px solid #e0e0e0",
+    borderRadius: 10,
+    padding: "18px 20px",
+    marginTop: 20,
+  },
+
+  resultTitle: {
+    fontSize: 14,
+    fontWeight: 600,
+    color: "#1a1a1a",
+    marginBottom: 14,
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  resultGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: 10,
+    marginBottom: 14,
+  },
+
+  resultItem: {
+    background: "#fff",
+    border: "0.5px solid #e0e0e0",
+    borderRadius: 8,
+    padding: "10px 12px",
+  },
+
+  resultLabel: {
+    fontSize: 11,
+    color: "#888",
+    marginBottom: 3,
+  },
+
+  resultValue: {
+    fontSize: 14,
+    fontWeight: 600,
+    color: "#1a1a1a",
+  },
+
+  highlightItem: {
+    background: "#EAF3DE",
+    border: "0.5px solid #C0DD97",
+    borderRadius: 8,
+    padding: "12px 14px",
+    marginTop: 4,
+  },
+
+  highlightItemBlue: {
+    background: "#E6F1FB",
+    border: "0.5px solid #B5D4F4",
+    borderRadius: 8,
+    padding: "12px 14px",
+    marginTop: 4,
+  },
+
+  highlightLabel: {
+    fontSize: 11,
+    color: "#888",
+    marginBottom: 4,
+  },
+
+  highlightValue: {
+    fontSize: 22,
+    fontWeight: 700,
+  },
+
+  consultNote: {
+    fontSize: 12,
+    color: "#888",
+    marginTop: 10,
+    fontStyle: "italic" as const,
+  },
+};
+
+const getSubmitBtnStyle = (
+  disabled: boolean,
+  isConsult: boolean,
+): React.CSSProperties => ({
+  width: "100%",
+  padding: "11px",
+  borderRadius: 8,
+  border: "none",
+  background: disabled ? "#f1f1f1" : isConsult ? "#185FA5" : "#3B6D11",
+  color: disabled ? "#aaa" : "#fff",
+  fontSize: 14,
+  fontWeight: 600,
+  cursor: disabled ? "not-allowed" : "pointer",
+  marginTop: 6,
+});
+
+/* ── componente ── */
 
 const CommissionSellerPage = () => {
   const [sellers, setSellers] = useState<SellerOption[]>([]);
-  const [sellerId, setsellerId] = useState<number | "">("");
+  const [sellerId, setSellerId] = useState<number | "">("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [saveHistory, setSaveHistory] = useState(false);
-
+  const [paymentPercentage, setPaymentPercentage] = useState<number | "">("");
+  const [reason, setReason] = useState<CommissionReason | "">("");
   const [response, setResponse] = useState<CommissionResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const isOnlyConsultation = reason === "CONSULTA" || reason === "OUTRO";
+
   useEffect(() => {
-    const loadingSelles = async () => {
+    const loadingSellers = async () => {
       try {
         const res = await api.get("/seller/name/all");
         setSellers(res.data);
@@ -35,148 +232,300 @@ const CommissionSellerPage = () => {
         alert("Erro ao carregar vendedores.");
       }
     };
-
-    loadingSelles();
+    loadingSellers();
   }, []);
+
+  const formatCurrency = (value: number) =>
+    value.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+  const formatDateBr = (iso: string) => {
+    const [y, m, d] = iso.split("T")[0].split("-");
+    return `${d}/${m}/${y}`;
+  };
+
+  const getReasonLabel = (reasonValue: CommissionReason) => {
+    const labels: Record<CommissionReason, string> = {
+      ADIANTAMENTO: "Adiantamento",
+      FECHAMENTO_MENSAL: "Fechamento mensal",
+      CONSULTA: "Consulta",
+      OUTRO: "Outro",
+    };
+    return labels[reasonValue];
+  };
+
+  const isConsultationReason = (reasonValue: CommissionReason) =>
+    reasonValue === "CONSULTA" || reasonValue === "OUTRO";
 
   const handleSearch = async () => {
     if (!sellerId) {
-      alert("Informe o ID do vendedor!");
+      alert("Selecione o vendedor.");
+      return;
+    }
+    if (!startDate) {
+      alert("Informe a data inicial.");
+      return;
+    }
+    if (!endDate) {
+      alert("Informe a data final.");
+      return;
+    }
+    if (new Date(endDate) < new Date(startDate)) {
+      alert("A data final não pode ser anterior à data inicial.");
+      return;
+    }
+    if (!paymentPercentage) {
+      alert("Informe o percentual da comissão.");
+      return;
+    }
+    if (Number(paymentPercentage) <= 0 || Number(paymentPercentage) > 100) {
+      alert("O percentual deve ser maior que 0 e menor ou igual a 100.");
+      return;
+    }
+    if (!reason) {
+      alert("Selecione o motivo da consulta.");
       return;
     }
 
     setLoading(true);
+    setResponse(null);
 
     try {
-      const res = await api.get(`/seller/${sellerId}/commission`, {
-        params: {
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-          saveHistory,
-        },
+      const res = await api.post(`/seller/${sellerId}/commission`, {
+        startDate,
+        endDate,
+        paymentPercentage,
+        reason,
       });
-
       setResponse(res.data);
     } catch (err) {
       console.error(err);
-      alert("Erro ao buscar comissão.");
+      alert("Erro ao calcular comissão.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container-fluid px-1 my-1">
-      <BreadcrumbSection title="Comissão do Vendedor" link="/inicio" />
+    <div style={S.page}>
+      <div className="container-fluid px-1 my-1">
+        <BreadcrumbSection title="Comissão do Vendedor" link="/inicio" />
 
-      <div className="card shadow-sm mt-3">
-        <div className="card-body">
-          <h4 className="card-title mb-4">Consultar Comissão</h4>
+        <div style={S.card}>
+          <div style={S.cardHead}>
+            <div style={S.cardTitle}>Calcular comissão</div>
+          </div>
 
-          {/* Form */}
-          <div className="row g-3">
+          <div style={S.cardBody}>
+            <div style={S.grid}>
+              {/* Vendedor */}
+              <div style={S.field}>
+                <label style={S.label}>Vendedor *</label>
+                <select
+                  style={S.select}
+                  value={sellerId}
+                  onChange={(e) =>
+                    setSellerId(e.target.value ? Number(e.target.value) : "")
+                  }
+                  required
+                >
+                  <option value="">Selecione...</option>
+                  {sellers.map((seller) => (
+                    <option key={seller.idSeller} value={seller.idSeller}>
+                      {seller.nomeSeller}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* SELECT do cobrador */}
-            <div className="col-md-4">
-              <label className="form-label">Vendedor *</label>
-              <select
-                className="form-control"
-                value={sellerId}
-                onChange={(e) =>
-                  setsellerId(e.target.value ? Number(e.target.value) : "")
-                }
-              >
-                <option value="">Selecione...</option>
-                {sellers.map((s) => (
-                  <option key={s.idSeller} value={s.idSeller}>
-                    {s.nomeSeller}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Data inicial */}
-            <div className="col-md-4">
-              <label className="form-label">Data inicial</label>
-              <input
-                type="date"
-                className="form-control"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-
-            {/* Data final */}
-            <div className="col-md-4">
-              <label className="form-label">Data final</label>
-              <input
-                type="date"
-                className="form-control"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-
-            {/* Salvar histórico */}
-            <div className="col-md-12 mt-3">
-              <div className="form-check">
+              {/* Data inicial */}
+              <div style={S.field}>
+                <label style={S.label}>Data inicial *</label>
                 <input
-                  type="checkbox"
-                  id="saveHistory"
-                  className="form-check-input"
-                  checked={saveHistory}
-                  onChange={(e) => setSaveHistory(e.target.checked)}
+                  type="date"
+                  style={S.input}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
                 />
-                <label className="form-check-label" htmlFor="saveHistory">
-                  Salvar no histórico?
-                </label>
+              </div>
+
+              {/* Data final */}
+              <div style={S.field}>
+                <label style={S.label}>Data final *</label>
+                <input
+                  type="date"
+                  style={S.input}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Percentual */}
+              <div style={S.field}>
+                <label style={S.label}>Percentual da comissão (%) *</label>
+                <input
+                  type="number"
+                  style={S.input}
+                  value={paymentPercentage}
+                  min="1"
+                  max="100"
+                  step="0.01"
+                  placeholder="Ex: 30"
+                  onChange={(e) =>
+                    setPaymentPercentage(
+                      e.target.value ? Number(e.target.value) : "",
+                    )
+                  }
+                  required
+                />
+              </div>
+
+              {/* Motivo — ocupa coluna cheia */}
+              <div style={{ ...S.field, gridColumn: "1 / -1" }}>
+                <label style={S.label}>Motivo da consulta *</label>
+                <select
+                  style={S.select}
+                  value={reason}
+                  onChange={(e) =>
+                    setReason(e.target.value as CommissionReason | "")
+                  }
+                  required
+                >
+                  <option value="">Selecione...</option>
+                  <option value="ADIANTAMENTO">Adiantamento</option>
+                  <option value="FECHAMENTO_MENSAL">Fechamento mensal</option>
+                  <option value="CONSULTA">Consulta</option>
+                  <option value="OUTRO">Outro</option>
+                </select>
               </div>
             </div>
 
-            <div className="col-md-12 mt-3">
-              <button
-                onClick={handleSearch}
-                className="btn btn-primary w-100 btn-lg"
+            {/* Aviso de motivo */}
+            {reason && (
+              <div
+                style={{
+                  ...(isOnlyConsultation ? S.alertInfo : S.alertWarn),
+                  marginTop: 14,
+                }}
               >
-                Calcular Comissão
-              </button>
-            </div>
+                {isOnlyConsultation
+                  ? "Este filtro é apenas para consulta. O valor será simulado e não será salvo como pagamento no histórico."
+                  : "Este filtro gera pagamento de comissão e será salvo no histórico."}
+              </div>
+            )}
+
+            {/* Botão */}
+            <button
+              type="button"
+              style={getSubmitBtnStyle(loading, isOnlyConsultation)}
+              disabled={loading}
+              onClick={handleSearch}
+            >
+              {loading
+                ? "Calculando..."
+                : isOnlyConsultation
+                  ? "Consultar comissão"
+                  : "Calcular e salvar comissão"}
+            </button>
+
+            {/* Resultado */}
+            {response && (
+              <div style={S.resultCard}>
+                <div style={S.resultTitle}>
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: isConsultationReason(response.reason)
+                        ? "#185FA5"
+                        : "#3B6D11",
+                      flexShrink: 0,
+                    }}
+                  />
+                  {isConsultationReason(response.reason)
+                    ? "Consulta de comissão"
+                    : "Comissão salva no histórico"}
+                </div>
+
+                <div style={S.resultGrid}>
+                  <div style={S.resultItem}>
+                    <div style={S.resultLabel}>Vendedor</div>
+                    <div style={S.resultValue}>{response.sellerName}</div>
+                  </div>
+                  <div style={S.resultItem}>
+                    <div style={S.resultLabel}>Período</div>
+                    <div style={S.resultValue}>
+                      {formatDateBr(response.startDate)} →{" "}
+                      {formatDateBr(response.endDate)}
+                    </div>
+                  </div>
+                  <div style={S.resultItem}>
+                    <div style={S.resultLabel}>Motivo</div>
+                    <div style={S.resultValue}>
+                      {getReasonLabel(response.reason)}
+                    </div>
+                  </div>
+                  <div style={S.resultItem}>
+                    <div style={S.resultLabel}>Comissão total do período</div>
+                    <div style={S.resultValue}>
+                      R$ {formatCurrency(response.totalCommission)}
+                    </div>
+                  </div>
+                  <div style={S.resultItem}>
+                    <div style={S.resultLabel}>Percentual informado</div>
+                    <div style={S.resultValue}>
+                      {response.paymentPercentage}%
+                    </div>
+                  </div>
+                  {!isConsultationReason(response.reason) && (
+                    <div style={S.resultItem}>
+                      <div style={S.resultLabel}>Valor já pago no período</div>
+                      <div style={S.resultValue}>
+                        R$ {formatCurrency(response.previousPaidAmount)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr style={S.divider} />
+
+                <div
+                  style={
+                    isConsultationReason(response.reason)
+                      ? S.highlightItemBlue
+                      : S.highlightItem
+                  }
+                >
+                  <div style={S.highlightLabel}>
+                    {isConsultationReason(response.reason)
+                      ? "Valor simulado para o percentual informado"
+                      : "Valor a pagar agora"}
+                  </div>
+                  <div
+                    style={{
+                      ...S.highlightValue,
+                      color: isConsultationReason(response.reason)
+                        ? "#185FA5"
+                        : "#3B6D11",
+                    }}
+                  >
+                    R$ {formatCurrency(response.amountToPay)}
+                  </div>
+                </div>
+
+                {isConsultationReason(response.reason) && (
+                  <div style={S.consultNote}>
+                    Esta consulta não foi salva como pagamento de comissão.
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-
-          {/* Resultado */}
-          {loading && (
-            <div className="text-center mt-4">Carregando...</div>
-          )}
-
-          {response && (
-            <div className="alert alert-success mt-4">
-              <h5>Comissão</h5>
-
-              <p>
-                <strong>Vendedor:</strong> {response.sellerName}
-              </p>
-
-              <p>
-                <strong>Período:</strong>{" "}
-                {(() => {
-                  const formatBr = (iso: string) => {
-                    const [y, m, d] = iso.split("T")[0].split("-");
-                    return `${d}/${m}/${y}`;
-                  };
-                  return `${formatBr(response.startDate)} Até ${formatBr(response.endDate)}`;
-                })()}
-              </p>
-
-              <p>
-                <strong>Comissão (R$):</strong>{" "}
-                {response.commission.toLocaleString("pt-BR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-            </div>
-          )}
-
         </div>
       </div>
     </div>

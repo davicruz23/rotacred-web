@@ -74,7 +74,7 @@ const RightSidebarSection = () => {
       </div>
 
       <div className="sidebar-body scrollable">
-        <div className="right-sidebar-group">
+        {/* <div className="right-sidebar-group">
           <span className="sidebar-subtitle">
             Dashboard Variation
             <span>
@@ -101,7 +101,7 @@ const RightSidebarSection = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         <div className="right-sidebar-group">
           <span className="sidebar-subtitle">
@@ -154,7 +154,7 @@ const RightSidebarSection = () => {
           </div>
         </div>
 
-        <div className="right-sidebar-group">
+        {/* <div className="right-sidebar-group">
           <span className="sidebar-subtitle">
             Sidebar Background
             <span>
@@ -181,9 +181,9 @@ const RightSidebarSection = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="right-sidebar-group">
+        {/* <div className="right-sidebar-group">
           <span className="sidebar-subtitle">
             Main Background
             <span>
@@ -210,7 +210,7 @@ const RightSidebarSection = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
