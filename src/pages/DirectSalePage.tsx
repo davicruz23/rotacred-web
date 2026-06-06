@@ -31,6 +31,13 @@ type ClientForm = {
   };
 };
 
+type ClientSearchData = {
+  id: number;
+  name: string;
+  cpf: string;
+  phone?: string;
+};
+
 const BRAZIL_STATES = [
   { value: "AC", label: "Acre" },
   { value: "AL", label: "Alagoas" },
@@ -64,6 +71,7 @@ const BRAZIL_STATES = [
 const STORE_AND_APPROVE_ENDPOINT = "/sale/store-and-approve";
 const PRODUCTS_ENDPOINT = "/product/all";
 const CPF_VALIDATOR = "/cpf/validar";
+const CLIENT_SEARCH_ENDPOINT = "/client/search";
 
 const S: Record<string, React.CSSProperties> = {
   page: { padding: "0 4px" },
@@ -323,7 +331,10 @@ const DirectSalePage = () => {
   const [cashPaid, setCashPaid] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-
+  const [clientSearch, setClientSearch] = useState("");
+  const [clientResults, setClientResults] = useState<ClientSearchData[]>([]);
+  const [loadingClients, setLoadingClients] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   const [cpfError, setCpfError] = useState("");
 
   const [client, setClient] = useState<ClientForm>({
@@ -388,8 +399,60 @@ const DirectSalePage = () => {
     return () => clearTimeout(timeout);
   }, [searchName]);
 
-  const handleClientChange = (field: keyof ClientForm, value: string) =>
-    setClient((prev) => ({ ...prev, [field]: value }));
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchClients(clientSearch);
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [clientSearch]);
+
+  const handleSelectClient = (selectedClient: ClientSearchData) => {
+    setSelectedClientId(selectedClient.id);
+
+    setClientSearch(`${selectedClient.name} - ${selectedClient.cpf}`);
+
+    setClient((prev) => ({
+      ...prev,
+      name: selectedClient.name,
+      cpf: selectedClient.cpf,
+      phone: selectedClient.phone ?? "",
+    }));
+
+    setCpfError("");
+    setClientResults([]);
+  };
+
+  const clearSelectedClient = () => {
+    setSelectedClientId(null);
+    setClientSearch("");
+    setClientResults([]);
+
+    setClient({
+      name: "",
+      cpf: "",
+      phone: "",
+      address: {
+        state: "PB",
+        city: "",
+        street: "",
+        number: "",
+        zipCode: "",
+        complement: "",
+      },
+    });
+
+    setCpfError("");
+  };
+
+  const handleClientChange = (field: keyof ClientForm, value: string) => {
+    setSelectedClientId(null);
+
+    setClient((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleAddressChange = (
     field: keyof ClientForm["address"],
@@ -487,23 +550,26 @@ const DirectSalePage = () => {
   }
 
   const handleSubmit = async () => {
-    const cpfIsValid = await validateCpf(client.cpf);
+    if (!selectedClientId) {
+      const cpfIsValid = await validateCpf(client.cpf);
 
-    if (!cpfIsValid) {
-      return;
+      if (!cpfIsValid) {
+        return;
+      }
+
+      if (!client.name.trim()) {
+        alert("Informe o nome do cliente");
+        return;
+      }
+
+      if (!client.cpf || client.cpf.trim() === "") {
+        alert("CPF é obrigatório.");
+        return;
+      }
     }
 
-    if (!client.name.trim()) {
-      alert("Informe o nome do cliente");
-      return;
-    }
     if (selectedProducts.length === 0) {
       alert("Adicione pelo menos um produto");
-      return;
-    }
-
-    if (!client.cpf || client.cpf.trim() === "") {
-      alert("CPF é obrigatório.");
       return;
     }
 
@@ -513,7 +579,8 @@ const DirectSalePage = () => {
         preSaleDate: new Date().toISOString().substring(0, 10),
         sellerId: Number(3),
         chargingId: Number(1),
-        client,
+        clientId: selectedClientId,
+        client: selectedClientId ? null : client,
         products: selectedProducts.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
@@ -528,9 +595,16 @@ const DirectSalePage = () => {
 
     try {
       setSaving(true);
+
       const response = await api.post(STORE_AND_APPROVE_ENDPOINT, payload);
+
       if (response.status === 200 || response.status === 201) {
         alert("Venda cadastrada com sucesso!");
+
+        setSelectedClientId(null);
+        setClientSearch("");
+        setClientResults([]);
+
         setClient({
           name: "",
           cpf: "",
@@ -544,6 +618,7 @@ const DirectSalePage = () => {
             complement: "",
           },
         });
+
         setPaymentMethod("PARCEL");
         setInstallments(1);
         setCashPaid(0);
@@ -595,6 +670,35 @@ const DirectSalePage = () => {
   const brl = (value: number) =>
     value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+  const fetchClients = async (search: string) => {
+    const value = search.trim();
+
+    if (value.length < 3) {
+      setClientResults([]);
+      return;
+    }
+
+    try {
+      setLoadingClients(true);
+
+      const response = await api.get<ClientSearchData[]>(
+        CLIENT_SEARCH_ENDPOINT,
+        {
+          params: {
+            search: value,
+          },
+        },
+      );
+
+      setClientResults(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+      setClientResults([]);
+    } finally {
+      setLoadingClients(false);
+    }
+  };
+
   return (
     <div style={S.page}>
       <div className="row g-4">
@@ -603,7 +707,128 @@ const DirectSalePage = () => {
             <div style={S.cardHead}>
               <div style={S.cardTitle}>Dados do cliente</div>
             </div>
+
             <div style={S.cardBody}>
+              <div style={{ marginBottom: 16 }}>
+                <div style={S.field}>
+                  <label style={S.label}>Buscar cliente cadastrado</label>
+
+                  <div style={{ position: "relative" }}>
+                    <div style={S.searchWrap}>
+                      <i
+                        className="fa-light fa-magnifying-glass"
+                        style={{
+                          color: "var(--rtc-soft-muted, #aaa)",
+                          fontSize: 14,
+                          flexShrink: 0,
+                        }}
+                      />
+
+                      <input
+                        type="text"
+                        style={S.searchInput}
+                        placeholder="Digite nome ou CPF do cliente..."
+                        value={clientSearch}
+                        onChange={(e) => {
+                          setClientSearch(e.target.value);
+                          setSelectedClientId(null);
+                        }}
+                      />
+
+                      {clientSearch?.trim() && (
+                        <button
+                          style={S.clearBtn}
+                          type="button"
+                          onClick={clearSelectedClient}
+                          title="Limpar cliente"
+                        >
+                          <i className="fa-light fa-xmark" />
+                        </button>
+                      )}
+                    </div>
+
+                    {loadingClients && (
+                      <div style={S.hint}>Buscando clientes...</div>
+                    )}
+
+                    {clientResults.length > 0 && !selectedClientId && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 42,
+                          left: 0,
+                          zIndex: 20,
+                          width: "100%",
+                          maxWidth: 420,
+                          background: "var(--rtc-card-bg, #fff)",
+                          border: "0.5px solid var(--rtc-border, #e0e0e0)",
+                          borderRadius: 8,
+                          boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {clientResults.map((item) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handleSelectClient(item)}
+                            style={{
+                              width: "100%",
+                              border: "none",
+                              background: "transparent",
+                              padding: "10px 12px",
+                              textAlign: "left",
+                              cursor: "pointer",
+                              borderBottom:
+                                "0.5px solid var(--rtc-border, #e0e0e0)",
+                            }}
+                          >
+                            <div
+                              style={{
+                                fontSize: 13,
+                                fontWeight: 600,
+                                color: "var(--rtc-text, #1a1a1a)",
+                              }}
+                            >
+                              {item.name}
+                            </div>
+
+                            <div
+                              style={{
+                                fontSize: 12,
+                                color: "var(--rtc-muted, #888)",
+                                marginTop: 2,
+                              }}
+                            >
+                              CPF: {item.cpf}
+                              {item.phone ? ` • Tel: ${item.phone}` : ""}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {selectedClientId ? (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        fontSize: 12,
+                        color: "#3B6D11",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Está venda será associada ao cliente cadastrado!
+                    </div>
+                  ) : (
+                    <div style={S.hint}>
+                      Se o cliente já existir, selecione na lista. Se não
+                      existir, preencha os dados abaixo.
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div style={S.gridClient}>
                 <div style={S.field}>
                   <label style={S.label}>Nome</label>
@@ -611,9 +836,11 @@ const DirectSalePage = () => {
                     style={S.input}
                     type="text"
                     value={client.name}
+                    disabled={!!selectedClientId}
                     onChange={(e) => handleClientChange("name", e.target.value)}
                   />
                 </div>
+
                 <div style={S.field}>
                   <label style={S.label}>CPF</label>
 
@@ -624,7 +851,8 @@ const DirectSalePage = () => {
                     }}
                     type="text"
                     value={client.cpf}
-                    required
+                    required={!selectedClientId}
+                    disabled={!!selectedClientId}
                     maxLength={14}
                     onChange={(e) => {
                       handleClientChange("cpf", e.target.value);
@@ -632,95 +860,107 @@ const DirectSalePage = () => {
                     }}
                   />
 
-                  {cpfError && (
+                  {cpfError && !selectedClientId && (
                     <small style={{ color: "#dc2626", marginTop: 4 }}>
                       {cpfError}
                     </small>
                   )}
                 </div>
+
                 <div style={S.field}>
                   <label style={S.label}>Telefone</label>
                   <input
                     style={S.input}
                     type="text"
                     value={client.phone}
+                    disabled={!!selectedClientId}
                     onChange={(e) =>
                       handleClientChange("phone", e.target.value)
                     }
                   />
                 </div>
-                <div style={S.field}>
-                  <label style={S.label}>CEP</label>
-                  <input
-                    style={S.input}
-                    type="text"
-                    placeholder="Digite o CEP"
-                    maxLength={8}
-                    value={client.address.zipCode}
-                    onChange={(e) => handleZipCodeChange(e.target.value)}
-                  />
-                </div>
-                <div style={S.field}>
-                  <label style={S.label}>Estado</label>
-                  <select
-                    style={S.select}
-                    value={client.address.state}
-                    onChange={(e) =>
-                      handleAddressChange("state", e.target.value)
-                    }
-                  >
-                    {BRAZIL_STATES.map((state) => (
-                      <option key={state.value} value={state.value}>
-                        {state.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div style={S.field}>
-                  <label style={S.label}>Cidade</label>
-                  <input
-                    style={S.input}
-                    type="text"
-                    value={client.address.city}
-                    onChange={(e) =>
-                      handleAddressChange("city", e.target.value)
-                    }
-                  />
-                </div>
-                <div style={S.field}>
-                  <label style={S.label}>Número</label>
-                  <input
-                    style={S.input}
-                    type="text"
-                    value={client.address.number}
-                    onChange={(e) =>
-                      handleAddressChange("number", e.target.value)
-                    }
-                  />
-                </div>
-                <div style={S.field}>
-                  <label style={S.label}>Rua</label>
-                  <input
-                    style={S.input}
-                    type="text"
-                    value={client.address.street}
-                    onChange={(e) =>
-                      handleAddressChange("street", e.target.value)
-                    }
-                  />
-                </div>
-                <div style={S.field}>
-                  <label style={S.label}>Complemento</label>
-                  <input
-                    style={S.input}
-                    type="text"
-                    value={client.address.complement}
-                    onChange={(e) =>
-                      handleAddressChange("complement", e.target.value)
-                    }
-                  />
-                </div>
               </div>
+
+              {!selectedClientId && (
+                <div style={{ ...S.gridClient, marginTop: 16 }}>
+                  <div style={S.field}>
+                    <label style={S.label}>CEP</label>
+                    <input
+                      style={S.input}
+                      type="text"
+                      placeholder="Digite o CEP"
+                      maxLength={8}
+                      value={client.address.zipCode}
+                      onChange={(e) => handleZipCodeChange(e.target.value)}
+                    />
+                  </div>
+
+                  <div style={S.field}>
+                    <label style={S.label}>Estado</label>
+                    <select
+                      style={S.select}
+                      value={client.address.state}
+                      onChange={(e) =>
+                        handleAddressChange("state", e.target.value)
+                      }
+                    >
+                      {BRAZIL_STATES.map((state) => (
+                        <option key={state.value} value={state.value}>
+                          {state.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div style={S.field}>
+                    <label style={S.label}>Cidade</label>
+                    <input
+                      style={S.input}
+                      type="text"
+                      value={client.address.city}
+                      onChange={(e) =>
+                        handleAddressChange("city", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div style={S.field}>
+                    <label style={S.label}>Número</label>
+                    <input
+                      style={S.input}
+                      type="text"
+                      value={client.address.number}
+                      onChange={(e) =>
+                        handleAddressChange("number", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div style={S.field}>
+                    <label style={S.label}>Rua</label>
+                    <input
+                      style={S.input}
+                      type="text"
+                      value={client.address.street}
+                      onChange={(e) =>
+                        handleAddressChange("street", e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div style={S.field}>
+                    <label style={S.label}>Complemento</label>
+                    <input
+                      style={S.input}
+                      type="text"
+                      value={client.address.complement}
+                      onChange={(e) =>
+                        handleAddressChange("complement", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -733,7 +973,11 @@ const DirectSalePage = () => {
                 <div style={S.searchWrap}>
                   <i
                     className="fa-light fa-magnifying-glass"
-                    style={{ color: "var(--rtc-soft-muted, #aaa)", fontSize: 14, flexShrink: 0 }}
+                    style={{
+                      color: "var(--rtc-soft-muted, #aaa)",
+                      fontSize: 14,
+                      flexShrink: 0,
+                    }}
                   />
                   <input
                     type="text"
@@ -792,7 +1036,9 @@ const DirectSalePage = () => {
                               (e.currentTarget as HTMLTableRowElement)
                                 .querySelectorAll("td")
                                 .forEach(
-                                  (td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"),
+                                  (td) =>
+                                    (td.style.background =
+                                      "var(--rtc-hover-bg, #f8f9fa)"),
                                 )
                             }
                             onMouseLeave={(e) =>
@@ -874,7 +1120,11 @@ const DirectSalePage = () => {
                         onMouseEnter={(e) =>
                           (e.currentTarget as HTMLTableRowElement)
                             .querySelectorAll("td")
-                            .forEach((td) => (td.style.background = "var(--rtc-hover-bg, #f8f9fa)"))
+                            .forEach(
+                              (td) =>
+                                (td.style.background =
+                                  "var(--rtc-hover-bg, #f8f9fa)"),
+                            )
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget as HTMLTableRowElement)
