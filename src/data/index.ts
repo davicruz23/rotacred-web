@@ -554,6 +554,22 @@ const navData = [
         ],
       },
       {
+        title: "Localização",
+        hasSub: true,
+        icon: "ti ti-map-pin",
+        url: "#",
+        subLinks: [
+          {
+            subTitle: "Acompanhar Cobradores",
+            subUrl: "/collector-location",
+          },
+          {
+            subTitle: "Filtrar Por Périodo",
+            subUrl: "/collector-sales",
+          },
+        ],
+      },
+      {
         title: "Pós-Venda",
         hasSub: true,
         icon: "ti ti-checkup-list",

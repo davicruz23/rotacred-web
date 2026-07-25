@@ -39,6 +39,7 @@ type ClientSearchData = {
 };
 
 const BRAZIL_STATES = [
+  // { value: "", label: "SELECIONE" },
   { value: "AC", label: "Acre" },
   { value: "AL", label: "Alagoas" },
   { value: "AP", label: "Amapá" },
@@ -67,6 +68,20 @@ const BRAZIL_STATES = [
   { value: "SE", label: "Sergipe" },
   { value: "TO", label: "Tocantins" },
 ];
+
+const normalizeState = (value: string | null | undefined): string => {
+  if (!value) return "";
+
+  const normalized = value.trim().toLowerCase();
+
+  const state = BRAZIL_STATES.find(
+    (item) =>
+      item.value.toLowerCase() === normalized ||
+      item.label.toLowerCase() === normalized,
+  );
+
+  return state?.value ?? "";
+};
 
 const STORE_AND_APPROVE_ENDPOINT = "/sale/store-and-approve";
 const PRODUCTS_ENDPOINT = "/product/all";
@@ -326,7 +341,7 @@ const DirectSalePage = () => {
     [],
   );
 
-  const [paymentMethod, setPaymentMethod] = useState("PARCEL");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [installments, setInstallments] = useState(1);
   const [cashPaid, setCashPaid] = useState(0);
   const [latitude, setLatitude] = useState(0);
@@ -342,7 +357,7 @@ const DirectSalePage = () => {
     cpf: "",
     phone: "",
     address: {
-      state: "PB",
+      state: "",
       city: "",
       street: "",
       number: "",
@@ -364,6 +379,30 @@ const DirectSalePage = () => {
     () => Math.max(totalSale - Number(cashPaid || 0), 0),
     [totalSale, cashPaid],
   );
+
+  const isFormValid = useMemo(() => {
+    const clientIsValid =
+      selectedClientId !== null ||
+      (client.name.trim() !== "" &&
+        client.cpf.replace(/\D/g, "").length === 11 &&
+        client.phone.replace(/\D/g, "").length > 0 &&
+        client.address.zipCode.replace(/\D/g, "").length === 8 &&
+        client.address.state.trim() !== "" &&
+        client.address.city.trim() !== "" &&
+        client.address.street.trim() !== "" &&
+        client.address.number.trim() !== "" &&
+        client.address.complement.trim() !== "");
+
+    const productsAreValid =
+      selectedProducts.length > 0 &&
+      selectedProducts.every(
+        (product) => product.productId > 0 && Number(product.quantity) > 0,
+      );
+
+    const paymentIsValid = paymentMethod.trim() !== "";
+
+    return clientIsValid && productsAreValid && paymentIsValid;
+  }, [selectedClientId, client, selectedProducts, paymentMethod]);
 
   const fetchProducts = async (name = searchName) => {
     try {
@@ -388,9 +427,9 @@ const DirectSalePage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProducts("");
-  }, []);
+  // useEffect(() => {
+  //   fetchProducts("");
+  // }, []);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -550,27 +589,17 @@ const DirectSalePage = () => {
   }
 
   const handleSubmit = async () => {
+    if (!isFormValid) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
     if (!selectedClientId) {
       const cpfIsValid = await validateCpf(client.cpf);
 
       if (!cpfIsValid) {
         return;
       }
-
-      if (!client.name.trim()) {
-        alert("Informe o nome do cliente");
-        return;
-      }
-
-      if (!client.cpf || client.cpf.trim() === "") {
-        alert("CPF é obrigatório.");
-        return;
-      }
-    }
-
-    if (selectedProducts.length === 0) {
-      alert("Adicione pelo menos um produto");
-      return;
     }
 
     const payload = {
@@ -633,7 +662,7 @@ const DirectSalePage = () => {
       console.error(error);
       alert(
         error?.response?.data?.message ||
-          "Erro ao conectar com o servidor ao cadastrar venda",
+        "Erro ao conectar com o servidor ao cadastrar venda",
       );
     } finally {
       setSaving(false);
@@ -644,21 +673,29 @@ const DirectSalePage = () => {
 
   const handleZipCodeChange = async (value: string) => {
     const zipCode = onlyNumbers(value);
-    handleAddressChange("zipCode", zipCode);
+
+    handleAddressChange("zipCode", maskZipCode(zipCode));
+
     if (zipCode.length !== 8) return;
+
     try {
       const response = await api.get(`/cep/${zipCode}`);
       const data = response.data;
+
       setClient((prev) => ({
         ...prev,
         address: {
           ...prev.address,
-          zipCode,
+          zipCode: maskZipCode(zipCode),
           street: data.street ?? data.logradouro ?? prev.address.street,
           city: data.city ?? data.localidade ?? prev.address.city,
-          state: data.state ?? data.uf ?? prev.address.state ?? "PB",
+
+          state: normalizeState(data.state || data.uf),
+          
           complement:
-            data.complement ?? data.complemento ?? prev.address.complement,
+            data.complement ??
+            data.complemento ??
+            prev.address.complement,
         },
       }));
     } catch (error) {
@@ -697,6 +734,35 @@ const DirectSalePage = () => {
     } finally {
       setLoadingClients(false);
     }
+  };
+
+  const maskCpf = (value: string) => {
+    const numbers = onlyNumbers(value).slice(0, 11);
+
+    return numbers
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  };
+
+  const maskPhone = (value: string) => {
+    const numbers = onlyNumbers(value).slice(0, 11);
+
+    if (numbers.length <= 10) {
+      return numbers
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return numbers
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+  };
+
+  const maskZipCode = (value: string) => {
+    const numbers = onlyNumbers(value).slice(0, 8);
+
+    return numbers.replace(/(\d{5})(\d)/, "$1-$2");
   };
 
   return (
@@ -855,7 +921,7 @@ const DirectSalePage = () => {
                     disabled={!!selectedClientId}
                     maxLength={14}
                     onChange={(e) => {
-                      handleClientChange("cpf", e.target.value);
+                      handleClientChange("cpf", maskCpf(e.target.value));
                       setCpfError("");
                     }}
                   />
@@ -875,28 +941,36 @@ const DirectSalePage = () => {
                     value={client.phone}
                     disabled={!!selectedClientId}
                     onChange={(e) =>
-                      handleClientChange("phone", e.target.value)
+                      handleClientChange("phone", maskPhone(e.target.value))
                     }
                   />
                 </div>
               </div>
 
               {!selectedClientId && (
-                <div style={{ ...S.gridClient, marginTop: 16 }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
+                    gap: 16,
+                    marginTop: 16,
+                  }}
+                >
                   <div style={S.field}>
                     <label style={S.label}>CEP</label>
                     <input
                       style={S.input}
                       type="text"
                       placeholder="Digite o CEP"
-                      maxLength={8}
+                      maxLength={9}
                       value={client.address.zipCode}
-                      onChange={(e) => handleZipCodeChange(e.target.value)}
+                      onChange={(e) => handleZipCodeChange(maskZipCode(e.target.value))}
                     />
                   </div>
 
                   <div style={S.field}>
                     <label style={S.label}>Estado</label>
+
                     <select
                       style={S.select}
                       value={client.address.state}
@@ -904,6 +978,10 @@ const DirectSalePage = () => {
                         handleAddressChange("state", e.target.value)
                       }
                     >
+                      <option value="" disabled>
+                        SELECIONE
+                      </option>
+
                       {BRAZIL_STATES.map((state) => (
                         <option key={state.value} value={state.value}>
                           {state.label}
@@ -1037,8 +1115,8 @@ const DirectSalePage = () => {
                                 .querySelectorAll("td")
                                 .forEach(
                                   (td) =>
-                                    (td.style.background =
-                                      "var(--rtc-hover-bg, #f8f9fa)"),
+                                  (td.style.background =
+                                    "var(--rtc-hover-bg, #f8f9fa)"),
                                 )
                             }
                             onMouseLeave={(e) =>
@@ -1122,8 +1200,8 @@ const DirectSalePage = () => {
                             .querySelectorAll("td")
                             .forEach(
                               (td) =>
-                                (td.style.background =
-                                  "var(--rtc-hover-bg, #f8f9fa)"),
+                              (td.style.background =
+                                "var(--rtc-hover-bg, #f8f9fa)"),
                             )
                         }
                         onMouseLeave={(e) =>
@@ -1179,8 +1257,13 @@ const DirectSalePage = () => {
                   <select
                     style={S.select}
                     value={paymentMethod}
+                    required
                     onChange={(e) => setPaymentMethod(e.target.value)}
                   >
+                    <option value="" disabled>
+                      SELECIONE
+                    </option>
+
                     <option value="CASH">Dinheiro</option>
                     <option value="PARCEL">Parcelado</option>
                     <option value="CREDIT">Cartão de crédito</option>
@@ -1228,9 +1311,9 @@ const DirectSalePage = () => {
                   </div>
                 </div>
                 <button
-                  style={getSaveBtn(saving)}
+                  style={getSaveBtn(saving || !isFormValid)}
                   type="button"
-                  disabled={saving}
+                  disabled={saving || !isFormValid}
                   onClick={handleSubmit}
                 >
                   {saving ? (

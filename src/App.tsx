@@ -42,6 +42,7 @@ import UpdateSaleReturn from "./pages/UpdateSaleReturn";
 import CommissionHistory from "./pages/CommissionHistoryPage";
 import DirectSalePage from "./pages/DirectSalePage";
 import SalesListPage from "./pages/SalesList";
+import CollectorLocationPage from "./pages/CollectorLocationPage";
 
 function App() {
   const activeLayout = useAppSelector((state) => state.layout.isLayout);
@@ -90,6 +91,7 @@ function App() {
                 <Route path="/commission-seller" element={<CommissionSellerPage />} />
                 <Route path="/new-charging" element={<NewChargingPage />} />
                 <Route path="/commission-history" element={<CommissionHistory/>} />
+                <Route path="/collector-location" element={<CollectorLocationPage/>} />
               </Route>
 
               {/* ROTAS PARA SUPERADMIN + FUNCIONÁRIO */}

@@ -55,12 +55,11 @@ const AllProductPage = () => {
     }
   };
 
-  // primeira carga
-  useEffect(() => {
-    fetchProducts(0, "");
-  }, []);
+  // // primeira carga
+  // useEffect(() => {
+  //   fetchProducts(0, "");
+  // }, []);
 
-  // 🔥 busca automática enquanto digita (debounce)
   useEffect(() => {
     const timeout = setTimeout(() => {
       setCurrentPage(0);
